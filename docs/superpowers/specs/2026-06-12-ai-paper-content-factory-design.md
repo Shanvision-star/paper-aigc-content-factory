@@ -12,6 +12,7 @@
 - 多比例视频草稿
 - 多平台标题、简介、标签、封面和发布说明
 - 质量报告和人工审核记录
+- 多平台开场 Hook 候选、评分和选用记录
 
 第一篇目标是《Attention Is All You Need》。系统第一阶段不追求全自动发布，而是生成可人工审核的发布包；人工确认后再由用户手动发布到抖音、小红书、B 站、YouTube、X 等平台。
 
@@ -74,6 +75,7 @@ D:\Shanvisorin_platform\Paper_everyday\paper_desgin\attention_is_all_you_nedd_de
 - 少量 Skill：第一阶段只做 8 个生产 Skill + 1 个优化 Skill。
 - 外部适配器：重模型和渲染器由脚本或本地服务承接，Skill 只管流程、输入输出和门禁。
 - 人工审核前移：事实、叙事、低清视频三个关键点必须能被人工确认。
+- Hook 是结构化产物，不是临时文案：每个平台至少生成 3 个开场候选，并记录选用理由、风险和评分。
 
 ## 核心架构
 
@@ -82,7 +84,7 @@ topic.yaml
   -> episode-orchestrator
   -> source-harvester
   -> research-to-claims
-  -> script-storyboard-writer
+  -> script-storyboard-writer (includes Hook Lab)
   -> visual-orchestrator
   -> parallel:
        visual assets
@@ -108,9 +110,11 @@ episodes/{episode_id}/
 │   └── timeline.json
 ├── script/
 │   ├── voiceover.md
-│   └── voice_segments.json
+│   ├── voice_segments.json
+│   └── hooks.json
 ├── storyboard/
-│   └── storyboard.json
+│   ├── storyboard.json
+│   └── hook_variants.json
 ├── assets/
 │   ├── assets_manifest.json
 │   ├── diagrams/
@@ -137,6 +141,7 @@ episodes/{episode_id}/
 │   ├── human_review.md
 │   └── improvement_candidates.json
 └── qa/
+    ├── hook_report.json
     └── qa_report.json
 ```
 
@@ -204,6 +209,34 @@ constraints:
 ]
 ```
 
+`hooks.json` 是开场吸引力核心：
+
+```json
+{
+  "episode_id": "ep01_attention_is_all_you_need",
+  "platform": "douyin.zh-CN",
+  "selected_hook_id": "hook_douyin_01",
+  "variants": [
+    {
+      "hook_id": "hook_douyin_01",
+      "pattern": "pain_point",
+      "spoken_line": "如果你一看到 QKV 就断片，先看这 20 秒。",
+      "on_screen_text": "QKV 到底是什么？",
+      "visual_cue": "Q/K/V 三张卡片快速入场",
+      "claim_ids": ["c_attention_qkv"],
+      "risk_flags": [],
+      "score": {
+        "hook_strength": 9,
+        "clarity": 8,
+        "truthfulness": 9,
+        "platform_fit": 9,
+        "visual_potential": 9
+      }
+    }
+  ]
+}
+```
+
 ## 8+1 Skill 切分
 
 ### 1. `episode-orchestrator`
@@ -252,6 +285,7 @@ constraints:
 
 - 生成 `voiceover.md`。
 - 生成 `voice_segments.json`。
+- 生成 `hooks.json` 和 `hook_variants.json`。
 - 生成 `storyboard.json`。
 - 生成 `blog/blog.md` 和 PDF outline。
 
@@ -259,6 +293,8 @@ constraints:
 
 - 不直接生成音频。
 - 不直接渲染视频。
+- 不用无来源夸张结论做标题党。
+- 不让通用开场白进入短视频第一幕。
 
 ### 5. `visual-orchestrator`
 
@@ -267,6 +303,7 @@ constraints:
 - 判断每个 scene 使用哪个视觉引擎。
 - 生成 `assets_manifest.json`。
 - 生成 Mermaid/D2/Manim/HyperFrames 的 visual specs。
+- 将 Hook Lab 的 `visual_cue` 转成第一幕可渲染视觉动作。
 
 决策规则：
 
@@ -322,6 +359,7 @@ constraints:
 职责：
 
 - 读取 `qa_report.json`、截图/关键帧、音频检测、字幕检测、人工 `human_review.md`。
+- 读取 `hook_report.json` 和人工对开场的保留/划走风险反馈。
 - 输出 `review/improvement_candidates.json`。
 - 提出可审核的 Skill、template、prompt、platform profile 或 quality gate 改进建议。
 
@@ -378,6 +416,89 @@ constraints:
 - 总时长与 storyboard 目标时长接近。
 - 无明显削波、长静音或断裂。
 - 若使用个人声音，必须存在 `consent.wav` 和 `voice_profile_manifest.json`。
+
+## Hook Lab 与平台开场模式
+
+Hook Lab 是 `script-storyboard-writer` 的子流程，不新增独立 Skill。它负责生成、评分和选择每个平台的开场方案。
+
+### Hook 生成规则
+
+每个平台至少生成 3 个候选，候选必须包含：
+
+- 口播第一句。
+- 屏幕大字。
+- 首帧或前 3 秒视觉动作。
+- 对应 claim 或说明其属于类比/解释。
+- 风险标记，例如夸大、过度标题党、来源不足、受众不匹配。
+- 五维评分：`hook_strength`、`clarity`、`truthfulness`、`platform_fit`、`visual_potential`。
+
+### 常用 Hook Pattern
+
+- 反常识：用一个合理但出乎意料的判断打断滑动。
+- 结果先行：先告诉观众这篇论文改变了什么。
+- 痛点代入：先命中学习障碍，如 QKV、Softmax、矩阵维度。
+- 冲突对比：用 RNN vs Transformer 这类对比制造理解坡度。
+- 视觉承诺：承诺用一张图或一段动画解释清楚。
+- 权威锚点：说明论文、年份、影响范围，但不能夸大。
+- 收藏承诺：强调这条内容值得保存和复看。
+- 避坑提醒：先纠正常见误解，再进入解释。
+
+### 平台开场策略
+
+抖音中文：
+
+- 前 0-3 秒必须有强钩子和明显视觉变化。
+- 优先使用反常识、痛点代入、冲突对比、视觉承诺。
+- 禁止用“大家好，今天我们来讲...”作为第一句。
+
+小红书中文：
+
+- 首屏优先服务封面和收藏价值。
+- 优先使用收藏承诺、学习痛点、笔记感总结、避坑提醒。
+- 标题和封面要能单独成立，视频第一句负责补充而不是重复封面。
+
+B 站中文：
+
+- 开场可以稍慢，但必须在 10 秒内给出本集问题和观看收益。
+- 优先使用权威锚点、问题导向、结构预告。
+- 允许保留论文上下文和公式路线。
+
+YouTube Shorts 英文：
+
+- 前 0-3 秒说明全球语境，减少中文平台梗。
+- 优先使用结果先行、反常识、visual promise。
+- 避免需要中文互联网背景才能理解的表达。
+
+YouTube Long 英文：
+
+- 开头要建立可信议程：why this paper matters, what viewers will understand, and how the episode is structured.
+- 允许在 15-30 秒内铺垫，但不能失去问题意识。
+
+X 英文：
+
+- 开场要像一个观点或图解摘要，而不是完整讲课。
+- 优先使用 bold claim、visual summary、thread lead-in。
+- 画面中心安全区必须保留，方便 16:9 和 1:1 双版本裁切。
+
+### 第一篇 Hook 示例
+
+抖音：
+
+- `如果你一看到 QKV 就断片，先看这 20 秒。`
+- `Transformer 最厉害的不是更大，而是它不再一个字一个字读。`
+- `今天的大模型，几乎都绕不开这篇 2017 年论文。`
+
+小红书：
+
+- `一张图看懂 Transformer 的核心。`
+- `终于有人把 QKV 讲成人话了。`
+- `读 Attention Is All You Need，我只抓这 5 个点。`
+
+英文 Shorts：
+
+- `Every modern LLM owes something to this 2017 paper.`
+- `Attention did not make AI bigger first. It changed how models read.`
+- `Q, K, and V sound abstract. Here is the simplest way to see them.`
 
 ## 多平台输出合同
 
@@ -507,15 +628,26 @@ constraints:
 - 每条 claim 有 `source_ids` 和 `confidence`。
 - 脚本、博客、PDF 的关键事实能回到 claim。
 
-### Gate 3：脚本门禁
+### Gate 3：Hook 门禁
 
-- 开头 5 秒有 hook。
+- `script/hooks.json` 存在。
+- `storyboard/hook_variants.json` 存在。
+- 每个平台至少 3 个 hook 候选。
+- 最终选中的 hook 必须有 `hook_id`、`pattern`、`spoken_line`、`on_screen_text`、`visual_cue` 和评分。
+- 前 3 秒不能是泛泛介绍。
+- Hook 不能使用无来源的夸张结论。
+- 抖音版偏强钩子，小红书版偏收藏封面，B 站版偏可信议程，YouTube Shorts 版偏全球语境解释。
+- `qa/hook_report.json` 必须记录候选得分、人工选择和淘汰原因。
+
+### Gate 4：脚本门禁
+
 - 全片只有一个核心 thesis。
 - 口播时长在目标时长合理范围内。
 - 每 8-12 秒有视觉变化。
 - 中文和英文版本分别按受众重写，不允许直接机翻。
+- 第一幕必须引用已选 `hook_id`。
 
-### Gate 4：视觉门禁
+### Gate 5：视觉门禁
 
 - 每个 scene 有 `visual_type`。
 - 每个 visual 有 `engine` 和 output。
@@ -523,7 +655,7 @@ constraints:
 - 竖屏版本检查顶部、底部和中心安全区。
 - 字幕不得遮挡公式关键部分。
 
-### Gate 5：声音门禁
+### Gate 6：声音门禁
 
 - `voiceover.wav` 存在且可播放。
 - `voiceover_manifest.json` 存在。
@@ -531,7 +663,7 @@ constraints:
 - 无长静音、削波或明显断裂。
 - 个人声音模式下必须有授权录音和 voice profile manifest。
 
-### Gate 6：字幕门禁
+### Gate 7：字幕门禁
 
 - `subtitles.srt` 或 `subtitles.vtt` 存在。
 - 中文每行建议不超过 18 个汉字。
@@ -539,7 +671,7 @@ constraints:
 - 每条字幕建议 1.2s-4.5s。
 - 字幕不遮挡核心图。
 
-### Gate 7：发布门禁
+### Gate 8：发布门禁
 
 - `blog.md` 存在。
 - `episode.pdf` 存在。
@@ -555,6 +687,7 @@ constraints:
 
 ```text
 qa_report.json
+  + hook_report.json
   + human_review.md
   + screenshots/keyframes
   + audio/caption checks
@@ -573,6 +706,7 @@ qa_report.json
 - `expected_impact`：预期减少什么返工。
 - `risk`：可能带来的副作用。
 - `verification`：修改后如何证明。
+- `retention_signal`：Hook 相关建议需记录人工保留/划走风险、平台适配问题或首屏可读性问题。
 
 示例：
 
@@ -623,6 +757,7 @@ paper-aigc-content-factory/
 │   ├── validate_topic.ts
 │   ├── build_claims.ts
 │   ├── build_storyboard.ts
+│   ├── score_hooks.ts
 │   ├── render_hyperframes.ts
 │   ├── render_manim.py
 │   ├── tts_openai.ts
@@ -637,10 +772,12 @@ paper-aigc-content-factory/
 ├── templates/
 │   ├── blog.md.j2
 │   ├── pdf.typ.j2
+│   ├── hooks/
 │   ├── hyperframes/
 │   └── manim/
 ├── data/
 │   ├── style_tokens.json
+│   ├── hook_patterns.yml
 │   └── taxonomy/
 └── episodes/
     └── ep01_attention_is_all_you_need/
@@ -673,7 +810,12 @@ stages:
   - skill: research-to-claims
     output: research/claims.json
   - skill: script-storyboard-writer
-    output: script/voiceover.md
+    outputs:
+      - script/hooks.json
+      - script/voiceover.md
+      - script/voice_segments.json
+      - storyboard/hook_variants.json
+      - storyboard/storyboard.json
   - skill: visual-orchestrator
     output: assets/assets_manifest.json
   - skill: voiceover-adapter
@@ -738,21 +880,27 @@ stages:
 - 每条关键 claim 有 `source_ids`。
 - 脚本和博客不能引用无来源事实。
 
-### Task Packet 4：第一篇脚本、storyboard 和平台语言策略
+### Task Packet 4：第一篇脚本、Hook Lab、storyboard 和平台语言策略
 
-目标：形成中文母版和英文海外改写策略。
+目标：形成中文母版、英文海外改写策略和平台化开场方案。
 
 写入：
 
+- `script/hooks.json`
 - `script/voiceover.md`
 - `script/voice_segments.json`
+- `storyboard/hook_variants.json`
 - `storyboard/storyboard.json`
 - `blog/blog.md`
 - 平台 publish draft
+- `qa/hook_report.json`
 
 验证：
 
-- 开头 5 秒有 hook。
+- 每个平台至少 3 个 hook 候选。
+- 第一幕引用已选 `hook_id`。
+- Hook 评分包含吸引力、清晰度、真实性、平台适配和视觉潜力。
+- 无来源夸张结论不能进入已选 hook。
 - 中文国内版和英文海外版不是直译。
 - 每 8-12 秒有视觉变化。
 
@@ -828,6 +976,7 @@ stages:
 
 - 一条命令能从 `topic.yaml` 生成可审核发布包。
 - `claims.json` 能追溯关键事实。
+- `hooks.json` 和 `hook_report.json` 能记录每个平台的开场候选、评分和选用理由。
 - 个人声音或 fallback 声音能生成 `voiceover.wav`。
 - HyperFrames 能生成至少一个低清竖屏视频草稿。
 - `qa_report.json` 能发现缺引用、缺图、缺字幕、缺音频、缺封面的失败。
@@ -841,6 +990,13 @@ stages:
 - Motion Canvas: https://github.com/motion-canvas/motion-canvas
 - D2: https://d2lang.com/
 - GPT-SoVITS: https://github.com/RVC-Boss/GPT-SoVITS
+- Claude YouTube workflow reference: https://github.com/AgriciDaniel/claude-youtube
+- Claude Shorts scoring reference: https://github.com/AgriciDaniel/claude-shorts
+- Yao Open Prompts content references: https://github.com/yaojingang/yao-open-prompts
+- Social Calendar Skill reference: https://github.com/Darthflute/social-calendar-skill
+- Video Ad Generator hook reference: https://github.com/Creatify-AI/video-ad-generator
 - OpenAI Codex Skills: https://developers.openai.com/codex/skills
 - OpenAI Text to Speech: https://developers.openai.com/api/docs/guides/text-to-speech
 - OpenAI Speech to Text: https://developers.openai.com/api/docs/guides/speech-to-text
+
+这些 GitHub 项目只作为 Hook、留存评分和平台原生内容的设计参考；第一阶段不把它们直接安装为生产依赖。
