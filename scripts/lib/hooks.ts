@@ -313,6 +313,12 @@ export function writeHookArtifacts(episodeDir: string, results: PlatformHookResu
     selected_pattern: result.variants[0]?.pattern ?? null,
     selection_reason: "deterministic_first_primary_pattern"
   }));
+  const platforms = results.map((result) => ({
+    platform: result.platform,
+    selected_hook_id: result.selected_hook_id,
+    candidate_count: result.variants.length,
+    rejected_hook_ids: result.variants.slice(1).map((variant) => variant.hook_id)
+  }));
   const hookReport = {
     status: "partial",
     generated_at: new Date(0).toISOString(),
@@ -326,6 +332,7 @@ export function writeHookArtifacts(episodeDir: string, results: PlatformHookResu
       render_calls: false,
       network_calls: false
     },
+    platforms,
     selected_hooks: selectedHooks
   };
 

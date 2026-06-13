@@ -11,6 +11,62 @@
     "render_calls": false,
     "network_calls": false
   },
+  "platforms": [
+    {
+      "platform": "douyin.zh-CN",
+      "selected_hook_id": "hook_douyin_zh_cn_01",
+      "candidate_count": 3,
+      "rejected_hook_ids": [
+        "hook_douyin_zh_cn_02",
+        "hook_douyin_zh_cn_03"
+      ]
+    },
+    {
+      "platform": "xiaohongshu.zh-CN",
+      "selected_hook_id": "hook_xiaohongshu_zh_cn_01",
+      "candidate_count": 3,
+      "rejected_hook_ids": [
+        "hook_xiaohongshu_zh_cn_02",
+        "hook_xiaohongshu_zh_cn_03"
+      ]
+    },
+    {
+      "platform": "bilibili.zh-CN",
+      "selected_hook_id": "hook_bilibili_zh_cn_01",
+      "candidate_count": 3,
+      "rejected_hook_ids": [
+        "hook_bilibili_zh_cn_02",
+        "hook_bilibili_zh_cn_03"
+      ]
+    },
+    {
+      "platform": "youtube-shorts.en-US",
+      "selected_hook_id": "hook_youtube_shorts_en_us_01",
+      "candidate_count": 3,
+      "rejected_hook_ids": [
+        "hook_youtube_shorts_en_us_02",
+        "hook_youtube_shorts_en_us_03"
+      ]
+    },
+    {
+      "platform": "youtube-long.en-US",
+      "selected_hook_id": "hook_youtube_long_en_us_01",
+      "candidate_count": 3,
+      "rejected_hook_ids": [
+        "hook_youtube_long_en_us_02",
+        "hook_youtube_long_en_us_03"
+      ]
+    },
+    {
+      "platform": "x.en-US",
+      "selected_hook_id": "hook_x_en_us_01",
+      "candidate_count": 3,
+      "rejected_hook_ids": [
+        "hook_x_en_us_02",
+        "hook_x_en_us_03"
+      ]
+    }
+  ],
   "selected_hooks": [
     {
       "platform": "douyin.zh-CN",
