@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.env.local
+coverage/
+*.log
+episodes/**/renders/*.mp4
+episodes/**/audio/*.wav
+episodes/**/voice/enrollment/*.wav
+episodes/**/voice/enrollment/*.mp3

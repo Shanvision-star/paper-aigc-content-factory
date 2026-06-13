@@ -1,0 +1,23 @@
+{
+  "name": "paper-aigc-content-factory",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "validate:topic": "tsx scripts/validate_topic.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
+    "episode:contract-smoke": "tsx scripts/run_pipeline.ts episodes/ep01_attention_is_all_you_need/topic.yaml --mode contract-smoke",
+    "hooks:score": "tsx scripts/score_hooks.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
+    "quality:gate": "tsx scripts/quality_gate.ts episodes/ep01_attention_is_all_you_need/topic.yaml"
+  },
+  "dependencies": {
+    "yaml": "^2.7.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
