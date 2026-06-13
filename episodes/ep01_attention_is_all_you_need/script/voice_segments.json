@@ -1,0 +1,49 @@
+[
+  {
+    "segment_id": "seg_001",
+    "start": 0,
+    "duration": 8,
+    "text": "如果你一看到 QKV 就断片，先看这 20 秒。",
+    "claim_ids": [
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "segment_id": "seg_002",
+    "start": 8,
+    "duration": 10,
+    "text": "这篇论文的关键，不是把模型堆得更大，而是改变模型阅读序列的方式。",
+    "claim_ids": [
+      "c_attention_reading_shift",
+      "c_transformer_parallelism"
+    ]
+  },
+  {
+    "segment_id": "seg_003",
+    "start": 18,
+    "duration": 12,
+    "text": "Q 像是在提问，K 像是在被匹配，V 则承载真正要被汇总的信息。",
+    "claim_ids": [
+      "c_attention_qkv",
+      "c_attention_core"
+    ]
+  },
+  {
+    "segment_id": "seg_004",
+    "start": 30,
+    "duration": 10,
+    "text": "当所有 token 可以同时看见彼此，长距离关系就不再只能排队传递。",
+    "claim_ids": [
+      "c_transformer_parallelism"
+    ]
+  },
+  {
+    "segment_id": "seg_005",
+    "start": 40,
+    "duration": 10,
+    "text": "这也是后来许多大语言模型都绕不开 Transformer 的原因之一。",
+    "claim_ids": [
+      "c_transformer_impact"
+    ]
+  }
+]

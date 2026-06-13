@@ -1,0 +1,15 @@
+{
+  "voice_profile_id": "rome_personal_zh_v1",
+  "owner": "user_self",
+  "consent_audio": "voice/enrollment/consent.wav",
+  "reference_audio": [],
+  "allowed_use": [
+    "personal_ai_paper_voiceover"
+  ],
+  "default_engine": "gpt_sovits_local",
+  "fallback_engine": "openai_tts",
+  "status": "recording_needed",
+  "generated_at": "1970-01-01T00:00:00.000Z",
+  "provider_calls": false,
+  "tts_calls": false
+}

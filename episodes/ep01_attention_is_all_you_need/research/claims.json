@@ -1,0 +1,96 @@
+[
+  {
+    "claim_id": "c_paper_problem",
+    "claim": "The Transformer paper targeted sequence transduction without relying on recurrent neural networks.",
+    "source_ids": [
+      "src_001"
+    ],
+    "confidence": "high",
+    "used_in": [
+      "blog",
+      "script",
+      "storyboard"
+    ]
+  },
+  {
+    "claim_id": "c_attention_core",
+    "claim": "Scaled dot-product attention compares queries and keys, then uses the resulting weights to combine values.",
+    "source_ids": [
+      "src_001"
+    ],
+    "confidence": "high",
+    "used_in": [
+      "blog",
+      "script",
+      "storyboard"
+    ]
+  },
+  {
+    "claim_id": "c_attention_qkv",
+    "claim": "Q, K, and V are projected representations used by attention to decide what information each token should read.",
+    "source_ids": [
+      "src_001"
+    ],
+    "confidence": "high",
+    "used_in": [
+      "blog",
+      "script",
+      "storyboard"
+    ]
+  },
+  {
+    "claim_id": "c_transformer_parallelism",
+    "claim": "Self-attention allows the model to process token relationships without the sequential recurrence bottleneck.",
+    "source_ids": [
+      "src_001"
+    ],
+    "confidence": "high",
+    "used_in": [
+      "blog",
+      "script",
+      "storyboard"
+    ]
+  },
+  {
+    "claim_id": "c_attention_reading_shift",
+    "claim": "The important shift was not only model size, but the way the architecture reads relationships across a sequence.",
+    "source_ids": [
+      "src_001",
+      "src_002"
+    ],
+    "confidence": "medium",
+    "used_in": [
+      "blog",
+      "script",
+      "storyboard"
+    ]
+  },
+  {
+    "claim_id": "c_transformer_impact",
+    "claim": "Transformer-style architectures became foundational for many later large language models.",
+    "source_ids": [
+      "src_001",
+      "src_002"
+    ],
+    "confidence": "medium",
+    "used_in": [
+      "blog",
+      "script",
+      "storyboard"
+    ]
+  },
+  {
+    "claim_id": "c_paper_summary",
+    "claim": "A practical explanation of the paper can be organized around the problem, attention mechanism, and later impact.",
+    "source_ids": [
+      "src_001",
+      "src_002"
+    ],
+    "confidence": "medium",
+    "used_in": [
+      "blog",
+      "script",
+      "storyboard"
+    ]
+  }
+]
