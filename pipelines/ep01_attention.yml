@@ -1,0 +1,8 @@
+id: ep01_attention_is_all_you_need
+topic: episodes/ep01_attention_is_all_you_need/topic.yaml
+mode: contract-smoke
+stages:
+  - validate_topic
+  - score_hooks
+  - run_contract_smoke
+  - quality_gate

@@ -1,0 +1,17 @@
+id: bilibili.zh-CN
+language: zh-CN
+surface: long_video
+aspect_ratio: "16:9"
+resolution:
+  width: 1920
+  height: 1080
+subtitle:
+  hard_subtitle: true
+  max_chars_per_line: 24
+hook_strategy:
+  first_seconds: 10
+  primary_patterns:
+    - authority_anchor
+    - question_agenda
+    - structure_preview
+  allow_context_setup: true

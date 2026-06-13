@@ -1,0 +1,17 @@
+id: x.en-US
+language: en-US
+surface: social_clip
+aspect_ratio: "1:1"
+resolution:
+  width: 1080
+  height: 1080
+subtitle:
+  hard_subtitle: true
+  max_chars_per_line: 42
+hook_strategy:
+  first_seconds: 4
+  primary_patterns:
+    - bold_claim
+    - visual_summary
+    - thread_lead_in
+  center_safe_area: true

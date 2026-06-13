@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Paper Content Factory Episode",
+  "type": "object",
+  "required": ["episode_id", "title", "paper", "audience", "targets", "outputs", "constraints"],
+  "properties": {
+    "episode_id": { "type": "string", "pattern": "^ep[0-9]+_[a-z0-9_]+$" },
+    "title": { "type": "string", "minLength": 1 },
+    "paper": {
+      "type": "object",
+      "required": ["title", "arxiv_id", "local_research_report"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "arxiv_id": { "type": "string", "pattern": "^[0-9]{4}\\.[0-9]{4,5}$" },
+        "local_research_report": { "type": "string", "minLength": 1 }
+      }
+    },
+    "audience": {
+      "type": "object",
+      "required": ["primary"],
+      "properties": {
+        "primary": { "type": "string", "minLength": 1 }
+      }
+    },
+    "targets": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "outputs": {
+      "type": "object",
+      "required": ["blog", "pdf", "video", "voiceover", "publish_pack"],
+      "properties": {
+        "blog": { "type": "boolean" },
+        "pdf": { "type": "boolean" },
+        "video": { "type": "boolean" },
+        "voiceover": { "type": "boolean" },
+        "publish_pack": { "type": "boolean" }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "required": ["auto_publish", "require_primary_sources", "require_citation_gate", "require_human_review", "voice_mode"],
+      "properties": {
+        "auto_publish": { "const": false },
+        "require_primary_sources": { "type": "boolean" },
+        "require_citation_gate": { "type": "boolean" },
+        "require_human_review": { "type": "boolean" },
+        "voice_mode": { "enum": ["personal_voice_or_builtin_fallback", "builtin_voice_only"] }
+      }
+    }
+  }
+}

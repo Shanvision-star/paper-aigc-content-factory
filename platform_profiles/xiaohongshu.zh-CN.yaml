@@ -1,0 +1,18 @@
+id: xiaohongshu.zh-CN
+language: zh-CN
+surface: note_video
+aspect_ratio: "3:4"
+resolution:
+  width: 1080
+  height: 1440
+subtitle:
+  hard_subtitle: true
+  max_chars_per_line: 18
+hook_strategy:
+  first_seconds: 5
+  primary_patterns:
+    - saveable_summary
+    - learning_pain
+    - note_summary
+    - mistake_warning
+  cover_first: true

@@ -1,0 +1,87 @@
+scoring_dimensions:
+  - hook_strength
+  - clarity
+  - truthfulness
+  - platform_fit
+  - visual_potential
+patterns:
+  - id: pain_point
+    zh_name: 痛点代入
+    risk: medium
+    template_zh: "如果你一看到 {concept} 就断片，先看这 {duration} 秒。"
+    visual_cue: "{concept} 卡片快速入场，随后拆成三个可解释元素"
+  - id: contrarian
+    zh_name: 反常识
+    risk: medium
+    template_zh: "{subject} 最厉害的不是 {wrong_belief}，而是 {correct_shift}。"
+    template_en: "{subject} did not just make models bigger. It changed how models read."
+    visual_cue: "左右对比卡片，错误认知被划掉，正确变化放大"
+  - id: conflict_compare
+    zh_name: 冲突对比
+    risk: low
+    template_zh: "{old_way} 像 {old_metaphor}，{new_way} 像 {new_metaphor}。"
+    visual_cue: "两列对比动画，从排队处理切到并行连线"
+  - id: visual_promise
+    zh_name: 视觉承诺
+    risk: low
+    template_zh: "我用一张动态图，把 {concept} 讲清楚。"
+    template_en: "I will explain {concept} with one animated diagram."
+    visual_cue: "空白画布生成动态图节点"
+  - id: saveable_summary
+    zh_name: 收藏承诺
+    risk: low
+    template_zh: "一张图看懂 {concept} 的核心。"
+    visual_cue: "笔记封面式大标题和三点清单"
+  - id: learning_pain
+    zh_name: 学习痛点
+    risk: low
+    template_zh: "终于有人把 {concept} 讲成人话了。"
+    visual_cue: "复杂公式淡出，换成卡片解释"
+  - id: note_summary
+    zh_name: 笔记感总结
+    risk: low
+    template_zh: "读 {paper_short_title}，我只抓这 {count} 个点。"
+    visual_cue: "论文标题页切到收藏型笔记目录"
+  - id: mistake_warning
+    zh_name: 避坑提醒
+    risk: low
+    template_zh: "别一上来背公式，先理解 {concept} 在找什么。"
+    visual_cue: "公式变暗，问题卡片浮现"
+  - id: authority_anchor
+    zh_name: 权威锚点
+    risk: low
+    template_zh: "{year} 年这篇论文，改写了后来的 AI 架构。"
+    template_en: "This {year} paper changed how modern AI models are built."
+    visual_cue: "论文标题和时间线入场"
+  - id: question_agenda
+    zh_name: 问题导向
+    risk: low
+    template_zh: "{paper_short_title} 到底解决了什么问题？"
+    template_en: "What problem did {paper_short_title} actually solve?"
+    visual_cue: "问题卡片进入，随后展开三段式议程"
+  - id: structure_preview
+    zh_name: 结构预告
+    risk: low
+    template_zh: "这一集只回答三个问题：{question_1}、{question_2}、{question_3}。"
+    template_en: "This episode answers three questions: {question_1}, {question_2}, and {question_3}."
+    visual_cue: "三张章节卡片依次出现"
+  - id: result_first
+    zh_name: 结果先行
+    risk: low
+    template_en: "Every modern LLM owes something to this {year} paper."
+    visual_cue: "LLM logos as abstract blocks connect back to paper card"
+  - id: bold_claim
+    zh_name: 强观点
+    risk: medium
+    template_en: "Attention did not just scale AI. It changed how models read."
+    visual_cue: "Bold claim text with reading-path animation"
+  - id: visual_summary
+    zh_name: 图解摘要
+    risk: low
+    template_en: "The shortest visual explanation of Q, K, and V."
+    visual_cue: "Q/K/V cards align into attention output"
+  - id: thread_lead_in
+    zh_name: 串联引导
+    risk: low
+    template_en: "One diagram for the paper behind modern transformers."
+    visual_cue: "Diagram thumbnail expands from center-safe frame"
