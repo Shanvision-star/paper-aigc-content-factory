@@ -1,0 +1,31 @@
+{
+  "status": "partial",
+  "checked_at": "1970-01-01T00:00:00.000Z",
+  "passed": [
+    "topic.yaml",
+    "research/sources.jsonl",
+    "research/claims.json",
+    "script/hooks.json",
+    "script/voiceover.md",
+    "script/voice_segments.json",
+    "storyboard/hook_variants.json",
+    "storyboard/storyboard.json",
+    "qa/hook_report.json",
+    "blog/blog.md",
+    "voice/voice_profile_manifest.json",
+    "review/human_review.md"
+  ],
+  "failed": [],
+  "not_verified": [
+    "audio/voiceover.wav",
+    "captions/subtitles.srt",
+    "renders/douyin_zh_1080x1920_draft.mp4",
+    "publish/publish_pack.md"
+  ],
+  "blocking_items": [
+    "Not verified runtime artifact: audio/voiceover.wav",
+    "Not verified runtime artifact: captions/subtitles.srt",
+    "Not verified runtime artifact: renders/douyin_zh_1080x1920_draft.mp4",
+    "Not verified runtime artifact: publish/publish_pack.md"
+  ]
+}
