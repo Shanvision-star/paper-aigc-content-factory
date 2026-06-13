@@ -3,6 +3,8 @@ import path from "node:path";
 import YAML from "yaml";
 import { z } from "zod";
 
+export const ProfileIdSchema = z.string().regex(/^[a-z0-9-]+\.(zh-CN|en-US)$/);
+
 export function loadYamlFile(filePath: string): unknown {
   const absolutePath = path.resolve(filePath);
   const raw = fs.readFileSync(absolutePath, "utf8");
@@ -20,7 +22,7 @@ export const TopicSchema = z.object({
   audience: z.object({
     primary: z.string().min(1)
   }),
-  targets: z.array(z.string().min(1)).min(1),
+  targets: z.array(ProfileIdSchema).min(1),
   outputs: z.object({
     blog: z.boolean(),
     pdf: z.boolean(),
@@ -40,7 +42,7 @@ export const TopicSchema = z.object({
 export type Topic = z.infer<typeof TopicSchema>;
 
 export const PlatformProfileSchema = z.object({
-  id: z.string().min(1),
+  id: ProfileIdSchema,
   language: z.enum(["zh-CN", "en-US"]),
   surface: z.string().min(1),
   aspect_ratio: z.string().min(1),
@@ -81,6 +83,24 @@ export const HookPatternsSchema = z.object({
     template_en: z.string().optional(),
     visual_cue: z.string().min(1)
   })).min(1)
+}).superRefine((value, context) => {
+  const seenPatternIds = new Set<string>();
+  const duplicatePatternIds = new Set<string>();
+
+  for (const pattern of value.patterns) {
+    if (seenPatternIds.has(pattern.id)) {
+      duplicatePatternIds.add(pattern.id);
+    }
+    seenPatternIds.add(pattern.id);
+  }
+
+  if (duplicatePatternIds.size > 0) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: `Duplicate hook pattern id(s): ${Array.from(duplicatePatternIds).sort().join(", ")}`,
+      path: ["patterns"]
+    });
+  }
 });
 
 export type HookPatterns = z.infer<typeof HookPatternsSchema>;
@@ -90,7 +110,8 @@ export function readTopic(topicPath: string): Topic {
 }
 
 export function readPlatformProfile(profileId: string): PlatformProfile {
-  return PlatformProfileSchema.parse(loadYamlFile(`platform_profiles/${profileId}.yaml`));
+  const validProfileId = ProfileIdSchema.parse(profileId);
+  return PlatformProfileSchema.parse(loadYamlFile(`platform_profiles/${validProfileId}.yaml`));
 }
 
 export function readHookPatterns(): HookPatterns {

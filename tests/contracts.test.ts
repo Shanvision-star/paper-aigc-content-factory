@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { loadYamlFile, TopicSchema, PlatformProfileSchema, HookPatternsSchema } from "../scripts/lib/contracts.js";
+import { loadYamlFile, TopicSchema, PlatformProfileSchema, HookPatternsSchema, ProfileIdSchema } from "../scripts/lib/contracts.js";
 
 describe("content factory contracts", () => {
   it("loads the first episode topic", () => {
@@ -44,5 +44,73 @@ describe("content factory contracts", () => {
       "platform_fit",
       "visual_potential"
     ]);
+  });
+
+  it("rejects unsafe profile identifiers", () => {
+    expect(ProfileIdSchema.safeParse("../hook_patterns").success).toBe(false);
+    expect(TopicSchema.safeParse({
+      episode_id: "ep01_attention_is_all_you_need",
+      title: "Attention Is All You Need 改变了什么",
+      paper: {
+        title: "Attention Is All You Need",
+        arxiv_id: "1706.03762",
+        local_research_report: "D:/Shanvisorin_platform/Paper_everyday/paper_desgin/attention_is_all_you_nedd_deep-research-report.md"
+      },
+      audience: {
+        primary: "工程师 + AI 内容初学者"
+      },
+      targets: ["../hook_patterns"],
+      outputs: {
+        blog: true,
+        pdf: true,
+        video: true,
+        voiceover: true,
+        publish_pack: true
+      },
+      constraints: {
+        auto_publish: false,
+        require_primary_sources: true,
+        require_citation_gate: true,
+        require_human_review: true,
+        voice_mode: "personal_voice_or_builtin_fallback"
+      }
+    }).success).toBe(false);
+  });
+
+  it("rejects duplicate hook pattern identifiers", () => {
+    const scoring_dimensions = [
+      "hook_strength",
+      "clarity",
+      "truthfulness",
+      "platform_fit",
+      "visual_potential"
+    ];
+
+    const duplicatePatterns = {
+      scoring_dimensions,
+      patterns: [
+        {
+          id: "pain_point",
+          zh_name: "痛点代入",
+          risk: "medium",
+          template_zh: "如果你一看到 {concept} 就断片，先看这 {duration} 秒。",
+          visual_cue: "{concept} 卡片快速入场，随后拆成三个可解释元素"
+        },
+        {
+          id: "pain_point",
+          zh_name: "重复痛点",
+          risk: "low",
+          template_zh: "重复",
+          visual_cue: "重复"
+        }
+      ]
+    };
+
+    const result = HookPatternsSchema.safeParse(duplicatePatterns);
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toContain("Duplicate hook pattern id(s): pain_point");
+    }
   });
 });
