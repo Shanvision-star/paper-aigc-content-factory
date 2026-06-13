@@ -1,0 +1,36 @@
+---
+name: quality-gate
+description: Use when evaluating episode artifacts and reporting pass, partial, or failed production readiness.
+---
+
+# Quality Gate
+
+## Inputs
+
+- `topic.yaml`
+- `research/claims.json`
+- `script/hooks.json`
+- `script/storyboard.json`
+- `qa/hook_report.json`
+- Available audio, caption, visual, video, blog, and publish artifacts
+
+## Outputs
+
+- `qa/qa_report.json`
+- Gate status: `pass`, `partial`, or `failed`
+- Missing-artifact list
+- Human-review checklist
+
+## Allowed Actions
+
+- Evaluate topic, sources, claims, hooks, script, visuals, voice, captions, video, and publish-pack readiness.
+- Report `pass`, `partial`, or `failed` with explicit reasons.
+- Preserve deterministic default checks and keep real provider smoke separate.
+- Surface missing voice, video, captions, cover, blog, or publish artifacts.
+
+## Forbidden Actions
+
+- Do not report false success.
+- Do not hide missing voice, video, caption, source, or publish artifacts.
+- Do not claim full production readiness when status is `partial` or `failed`.
+- Do not auto-publish or lower gates to make an episode pass.

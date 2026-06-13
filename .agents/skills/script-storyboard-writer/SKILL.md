@@ -1,0 +1,38 @@
+---
+name: script-storyboard-writer
+description: Use when drafting platform-aware hooks, voiceover, segments, storyboard, and blog copy from grounded claims.
+---
+
+# Script Storyboard Writer
+
+## Inputs
+
+- `research/claims.json`
+- `research/timeline.json`
+- Hook patterns and Hook Lab constraints
+- `platform_profiles/*.yaml`
+- Topic and audience intent
+
+## Outputs
+
+- `script/hooks.json`
+- `script/hook_variants.json`
+- `script/voiceover.md`
+- `script/voice_segments.json`
+- `script/storyboard.json`
+- `blog/blog.md`
+- PDF outline draft
+
+## Allowed Actions
+
+- Write hooks, voiceover, segments, storyboard beats, and blog draft from sourced claims.
+- Adapt opening style and pacing to the selected platform profiles.
+- Keep one core thesis and make the first scene reference the selected hook.
+- Record hook choices, rejected variants, and source-backed rationale.
+
+## Forbidden Actions
+
+- Do not use generic openers in the short-video first scene.
+- Do not render video, generate keyframes, or synthesize audio.
+- Do not use unsourced exaggeration as clickbait.
+- Do not change or invent claim evidence while writing scripts.
