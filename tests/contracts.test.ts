@@ -1,5 +1,7 @@
+import { randomUUID } from "node:crypto";
+import fs from "node:fs";
 import { describe, expect, it } from "vitest";
-import { loadYamlFile, TopicSchema, PlatformProfileSchema, HookPatternsSchema, ProfileIdSchema } from "../scripts/lib/contracts.js";
+import { loadYamlFile, TopicSchema, PlatformProfileSchema, HookPatternsSchema, ProfileIdSchema, readPlatformProfile } from "../scripts/lib/contracts.js";
 
 describe("content factory contracts", () => {
   it("loads the first episode topic", () => {
@@ -75,6 +77,23 @@ describe("content factory contracts", () => {
         voice_mode: "personal_voice_or_builtin_fallback"
       }
     }).success).toBe(false);
+  });
+
+  it("rejects platform profile files whose internal id does not match the requested id", () => {
+    const profileId = `tmp-contract-${randomUUID().replaceAll("-", "")}.zh-CN`;
+    const profilePath = `platform_profiles/${profileId}.yaml`;
+
+    try {
+      fs.writeFileSync(profilePath, fs.readFileSync("platform_profiles/douyin.zh-CN.yaml", "utf8"), "utf8");
+
+      expect(() => readPlatformProfile(profileId)).toThrow(
+        `Platform profile id mismatch for platform_profiles/${profileId}.yaml: expected ${profileId}, got douyin.zh-CN`
+      );
+    } finally {
+      if (fs.existsSync(profilePath)) {
+        fs.unlinkSync(profilePath);
+      }
+    }
   });
 
   it("rejects duplicate hook pattern identifiers", () => {

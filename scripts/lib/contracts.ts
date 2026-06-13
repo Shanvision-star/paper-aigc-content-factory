@@ -111,7 +111,14 @@ export function readTopic(topicPath: string): Topic {
 
 export function readPlatformProfile(profileId: string): PlatformProfile {
   const validProfileId = ProfileIdSchema.parse(profileId);
-  return PlatformProfileSchema.parse(loadYamlFile(`platform_profiles/${validProfileId}.yaml`));
+  const profilePath = `platform_profiles/${validProfileId}.yaml`;
+  const profile = PlatformProfileSchema.parse(loadYamlFile(profilePath));
+
+  if (profile.id !== validProfileId) {
+    throw new Error(`Platform profile id mismatch for ${profilePath}: expected ${validProfileId}, got ${profile.id}`);
+  }
+
+  return profile;
 }
 
 export function readHookPatterns(): HookPatterns {
