@@ -14,8 +14,8 @@ description: Use when aligning voiceover audio and segment text into subtitle fi
 
 ## Outputs
 
-- `subtitles/subtitles.srt`
-- `subtitles/subtitles.vtt`
+- `captions/subtitles.srt`
+- `captions/subtitles.vtt`
 - Caption timing and readability warnings
 - Missing-audio status when alignment cannot run
 

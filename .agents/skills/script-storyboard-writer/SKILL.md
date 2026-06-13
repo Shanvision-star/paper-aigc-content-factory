@@ -16,10 +16,10 @@ description: Use when drafting platform-aware hooks, voiceover, segments, storyb
 ## Outputs
 
 - `script/hooks.json`
-- `script/hook_variants.json`
+- `storyboard/hook_variants.json`
 - `script/voiceover.md`
 - `script/voice_segments.json`
-- `script/storyboard.json`
+- `storyboard/storyboard.json`
 - `blog/blog.md`
 - PDF outline draft
 

@@ -7,10 +7,10 @@ description: Use when composing storyboard, assets, audio, and captions into Hyp
 
 ## Inputs
 
-- `script/storyboard.json`
+- `storyboard/storyboard.json`
 - `assets/assets_manifest.json`
 - `audio/voiceover.wav`
-- `subtitles/subtitles.srt` or `subtitles/subtitles.vtt`
+- `captions/subtitles.srt` or `captions/subtitles.vtt`
 - Platform render profile
 
 ## Outputs

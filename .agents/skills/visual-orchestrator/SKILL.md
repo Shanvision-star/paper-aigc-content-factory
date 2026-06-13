@@ -7,9 +7,9 @@ description: Use when assigning visual engines and preparing an assets manifest 
 
 ## Inputs
 
-- `script/storyboard.json`
+- `storyboard/storyboard.json`
 - `script/hooks.json`
-- `script/hook_variants.json`
+- `storyboard/hook_variants.json`
 - Platform profile visual constraints
 - Available local visual templates
 

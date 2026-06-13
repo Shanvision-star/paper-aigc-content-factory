@@ -10,7 +10,7 @@ description: Use when evaluating episode artifacts and reporting pass, partial, 
 - `topic.yaml`
 - `research/claims.json`
 - `script/hooks.json`
-- `script/storyboard.json`
+- `storyboard/storyboard.json`
 - `qa/hook_report.json`
 - Available audio, caption, visual, video, blog, and publish artifacts
 
