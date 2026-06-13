@@ -1,0 +1,57 @@
+name: ai-paper-content-factory-ep01
+group: AI Paper Content Factory
+type: graph
+description: >
+  P0 contract-smoke workflow for the Attention Is All You Need episode.
+  Runs deterministic local checks only; no LLM, TTS, render, or publish calls.
+
+steps:
+  - id: validate_topic
+    description: Validate topic.yaml, platform profiles, and hook patterns.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run validate:topic
+
+  - id: hooks_score
+    description: Generate deterministic multi-platform hook candidates.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run hooks:score
+    depends: validate_topic
+
+  - id: contract_smoke
+    description: Generate deterministic P0 episode artifacts.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run episode:contract-smoke
+    depends: hooks_score
+
+  - id: quality_gate
+    description: Write qa_report.json and keep runtime gaps explicit.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run quality:gate
+    depends: contract_smoke
+
+  - id: pipeline_map
+    description: Write pipeline_map.json and pipeline_map.md with every stage input and output.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run pipeline:map
+    depends: quality_gate
+
+  - id: test
+    description: Run deterministic Vitest contract tests.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm test
+    depends: pipeline_map
+
+  - id: typecheck
+    description: Run TypeScript type checking.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run typecheck
+    depends: test
+
+  - id: inspect_reports
+    description: Print the current quality status and hook platform count.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: >
+      node -e "const q=require('./episodes/ep01_attention_is_all_you_need/qa/qa_report.json');
+      const h=require('./episodes/ep01_attention_is_all_you_need/qa/hook_report.json');
+      console.log(q.status, h.platforms.length)"
+    depends: typecheck

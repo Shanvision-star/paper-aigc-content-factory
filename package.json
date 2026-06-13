@@ -8,7 +8,8 @@
     "validate:topic": "tsx scripts/validate_topic.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
     "episode:contract-smoke": "tsx scripts/run_pipeline.ts episodes/ep01_attention_is_all_you_need/topic.yaml --mode contract-smoke",
     "hooks:score": "tsx scripts/score_hooks.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
-    "quality:gate": "tsx scripts/quality_gate.ts episodes/ep01_attention_is_all_you_need/topic.yaml"
+    "quality:gate": "tsx scripts/quality_gate.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
+    "pipeline:map": "tsx scripts/pipeline_map.ts episodes/ep01_attention_is_all_you_need/topic.yaml"
   },
   "dependencies": {
     "yaml": "^2.7.0",
