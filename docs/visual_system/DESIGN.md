@@ -43,7 +43,7 @@ This file defines the reusable visual identity for AI paper explainer content. I
 - Content scale is `90%`.
 - Safe padding is `54px` left/right and `96px` top/bottom.
 - Padding color is `black padding`.
-- The reference cover is `cover_transformer_ai_v1_1080x1920_safe90.png`.
+- Cover output names should encode episode, platform, canvas, and constraint, such as `{episode_slug}_{platform}_cover_1080x1920_safe90.png`.
 
 ## Figure and Formula Treatment
 

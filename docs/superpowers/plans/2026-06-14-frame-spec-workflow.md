@@ -262,7 +262,7 @@ This file defines the reusable visual identity for AI paper explainer content. I
 - Content scale is `90%`.
 - Safe padding is `54px` left/right and `96px` top/bottom.
 - Padding color is `black padding`.
-- The reference cover is `cover_transformer_ai_v1_1080x1920_safe90.png`.
+- Cover output names should encode episode, platform, canvas, and constraint, such as `{episode_slug}_{platform}_cover_1080x1920_safe90.png`.
 
 ## Figure and Formula Treatment
 
@@ -391,7 +391,7 @@ Create `.agents/skills/frame-spec-writer/SKILL.md` with this exact content:
 ```markdown
 ---
 name: frame-spec-writer
-description: Use when creating or updating global DESIGN.md, global FRAME.md, or an episode-level video_script/FRAME.md for AI paper explainer videos.
+description: Use when creating, updating, or reviewing global DESIGN.md, global FRAME.md, or an episode-level video_script/FRAME.md for AI paper explainer videos.
 ---
 
 # Frame Spec Writer
@@ -439,11 +439,13 @@ Create the visual bridge between research/script/storyboard assets and HyperFram
 - Do not invent paper facts.
 - Do not rewrite spoken narration.
 - Do not run real HyperFrames render.
-- Do not run real Manim render unless explicitly requested outside default tests.
+- Do not run real Manim render.
+- Do not run provider, LLM, or network calls.
 - Do not run TTS or voice cloning.
 - Do not replace technical script review.
 - Do not replace human approval before final render.
 - Do not put hidden narration cues into `spoken_text`.
+- Only report required Manim scenes or missing Manim assets; rendering belongs to a separately routed task outside this skill.
 
 ## Workflow
 
