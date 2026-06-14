@@ -345,7 +345,7 @@ constraints:
 
 职责：
 
-- 读取 `storyboard.json`、`assets_manifest.json`、`voiceover.wav` 和字幕。
+- 读取 `video_script/FRAME.md`、`storyboard.json`、`assets_manifest.json`、`voiceover.wav` 和字幕。
 - 生成 HyperFrames HTML composition。
 - 先输出低清 draft，再输出平台 final render。
 
@@ -353,6 +353,17 @@ constraints:
 
 - 第一阶段只用 HyperFrames 做最终视频编排。
 - 不同时维护 Remotion 主链路。
+- 缺少 episode FRAME 时不进入 composition，先报告 frame contract 缺口。
+
+### Visual Frame Spec Workflow
+
+视频视觉规范采用 `DESIGN.md -> FRAME.md -> episode FRAME.md` 链路。
+
+- `docs/visual_system/DESIGN.md` 是账号级视觉身份。
+- `docs/visual_system/FRAME.md` 是视频镜头级规范，约束 safe area、Caption Safe Area、Typography Floor、Frame Treatments、Paper Genre Treatment Registry 和 Pre-Render Frame Audit。
+- `episodes/{paper_id}/video_script/FRAME.md` 是单篇论文的 frame contract，必须覆盖 paper figure spotlight、formula explanation、platform variants、原论文图、公式图或 Manim 场景、字幕避让和 render QA。
+
+新增 `frame-spec-writer` skill，位于 `script-storyboard-writer` / `visual-orchestrator` 之后、`hyperframes-composer` 之前。它只写视觉规范，不改写 `spoken_text`，不运行真实 HyperFrames、Manim、TTS 或 provider。
 
 ### 9. `workflow-optimizer`
 
@@ -408,6 +419,53 @@ constraints:
 - `openai_tts`：第一阶段快速 fallback，用于先跑通口播文件和字幕链路。
 - `gpt_sovits_local`：长期个人声音主引擎，通过本地 service 或 adapter 调用。
 - `f5_tts_local` / `cosyvoice_local`：第二阶段 bakeoff，不阻塞第一篇。
+
+### 口播发音与提示词规范
+
+- 文档生成、口播稿生成和 TTS 提示词必须记录中文多音字、结构助词和技术词的读法。
+- `动态地` 中的 `地` 是状语助词，必须读轻声 `de`，不能读 `di`。
+- 如果 TTS 引擎容易误读，`source_text` 可以保留 `动态地`，但 `spoken_text` 应改写为无歧义表达，例如 `以动态方式建立关系`。
+- 英文产品名和技术专名保持整体读法，例如 `ChatGPT`、`AI Agent`、`Attention`、`KV Cache`、`vLLM`；只在公式符号如 `Q`、`K`、`V`、`QK` 中保留字母间停顿。
+- 后续 prompt 模板必须包含“发音规范”段落，列出本集容易误读的中文词、英文词和公式符号。
+
+### Voiceover Hard Gates
+
+- 个人音色、克隆声音和本地 TTS 口播必须遵循 `sample -> asr_diff -> human_approval -> full_tts -> merge -> captions -> render`。
+- F5-TTS、GPT-SoVITS、CosyVoice 等引擎不能跳过 sample-first 直接跑全量音频。
+- F5-TTS 参考音频必须使用 neutral 8-10s 内容，避免与本集主题、`为什么重要` 或正式口播句重叠。
+- 有 ASR 输出时必须执行 ASR transcript diff；没有 ASR 时必须记录缺失，并保留人工听审。
+- `source_text` 和 `spoken_text` 必须分离：前者是审核稿，后者只服务发音、数字、英文和公式口播规范。
+- 小样审核、重复检测、reference-text leakage 检测和 postprocess 结果必须能进入 review 或 QA 记录。
+- 该流程由 `.agents/skills/tts-voiceover-quality-gate/SKILL.md` 维护，`voiceover-adapter` 只负责生成或导入音频产物。
+
+### Script Quality Contract
+
+- 正式脚本必须解释论文为什么影响今天的 modern LLM 时代，而不是只复述论文结构。
+- 每条视频保留一个核心 thesis，并用平台化 Hook 开场。
+- 关键机制必须用 Feynman 方式讲清楚：直观例子之后回到真实机制。
+- Attention 应解释为 weighted aggregation；不能误导成模型神奇地“看懂全句”。
+- Q/K/V 必须说明为 learned projection spaces，不能只拟人化成固定角色。
+- Multi-Head Attention 的 head 是训练中形成的表示子空间，不是人工指定专家。
+- ChatGPT、Claude、Agent、Sora、MCP、KV Cache、FlashAttention、vLLM 等现代连接必须保持层级准确。
+- 脚本进入 TTS 前应由 `.agents/skills/technical-script-reviewer/SKILL.md` 审查阻断项、清晰度、工程上下文和 TTS 风险。
+
+### Review Before Render
+
+- 不允许只用命令完成状态代表视频完成；必须检查 `qa_report.json`、小样审核、音频 manifest、字幕、封面和渲染状态。
+- `qa_report.json.status` 为 `partial` 或 `failed` 时，不得宣称生产完成。
+- 真实 TTS、真实 HyperFrames render 和真实 provider smoke 必须显式运行并与默认 `npm test` 分离。
+- Dagu 工作流必须暴露关键门禁节点：`sample`、`asr_diff`、`human_approval`、`full_tts`、`merge`、`captions`、`render`。
+- 每次脚本、音频参考、spoken_text 或字幕时长变化后，必须重新评估相关门禁或明确记录未重跑原因。
+
+### 竖版封面导出硬约束
+
+- 第一集抖音安全区封面是 `episodes/ep01_attention_is_all_you_need/video_script/cover_transformer_ai_v1_1080x1920_safe90.png`。
+- 最终封面格式必须是 `PNG`，画布必须是 `1080x1920`，比例为 `9:16`。
+- 面向抖音、小红书、B 站竖版和 YouTube Shorts 的默认封面内容缩放为 `90%`。
+- `90%` 缩放后保留 `54px` 左右安全边距、`96px` 上下安全边距，并使用 `black padding`。
+- 不要为了填满画布再次放大安全区封面；抖音上传封面时存在边缘溢出风险。
+- 后续封面生成、缩放和审核应优先调用 `.agents/skills/short-video-cover-constraints/SKILL.md`。
+- 封面设计参考来源固定为 `youtube-thumbnail`、`marketing-short-video-editing-coach`、`awesome-nanobanana-pro`，只作设计参考，不作为生产依赖。
 
 ### 音频质量门禁
 
