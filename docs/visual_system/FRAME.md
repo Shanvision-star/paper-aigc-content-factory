@@ -57,6 +57,16 @@ Use the original paper image as the main visual. Pan, zoom, or crop only when th
 
 Reveal operation order first, then notation. For Attention, show QK matching, softmax weights, and weighted V reading before the full formula.
 
+## Formula Asset Contract
+
+- Required formulas must appear as complete visual objects, not cropped fragments.
+- Acceptable formula sources are clear paper crops, high-resolution formula-editor screenshots, KaTeX/MathJax/SVG output, Manim stills, or Manim scenes.
+- Raster formula screenshots must be rendered at least `2x` the target display size; vector SVG or HTML math is preferred when possible.
+- Each formula scene must preserve a full bounding box inside the safe area and keep captions outside that box.
+- Formula assets must declare canonical formula text or LaTeX, source type, output path, and annotation targets in the episode frame contract or assets manifest.
+- Annotated formulas must highlight the exact operation order used by the narration, such as `QK^T -> scale by sqrt(d_k) -> softmax -> weighted V`.
+- Pre-render keyframes must prove the full formula is sharp, complete, and readable on phone-sized playback.
+
 ### Modern LLM Connection
 
 Connect the paper mechanism to current GPT, Claude, Gemini, Qwen, DeepSeek, Sora, Agent, MCP, KV Cache, vLLM, or FlashAttention context only when the technical-script review has approved the connection.
@@ -93,5 +103,6 @@ Summarize the paper's core mental model and preview the next technical decomposi
 - Subtitle overlap test: captions do not cover formulas, faces, or paper labels.
 - Figure attribution test: original paper figures stay identifiable and referenced in `assets_manifest.json`.
 - Formula legibility test: formulas are readable without shrinking below the typography floor.
+- Formula completeness test: each required formula is fully visible, has a canonical text/LaTeX record, and includes any required annotation targets.
 - Platform crop test: vertical, note-video vertical, landscape, and square variants declare what is preserved or adapted.
 - Render boundary test: real HyperFrames render remains outside default `npm test`.

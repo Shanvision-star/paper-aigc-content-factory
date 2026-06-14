@@ -366,6 +366,7 @@ constraints:
 - `docs/visual_system/DESIGN.md` 是账号级视觉身份。
 - `docs/visual_system/FRAME.md` 是视频镜头级规范，约束 safe area、Caption Safe Area、Typography Floor、Frame Treatments、Paper Genre Treatment Registry 和 Pre-Render Frame Audit。
 - `episodes/{paper_id}/video_script/FRAME.md` 是单篇论文的 frame contract，必须覆盖 paper figure spotlight、formula explanation、platform variants、原论文图、公式图或 Manim 场景、字幕避让和 render QA。
+- 公式资产必须执行 Formula Asset Contract：完整公式对象、canonical formula text 或 LaTeX、来源类型、清晰截图/SVG/MathJax/KaTeX/Manim 输出、标注目标、safe-area bounding box 和关键帧审核。
 
 新增 `frame-spec-writer` skill，位于 `script-storyboard-writer` / `visual-orchestrator` 之后、`hyperframes-composer` 之前。它只写视觉规范，不改写 `spoken_text`，不运行真实 HyperFrames、Manim、TTS 或 provider。
 
@@ -726,6 +727,7 @@ X 英文：
 - 每个平台至少输出截图或关键帧。
 - 竖屏版本检查顶部、底部和中心安全区。
 - 字幕不得遮挡公式关键部分。
+- 公式不得被裁切、拆碎、低清化或以 raw LaTeX 暴露；必须有完整公式关键帧和必要标注。
 
 ### Gate 6：声音门禁
 

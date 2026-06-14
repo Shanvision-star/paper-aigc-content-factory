@@ -158,6 +158,13 @@ Required content:
 - Load-bearing safe area.
 - Caption safe area and subtitle bands.
 - Typography floor for small-screen readability.
+- Formula Asset Contract:
+  - complete formula visual object
+  - canonical formula text or LaTeX
+  - accepted source type: paper crop, formula-editor screenshot, KaTeX/MathJax/SVG, Manim still, or Manim scene
+  - safe-area bounding box
+  - annotation targets for narrated formula parts
+  - keyframe proof that the formula is complete, sharp, and phone-readable
 - Frame treatments:
   - hook title
   - Feynman analogy
@@ -178,6 +185,7 @@ Required content:
   - subtitle overlap test
   - figure attribution test
   - formula legibility test
+  - formula completeness test
   - platform crop test
 
 This file should not choose the specific paper's formulas or figures.
@@ -281,6 +289,7 @@ research_report.md
   -> STORYBOARD.md
   -> assets_manifest.json
   -> episode FRAME.md
+  -> formula asset contract
   -> HyperFrames index.html + compositions/
   -> draft render + key frames
   -> HANDOFF.md + qa_report.json

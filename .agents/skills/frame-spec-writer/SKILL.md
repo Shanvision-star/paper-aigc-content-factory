@@ -38,6 +38,7 @@ Create the visual bridge between research/script/storyboard assets and HyperFram
 - Paper identity: title, year, authors or organization, episode thesis.
 - Required original paper figures.
 - Required formulas or Manim scenes.
+- Formula asset contract: canonical formula text or LaTeX, acceptable source type, minimum raster/vector quality, annotation targets, safe-area placement, and keyframe review rule.
 - Beat table with spoken cue, frame treatment, visual engine, required assets, and platform notes.
 - Caption rules derived from `spoken_text`.
 - Pronunciation constraints, including Chinese `地` as `de` when TTS normalization is needed.
@@ -63,7 +64,7 @@ Create the visual bridge between research/script/storyboard assets and HyperFram
 3. Identify required original paper figures and formulas.
 4. Map each beat to one frame treatment.
 5. Assign visual engines: `hyperframes`, `manim`, `svg`, `paper_image`, or `python_chart`.
-6. Check caption safe area, formula legibility, and platform variants.
+6. Check caption safe area, formula completeness, formula legibility, annotation targets, and platform variants.
 7. Write or update episode `video_script/FRAME.md`.
 8. Report missing assets or unresolved review risks instead of fabricating content.
 

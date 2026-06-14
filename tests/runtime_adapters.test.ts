@@ -383,10 +383,14 @@ describe("runtime adapters", () => {
 
       const result = runHyperframesDraft(topicPath, tempRoot);
       const html = fs.readFileSync(path.join(episodeDir, "renders/hyperframes/ep01_draft.html"), "utf8");
+      const design = fs.readFileSync(path.join(episodeDir, "renders/hyperframes_formal/DESIGN.md"), "utf8");
 
       expect(result.status).toBe("composition_ready");
       expect(html).toContain("data-composition-id=\"ep01-attention-draft\"");
       expect(html).toContain("Attention Is All You Need");
+      expect(design).toContain("Formula Asset Contract");
+      expect(design).toContain("KaTeX/MathJax/SVG");
+      expect(design).toContain("full formula bounding box");
       expect(fs.existsSync(path.join(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4"))).toBe(false);
     });
   });

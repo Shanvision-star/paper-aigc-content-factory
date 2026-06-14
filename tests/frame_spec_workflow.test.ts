@@ -12,6 +12,7 @@ const globalDesignPath = "docs/visual_system/DESIGN.md";
 const globalFramePath = "docs/visual_system/FRAME.md";
 const frameSkillPath = ".agents/skills/frame-spec-writer/SKILL.md";
 const hyperframesComposerSkillPath = ".agents/skills/hyperframes-composer/SKILL.md";
+const visualOrchestratorSkillPath = ".agents/skills/visual-orchestrator/SKILL.md";
 const ep01FramePath = "episodes/ep01_attention_is_all_you_need/video_script/FRAME.md";
 
 describe("frame-spec workflow constraints", () => {
@@ -27,6 +28,7 @@ describe("frame-spec workflow constraints", () => {
       expect(doc).toContain("frame-spec-writer");
       expect(doc).toContain("paper figure spotlight");
       expect(doc).toContain("formula explanation");
+      expect(doc).toContain("Formula Asset Contract");
       expect(doc).toContain("platform variants");
       expect(doc).toContain("safe area");
     }
@@ -54,6 +56,10 @@ describe("frame-spec workflow constraints", () => {
     expect(frame).toContain("Caption Safe Area");
     expect(frame).toContain("Typography Floor");
     expect(frame).toContain("Frame Treatments");
+    expect(frame).toContain("Formula Asset Contract");
+    expect(frame).toContain("complete visual objects");
+    expect(frame).toContain("KaTeX/MathJax/SVG");
+    expect(frame).toContain("Formula completeness test");
     expect(frame).toContain("Paper Genre Treatment Registry");
     expect(frame).toContain("Pre-Render Frame Audit");
   });
@@ -74,6 +80,8 @@ describe("frame-spec workflow constraints", () => {
     expect(skill).toContain("Do not run real HyperFrames render");
     expect(skill).toContain("Do not run real Manim render");
     expect(skill).toContain("Do not run provider, LLM, or network calls");
+    expect(skill).toContain("Formula asset contract");
+    expect(skill).toContain("annotation targets");
     expect(skill).toContain("Chinese `地`");
   });
 
@@ -86,6 +94,10 @@ describe("frame-spec workflow constraints", () => {
     expect(episodeFrame).toContain("original paper figures");
     expect(episodeFrame).toContain("Transformer architecture");
     expect(episodeFrame).toContain("Attention formula");
+    expect(episodeFrame).toContain("Formula Asset Contract");
+    expect(episodeFrame).toContain("canonical formula");
+    expect(episodeFrame).toContain("formula-editor screenshot");
+    expect(episodeFrame).toContain("annotation targets");
     expect(episodeFrame).toContain("QK");
     expect(episodeFrame).toContain("softmax");
     expect(episodeFrame).toContain("Multi-Head Attention");
@@ -99,8 +111,21 @@ describe("frame-spec workflow constraints", () => {
     const skill = read(hyperframesComposerSkillPath);
 
     expect(skill).toContain("video_script/FRAME.md");
+    expect(skill).toContain("Formula Asset Contract");
+    expect(skill).toContain("formula_editor_screenshot");
+    expect(skill).toContain("Do not use raw, unrendered LaTeX");
     expect(skill).toContain("Do not run P0 video render during default tests");
     expect(skill).toContain("Do not add Remotion as a P0 render path");
     expect(skill).toContain("Do not publish rendered media to any platform");
+  });
+
+  it("makes visual-orchestrator preserve formula asset metadata before HyperFrames", () => {
+    const skill = read(visualOrchestratorSkillPath);
+
+    expect(skill).toContain("formula assets");
+    expect(skill).toContain("canonical formula text");
+    expect(skill).toContain("source type");
+    expect(skill).toContain("annotation targets");
+    expect(skill).toContain("Do not mark a formula asset complete");
   });
 });
