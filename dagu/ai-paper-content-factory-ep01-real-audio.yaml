@@ -1,0 +1,142 @@
+name: ai-paper-content-factory-ep01-real-audio
+group: AI Paper Content Factory
+type: graph
+description: >
+  Explicit local runtime workflow for the Attention Is All You Need episode.
+  Uses the user's authorized local reference voice and F5-TTS output; no auto-publish.
+
+steps:
+  - id: formal_visuals
+    description: Generate formal SVG and formula assets for the episode.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run visuals:ep01-formal
+
+  - id: sync_runtime
+    description: Sync the approved V5 focus-cue script/storyboard into runtime script, segments, and F5 input text.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run runtime:sync-ep01-formal
+    depends: formal_visuals
+
+  - id: voiceover_duplicate_guard
+    description: Block exact or near-duplicate voiceover sentences before TTS generation.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run voiceover:duplicate-guard
+    depends: sync_runtime
+
+  - id: f5_reference_safety
+    description: Require neutral 8-10s F5 reference audio to prevent reference-text leakage.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:f5-check-reference
+    depends: voiceover_duplicate_guard
+
+  - id: prepare_tts_segments
+    description: Rewrite numbers, English acronyms, and key concepts into Chinese-friendly spoken text for segmented TTS.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:f5-prepare-segments
+    depends: f5_reference_safety
+
+  - id: sample
+    description: Generate representative F5-TTS samples before any full-length generation.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:f5-generate-samples
+    depends: prepare_tts_segments
+
+  - id: asr_diff
+    description: Compare local ASR transcripts against spoken_text when ASR output is available; keep human review mandatory if ASR is missing.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:asr-transcript-diff
+    depends: sample
+
+  - id: human_approval
+    description: Hard gate requiring human approval of seg_001, seg_010, and seg_014 samples before full generation.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:sample-review-gate
+    depends: asr_diff
+
+  - id: full_tts
+    description: Generate F5-TTS audio one scene at a time after representative samples are approved.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: powershell -NoProfile -ExecutionPolicy Bypass -File scripts/f5_tts_generate_segmented.ps1 -Device cuda -NfeStep 16 -Speed 0.78 -SegmentSubdir segments
+    depends: human_approval
+
+  - id: merge
+    description: Merge generated scene audio with short natural pauses before postprocessing.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:f5-merge-segments
+    depends: full_tts
+
+  - id: apply_audio_timings
+    description: Apply real segmented audio durations back to the voiceover, storyboard, captions source, and video timeline.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:apply-segment-timings
+    depends: merge
+
+  - id: audio_postprocess
+    description: Denoise, limit, and normalize the generated voiceover before importing it into the canonical audio slot.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:postprocess -- --input audio/voiceover.segmented.wav
+    depends: apply_audio_timings
+
+  - id: import_voiceover
+    description: Import the postprocessed WAV into the canonical audio/voiceover.wav slot.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: >
+      npx tsx scripts/voiceover_adapter.ts
+      episodes/ep01_attention_is_all_you_need/topic.yaml
+      --mode import-audio
+      --input C:/Users/Rome/Documents/Paper_every_day/episodes/ep01_attention_is_all_you_need/audio/voiceover.postprocessed.wav
+    depends: audio_postprocess
+
+  - id: captions
+    description: Generate SRT/VTT captions from the episode voice segments.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run captions:align
+    depends: import_voiceover
+
+  - id: render
+    description: Render the full 1080x1920 HyperFrames MP4 draft and mux the generated voiceover audio.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run video:hyperframes-render-formal
+    depends: captions
+
+  - id: publish_pack
+    description: Write platform publish pack for human review without posting.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run publish:pack
+    depends: render
+
+  - id: quality_gate
+    description: Recompute quality status and keep remaining runtime gaps explicit.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run quality:gate
+    depends: publish_pack
+
+  - id: pipeline_map
+    description: Refresh the visual input/output map after real audio import.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run pipeline:map
+    depends: quality_gate
+
+  - id: test
+    description: Run deterministic Vitest contract tests.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm test
+    depends: pipeline_map
+
+  - id: typecheck
+    description: Run TypeScript type checking.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run typecheck
+    depends: test
+
+  - id: inspect_artifacts
+    description: Print the generated audio, formal render, and quality status.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: >
+      node -e "const fs=require('fs');
+      const audio=require('./episodes/ep01_attention_is_all_you_need/audio/f5_tts/segments/segmented_merge_report.json');
+      const timing=require('./episodes/ep01_attention_is_all_you_need/video_script/timing_report.json');
+      const render=require('./episodes/ep01_attention_is_all_you_need/renders/hyperframes_formal_status.json');
+      const qa=require('./episodes/ep01_attention_is_all_you_need/qa/qa_report.json');
+      console.log(JSON.stringify({audio:audio.status, audio_duration:audio.duration_sec, timeline_duration:timing.total_duration_sec, render:render.status, mux_exit_code:render.mux_exit_code, qa:qa.status, blocking_items:qa.blocking_items}, null, 2));"
+    depends: typecheck

@@ -1,0 +1,4 @@
+interface:
+  display_name: "TTS Voiceover Quality Gate"
+  short_description: "Gate personal-voice TTS before full generation and render."
+  default_prompt: "Review or run the TTS voiceover gates before full audio generation."

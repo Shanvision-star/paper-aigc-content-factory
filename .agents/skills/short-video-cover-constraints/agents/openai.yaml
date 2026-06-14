@@ -1,0 +1,4 @@
+interface:
+  display_name: "Short Video Cover Constraints"
+  short_description: "Apply Douyin-safe 9:16 cover image export constraints."
+  default_prompt: "Create or adjust a short-video cover using the project safe90 export constraints."

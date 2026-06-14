@@ -41,17 +41,11 @@ steps:
     run: npm run video:hyperframes-draft
     depends: captions
 
-  - id: video_render_smoke_mp4
-    description: Render a short HyperFrames MP4 smoke test with local FFmpeg.
-    working_dir: C:/Users/Rome/Documents/Paper_every_day
-    run: npm run video:hyperframes-render-smoke
-    depends: video_render
-
   - id: publish_pack
     description: Write human-review publish pack without auto-publishing.
     working_dir: C:/Users/Rome/Documents/Paper_every_day
     run: npm run publish:pack
-    depends: video_render_smoke_mp4
+    depends: video_render
 
   - id: quality_gate
     description: Write qa_report.json and keep runtime gaps explicit.

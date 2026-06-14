@@ -47,13 +47,13 @@ describe("HyperFrames render smoke", () => {
     expect(env.PRODUCER_HEADLESS_SHELL_PATH).toBe(explicitBrowser);
   });
 
-  it("wires a dedicated Dagu render-smoke node before publish_pack", () => {
+  it("keeps MP4 render smoke out of the default P0 Dagu workflow", () => {
     const workflow = YAML.parse(fs.readFileSync("dagu/ai-paper-content-factory-ep01.yaml", "utf8"));
     const steps = Object.fromEntries(workflow.steps.map((step: { id: string }) => [step.id, step]));
 
-    expect(steps.video_render_smoke_mp4.run).toBe("npm run video:hyperframes-render-smoke");
-    expect(steps.video_render_smoke_mp4.depends).toBe("video_render");
-    expect(steps.publish_pack.depends).toBe("video_render_smoke_mp4");
+    expect(steps.video_render_smoke_mp4).toBeUndefined();
+    expect(steps.video_render.run).toBe("npm run video:hyperframes-draft");
+    expect(steps.publish_pack.depends).toBe("video_render");
   });
 
   it("keeps the real-audio workflow away from fast noisy F5-TTS review settings", () => {

@@ -592,7 +592,7 @@ Create `episodes/ep01_attention_is_all_you_need/video_script/FRAME.md` with this
 | hook | ChatGPT, Claude, AI Agent all depend on this paper lineage | Hook Title | hyperframes | title card + Transformer silhouette | keep title inside vertical safe area |
 | old-world | RNN/LSTM felt like queue-based message passing | Feynman Analogy | svg | queue vs direct relation diagram | captions bottom, diagram center |
 | self-attention | every token computes relations with other tokens | Formula Explanation | manim | token graph + attention matrix | avoid subtitle overlap with matrix |
-| qkv | Q asks, K labels, V provides content | Formula Explanation | hyperframes + svg | Q/K/V cards | English terms stay whole words |
+| qkv | learned Q/K/V projections; show QK compatibility and weighted V aggregation | Formula Explanation | hyperframes + svg | Q/K/V cards | English terms stay whole words |
 | formula | QK, softmax, then weighted V | Formula Explanation | manim | Attention formula image or scene | formula must be readable |
 | multi-head | multiple learned subspaces analyze relations | Formula Explanation | hyperframes | multi-head branch diagram | do not imply manual head assignment |
 | positional | positional encoding adds order information | Formula Explanation | manim | sin/cos wave + token row | keep waves visible behind labels |

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Technical Script Reviewer"
+  short_description: "Review paper scripts before voiceover."
+  default_prompt: "Review this AI paper explainer script before TTS or video render."
