@@ -28,7 +28,7 @@ Return a concise revision note:
 
 - `changed`: sentences improved for Chinese-native rhythm, paragraph flow, or terminology consistency.
 - `unchanged`: formulas, cited facts, technical claims, English terms, and locked phrases preserved.
-- `needs_re_review`: any sentence whose meaning changed enough to require another technical review.
+- `failed_semantic_drift`: any sentence whose meaning changed. Humanizer output must not advance until the drift is removed and the technical reviewer re-checks the corrected text.
 
 ## Required Checks
 
@@ -36,6 +36,7 @@ Return a concise revision note:
 - Keep English terms remain whole words.
 - Keep Chinese `地` as `de` only when the TTS adapter needs a pronunciation-safe rewrite.
 - Remove empty rhetorical inflation only when the underlying claim stays the same.
+- Treat semantic drift as failure, not as a normal revision branch.
 
 ## Forbidden Actions
 

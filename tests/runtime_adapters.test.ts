@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { runCaptionAligner } from "../scripts/caption_align.js";
 import { checkF5ReferenceSafety } from "../scripts/f5_reference_safety_check.js";
 import { runHyperframesDraft } from "../scripts/hyperframes_draft.js";
+import { buildRenderInputFingerprint } from "../scripts/lib/renderFreshness.js";
 import { runPublishPack } from "../scripts/publish_pack.js";
 import { runContractSmoke } from "../scripts/run_pipeline.js";
 import { runAsrTranscriptDiffGate } from "../scripts/asr_transcript_diff_gate.js";
@@ -401,6 +402,62 @@ describe("runtime adapters", () => {
       expect(pack).toContain("小红书");
       expect(pack).toContain("YouTube Shorts");
       expect(pack).toContain("Not ready to publish");
+    });
+  });
+
+  it("does not mark the publish pack ready from a stale mp4 without formal render status", () => {
+    withTempEpisode((tempRoot, episodeDir) => {
+      const sourceAudio = path.join(tempRoot, "manual", "voiceover.wav");
+      writeMinimalWav(sourceAudio);
+      runVoiceoverAdapter({ topicPath, rootDir: tempRoot, mode: "import-audio", inputAudioPath: sourceAudio });
+      writeMinimalWav(path.join(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4"));
+
+      const result = runPublishPack(topicPath, tempRoot);
+      const status = JSON.parse(fs.readFileSync(path.join(episodeDir, "publish/publish_status.json"), "utf8"));
+
+      expect(result.status).toBe("partial");
+      expect(status.missing_inputs).toContain("renders/hyperframes_formal_status.json#status=missing");
+    });
+  });
+
+  it("does not mark the publish pack ready from rendered status without input fingerprint", () => {
+    withTempEpisode((tempRoot, episodeDir) => {
+      const sourceAudio = path.join(tempRoot, "manual", "voiceover.wav");
+      writeMinimalWav(sourceAudio);
+      runVoiceoverAdapter({ topicPath, rootDir: tempRoot, mode: "import-audio", inputAudioPath: sourceAudio });
+      runCaptionAligner(topicPath, tempRoot);
+      runHyperframesDraft(topicPath, tempRoot);
+      writeMinimalWav(path.join(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4"));
+      fs.writeFileSync(path.join(episodeDir, "renders/hyperframes_formal_status.json"), JSON.stringify({ status: "rendered" }), "utf8");
+
+      const result = runPublishPack(topicPath, tempRoot);
+      const status = JSON.parse(fs.readFileSync(path.join(episodeDir, "publish/publish_status.json"), "utf8"));
+
+      expect(result.status).toBe("partial");
+      expect(status.missing_inputs).toContain("renders/hyperframes_formal_status.json#input_fingerprint=missing");
+    });
+  });
+
+  it("marks the publish pack ready only when formal render status matches current inputs", () => {
+    withTempEpisode((tempRoot, episodeDir) => {
+      const sourceAudio = path.join(tempRoot, "manual", "voiceover.wav");
+      writeMinimalWav(sourceAudio);
+      runVoiceoverAdapter({ topicPath, rootDir: tempRoot, mode: "import-audio", inputAudioPath: sourceAudio });
+      runCaptionAligner(topicPath, tempRoot);
+      runHyperframesDraft(topicPath, tempRoot);
+      writeMinimalWav(path.join(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4"));
+      const fingerprint = buildRenderInputFingerprint(episodeDir);
+      fs.writeFileSync(
+        path.join(episodeDir, "renders/hyperframes_formal_status.json"),
+        JSON.stringify({ status: "rendered", input_fingerprint: fingerprint.input_fingerprint }),
+        "utf8"
+      );
+
+      const result = runPublishPack(topicPath, tempRoot);
+      const status = JSON.parse(fs.readFileSync(path.join(episodeDir, "publish/publish_status.json"), "utf8"));
+
+      expect(result.status).toBe("ready");
+      expect(status.missing_inputs).toEqual([]);
     });
   });
 });

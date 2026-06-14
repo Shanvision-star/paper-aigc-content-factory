@@ -12,6 +12,20 @@ const scriptHumanizerSkillPath = ".agents/skills/script-humanizer-zh/SKILL.md";
 const openingOptimizerSkillPath = ".agents/skills/short-video-opening-optimizer/SKILL.md";
 const platformAdapterSkillPath = ".agents/skills/platform-format-adapter/SKILL.md";
 const researchNotesPath = "docs/platform_distribution/github_research_notes.md";
+const platformProfilePaths = {
+  bilibili: "platform_profiles/bilibili.zh-CN.yaml",
+  douyin: "platform_profiles/douyin.zh-CN.yaml",
+  tiktok: "platform_profiles/tiktok.en-US.yaml",
+  x: "platform_profiles/x.en-US.yaml",
+  xiaohongshu: "platform_profiles/xiaohongshu.zh-CN.yaml",
+  youtubeLong: "platform_profiles/youtube-long.en-US.yaml",
+  youtubeShorts: "platform_profiles/youtube-shorts.en-US.yaml",
+};
+
+const expectYamlResolution = (yaml: string, width: number, height: number) => {
+  expect(yaml).toMatch(new RegExp(`width:\\s*${width}`));
+  expect(yaml).toMatch(new RegExp(`height:\\s*${height}`));
+};
 
 describe("platform content workflow constraints", () => {
   it("records script humanizer, opening optimizer, and platform adapter in README and main spec", () => {
@@ -41,6 +55,8 @@ describe("platform content workflow constraints", () => {
     expect(skill).toContain("Do not change approved technical claims");
     expect(skill).toContain("Do not rewrite locked spoken_text");
     expect(skill).toContain("Do not alter formulas");
+    expect(skill).toContain("failed_semantic_drift");
+    expect(skill).toContain("Treat semantic drift as failure");
     expect(skill).toContain("Chinese-native rhythm");
     expect(skill).toContain("English terms remain whole words");
   });
@@ -74,6 +90,23 @@ describe("platform content workflow constraints", () => {
     expect(skill).toContain("metadata");
     expect(skill).toContain("Do not auto-publish");
     expect(skill).toContain("partial failure");
+    expect(skill).toContain("missing_profile");
+    expect(skill).toContain("xiaohongshu.zh-CN");
+    expect(skill).toContain("1080x1440");
+  });
+
+  it("keeps platform dimensions profile-driven for domestic and overseas targets", () => {
+    for (const profilePath of Object.values(platformProfilePaths)) {
+      expect(exists(profilePath)).toBe(true);
+    }
+
+    expectYamlResolution(read(platformProfilePaths.douyin), 1080, 1920);
+    expectYamlResolution(read(platformProfilePaths.tiktok), 1080, 1920);
+    expectYamlResolution(read(platformProfilePaths.youtubeShorts), 1080, 1920);
+    expectYamlResolution(read(platformProfilePaths.xiaohongshu), 1080, 1440);
+    expectYamlResolution(read(platformProfilePaths.bilibili), 1920, 1080);
+    expectYamlResolution(read(platformProfilePaths.youtubeLong), 1920, 1080);
+    expectYamlResolution(read(platformProfilePaths.x), 1080, 1080);
   });
 
   it("records GitHub research notes for reusable external patterns", () => {

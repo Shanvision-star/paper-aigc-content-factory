@@ -53,7 +53,13 @@ dagu/ai-paper-content-factory-ep01.yaml
 Dagu 面板负责串联 P0 命令：
 
 ```text
-validate_topic -> hooks_score -> contract_smoke -> voiceover_audio -> captions -> video_render -> publish_pack -> quality_gate -> pipeline_map -> test -> typecheck -> inspect_reports
+validate_topic -> hooks_score -> contract_smoke -> voiceover_audio -> captions -> video_draft -> publish_pack -> quality_gate -> pipeline_map -> test -> typecheck -> inspect_reports
+```
+
+完整内容生产链路在进入成片或发布包前还需要经过这些 skill 门禁：
+
+```text
+technical-script-reviewer -> script-humanizer-zh -> short-video-opening-optimizer -> frame-spec-writer -> hyperframes-composer -> platform-format-adapter
 ```
 
 这个 workflow 使用当前本机仓库路径 `C:/Users/Rome/Documents/Paper_every_day` 作为 `working_dir`。如果仓库迁移到别的位置，需要同步调整 YAML 里的 `working_dir`。
@@ -168,7 +174,7 @@ sample -> asr_diff -> human_approval -> full_tts -> merge -> captions -> render
 `DESIGN.md -> FRAME.md -> episode FRAME.md`
 
 - `docs/visual_system/DESIGN.md` 定义账号级视觉身份：颜色、字体、中英文模式、封面 `safe90`、论文图和公式处理原则。
-- `docs/visual_system/FRAME.md` 把视觉身份转成视频镜头规则：`1080x1920`、`1920x1080`、`1080x1080`、safe area、Caption Safe Area、Typography Floor、Frame Treatments、Paper Genre Treatment Registry、Pre-Render Frame Audit。
+- `docs/visual_system/FRAME.md` 把视觉身份转成视频镜头规则：`1080x1920`、`1080x1440`、`1920x1080`、`1080x1080`、safe area、Caption Safe Area、Typography Floor、Frame Treatments、Paper Genre Treatment Registry、Pre-Render Frame Audit。
 - `episodes/{paper_id}/video_script/FRAME.md` 定义单篇论文的执行规则：paper figure spotlight、formula explanation、platform variants、需要出现的原论文图片、公式图片或 Manim 场景、字幕避让和渲染 QA。
 
 `frame-spec-writer` 负责生成或更新 episode FRAME；`hyperframes-composer` 必须读取 episode FRAME 后再生成 HTML composition。这个链路不运行真实 HyperFrames render，不替代 technical-script-reviewer、tts-voiceover-quality-gate 或人工审核。
@@ -179,7 +185,7 @@ sample -> asr_diff -> human_approval -> full_tts -> merge -> captions -> render
 
 - `script-humanizer-zh` 是可选中文自然化层，必须在 `technical-script-reviewer` 之后、`spoken_text` 锁定之前运行；它只能改善中文节奏和术语一致性，不能改 approved claim、公式或锁定口播。
 - `short-video-opening-optimizer` 在 storyboard/frame lock 之前运行，按 Douyin、Xiaohongshu、Bilibili、TikTok、YouTube Shorts、YouTube、X 的平台语境评分 `0-3s` opening hook、visual hook、verbal hook 和 text overlay。
-- `platform-format-adapter` 使用 `platform_profiles/*.yaml`，把 cover、video、captions 和 metadata 整理为本地 `publish/platform_manifest.json`；默认竖版 cover 仍遵守 `safe90`，常见尺寸包括 `1080x1920`、`1920x1080`、`1080x1080`。
+- `platform-format-adapter` 使用 `platform_profiles/*.yaml`，把 cover、video、captions 和 metadata 整理为本地 `publish/platform_manifest.json`；默认竖版 cover 仍遵守 `safe90`，尺寸只能来自 profile，当前包括 `1080x1920`、小红书 `1080x1440`、`1920x1080`、`1080x1080`。
 
 这些 skill 只做本地审核、文本优化和平台包准备，不 auto-publish、不上传媒体、不绕过人工审核。
 

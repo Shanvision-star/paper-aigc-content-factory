@@ -152,6 +152,7 @@ Required content:
 
 - Frame sizes and aspect-ratio behavior:
   - primary short-video: `1080x1920`
+  - note-video vertical: `1080x1440` when selected by a platform profile
   - optional landscape: `1920x1080`
   - optional square: `1080x1080`
 - Load-bearing safe area.
@@ -338,13 +339,15 @@ Hard boundaries:
 
 Default priority:
 
-1. Douyin / TikTok / Xiaohongshu / YouTube Shorts vertical: `1080x1920`
-2. Bilibili / YouTube landscape: `1920x1080`
-3. X / cross-platform square or feed preview: `1080x1080`
+1. Douyin / TikTok / YouTube Shorts vertical: `1080x1920`
+2. Xiaohongshu note-video vertical: `1080x1440`
+3. Bilibili / YouTube landscape: `1920x1080`
+4. X / cross-platform square or feed preview: `1080x1080`
 
 Rules:
 
 - Vertical safe area remains the strictest default for titles, captions, and cover crops.
+- Platform dimensions must be read from `platform_profiles/*.yaml`; do not infer one vertical size for every vertical-looking surface.
 - Chinese outputs use Chinese narration and Chinese primary subtitles.
 - Overseas outputs use English narration or English subtitle mode, but visual structure should remain compatible.
 - Platform-specific changes should live in platform profile files or episode frame notes, not hardcoded into composition templates.

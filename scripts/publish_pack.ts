@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { readPlatformProfile, readTopic } from "./lib/contracts.js";
 import { episodeDirForTopic } from "./lib/episodePaths.js";
+import { formalRenderOutputPath, formalRenderReadinessIssue } from "./lib/renderFreshness.js";
 import { runtimeTimestamp, writeJson, writeText } from "./lib/runtimeAdapters.js";
 
 export type PublishPackResult = {
@@ -19,6 +20,7 @@ function platformName(profileId: string): string {
     "douyin.zh-CN": "抖音",
     "xiaohongshu.zh-CN": "小红书",
     "bilibili.zh-CN": "B 站",
+    "tiktok.en-US": "TikTok",
     "youtube-shorts.en-US": "YouTube Shorts",
     "youtube-long.en-US": "YouTube",
     "x.en-US": "X"
@@ -32,9 +34,11 @@ export function runPublishPack(topicPath: string, rootDir = "."): PublishPackRes
   const voiceStatus = fs.existsSync(voiceManifestPath)
     ? (JSON.parse(fs.readFileSync(voiceManifestPath, "utf8")) as VoiceProfileManifest).status
     : null;
+  const renderIssue = formalRenderReadinessIssue(episodeDir);
   const missingInputs = [
-    "renders/douyin_zh_1080x1920_draft.mp4",
-    ...(voiceStatus && voiceStatus !== "audio_ready" ? [`voice/voice_profile_manifest.json#status=${voiceStatus}`] : [])
+    formalRenderOutputPath,
+    ...(renderIssue ? [renderIssue] : []),
+    ...(voiceStatus === "audio_ready" ? [] : [`voice/voice_profile_manifest.json#status=${voiceStatus ?? "missing"}`])
   ].filter((relativePath) => !fs.existsSync(path.join(episodeDir, relativePath)));
   const status = missingInputs.length > 0 ? "partial" : "ready";
   const platformRows = topic.targets.map((profileId) => {

@@ -1,0 +1,18 @@
+id: tiktok.en-US
+language: en-US
+surface: short_video
+aspect_ratio: "9:16"
+resolution:
+  width: 1080
+  height: 1920
+subtitle:
+  hard_subtitle: true
+  max_chars_per_line: 42
+hook_strategy:
+  first_seconds: 3
+  primary_patterns:
+    - result_first
+    - contrarian
+    - visual_promise
+    - curiosity_gap
+  avoid_cn_context: true

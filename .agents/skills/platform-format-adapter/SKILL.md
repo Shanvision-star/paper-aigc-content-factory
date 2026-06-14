@@ -26,9 +26,13 @@ Map approved episode assets into local platform packages. This skill is the proj
 
 ## Required Variants
 
-- Douyin / TikTok / Xiaohongshu / YouTube Shorts: vertical `1080x1920`.
-- Bilibili / YouTube: landscape `1920x1080`.
-- X and cross-platform feed preview: square `1080x1080` or landscape when the platform profile selects it.
+All variants must be derived from `platform_profiles/*.yaml`; the examples below describe the current baseline, not a substitute for reading the profile:
+
+- `douyin.zh-CN` and `youtube-shorts.en-US`: vertical `1080x1920`.
+- `xiaohongshu.zh-CN`: note-video `1080x1440`.
+- `tiktok.en-US`: vertical `1080x1920` when this profile is present.
+- `bilibili.zh-CN` and `youtube-long.en-US`: landscape `1920x1080`.
+- `x.en-US`: square `1080x1080`.
 
 ## Manifest Fields
 
@@ -51,6 +55,7 @@ Each manifest entry must include:
 - Use exact sizes from `platform_profiles/*.yaml`; do not guess dimensions.
 - Treat missing cover, video, captions, or metadata as partial failure, not success.
 - Continue validating other variants after one platform fails and report partial failure clearly.
+- If a requested platform has no profile, report `missing_profile` for that platform and keep validating the remaining platforms.
 
 ## Forbidden Actions
 

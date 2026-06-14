@@ -20,8 +20,9 @@ describe("quality gate", () => {
       expect(report.passed).toContain("script/hooks.json");
       expect(report.not_verified).toContain("audio/voiceover.wav");
       expect(report.not_verified).toContain("renders/douyin_zh_1080x1920_draft.mp4");
+      expect(report.not_verified).toContain("renders/hyperframes_formal_status.json");
       expect(report.not_verified).toContain("voice/voice_profile_manifest.json#status");
-      expect(report.blocking_items).toHaveLength(5);
+      expect(report.blocking_items).toHaveLength(6);
       expect(report.blocking_items).toContain("Voice profile is not audio_ready: recording_needed");
       expect(report.failed).toEqual([]);
     } finally {

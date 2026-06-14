@@ -35,7 +35,7 @@ steps:
     run: npm run captions:align
     depends: voiceover_audio
 
-  - id: video_render
+  - id: video_draft
     description: Compose a HyperFrames HTML draft when audio and captions exist.
     working_dir: C:/Users/Rome/Documents/Paper_every_day
     run: npm run video:hyperframes-draft
@@ -45,7 +45,7 @@ steps:
     description: Write human-review publish pack without auto-publishing.
     working_dir: C:/Users/Rome/Documents/Paper_every_day
     run: npm run publish:pack
-    depends: video_render
+    depends: video_draft
 
   - id: quality_gate
     description: Write qa_report.json and keep runtime gaps explicit.

@@ -85,12 +85,16 @@ topic.yaml
   -> source-harvester
   -> research-to-claims
   -> script-storyboard-writer (includes Hook Lab)
+  -> technical-script-reviewer
+  -> script-humanizer-zh
+  -> short-video-opening-optimizer
   -> visual-orchestrator
   -> parallel:
        visual assets
        voiceover audio
   -> caption-aligner
   -> hyperframes-composer
+  -> platform-format-adapter
   -> quality-gate
   -> human-review
   -> workflow-optimizer
@@ -371,7 +375,7 @@ constraints:
 
 - `script-humanizer-zh`：可选中文自然化层，必须在 `technical-script-reviewer` 之后、`spoken_text` 锁定之前运行；它借鉴 `humanizer-zh` 的 Chinese-native rhythm、翻译腔清理和术语统一，但不能改变 approved claim、公式、数字或锁定口播。
 - `short-video-opening-optimizer`：在 storyboard/frame lock 前运行，按 Douyin、Xiaohongshu、Bilibili、TikTok、YouTube Shorts、YouTube、X 的平台语境评分 `0-3s` opening hook、visual hook、verbal hook、text overlay、技术可信度和 not clickbait 边界。
-- `platform-format-adapter`：读取 `platform_profiles/*.yaml`、cover、video、captions 和 metadata，整理本地 `publish/platform_manifest.json`。默认竖版封面沿用 `safe90`，平台尺寸至少覆盖 `1080x1920`、`1920x1080` 和 `1080x1080`。
+- `platform-format-adapter`：读取 `platform_profiles/*.yaml`、cover、video、captions 和 metadata，整理本地 `publish/platform_manifest.json`。默认竖版封面沿用 `safe90`，平台尺寸只能来自 profile，当前至少覆盖 `1080x1920`、小红书 `1080x1440`、`1920x1080` 和 `1080x1080`。
 
 这些 skill 只做本地审核、文本优化和平台包准备，不 auto-publish、不上传媒体、不运行真实 TTS/HyperFrames/Manim/provider。
 
@@ -884,6 +888,12 @@ stages:
       - script/voice_segments.json
       - storyboard/hook_variants.json
       - storyboard/storyboard.json
+  - skill: technical-script-reviewer
+    output: review/technical_script_review.md
+  - skill: script-humanizer-zh
+    output: script/voiceover_humanized.md
+  - skill: short-video-opening-optimizer
+    output: storyboard/hook_variants.json
   - skill: visual-orchestrator
     output: assets/assets_manifest.json
   - skill: voiceover-adapter
@@ -892,6 +902,8 @@ stages:
     output: captions/subtitles.srt
   - skill: hyperframes-composer
     output: renders/
+  - skill: platform-format-adapter
+    output: publish/platform_manifest.json
   - skill: quality-gate
     output: qa/qa_report.json
   - skill: workflow-optimizer

@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { readHookPatterns, readPlatformProfile, readTopic } from "./contracts.js";
 import { episodeDirForTopic } from "./episodePaths.js";
+import { formalRenderOutputPath, formalRenderReadinessIssue, formalRenderStatusPath } from "./renderFreshness.js";
 import type { QualityReport } from "./quality.js";
 
 export type PipelineStageStatus = "pass" | "partial" | "failed" | "blocked";
@@ -140,7 +141,17 @@ function publishPackStatus(episodeDir: string): PipelineStageStatus {
     return "blocked";
   }
 
-  return fs.existsSync(path.join(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4")) ? "pass" : "partial";
+  if (!fs.existsSync(path.join(episodeDir, formalRenderOutputPath))) {
+    return "partial";
+  }
+
+  return formalRenderReadinessIssue(episodeDir) === null ? "pass" : "partial";
+}
+
+function publishPackBlockingItems(episodeDir: string): string[] {
+  const issue = formalRenderReadinessIssue(episodeDir);
+
+  return issue ? [`Formal HyperFrames render is not ready: ${issue}`] : [];
 }
 
 export function buildPipelineMap(topicPath: string, rootDir = "."): PipelineMap {
@@ -221,38 +232,36 @@ export function buildPipelineMap(topicPath: string, rootDir = "."): PipelineMap 
       episodeAsset(episodeDir, "audio/voiceover.wav")
     ], [episodeAsset(episodeDir, "captions/subtitles.srt")]), notVerifiedWhenMissing(episodeDir, "captions/subtitles.srt")),
     buildStage({
-      id: "video_render",
-      title: "Video Render",
+      id: "video_draft",
+      title: "Video Draft",
       command: "npm run video:hyperframes-draft",
-      purpose: "把 storyboard、音频和字幕组合成 HyperFrames HTML 草稿；MP4 渲染仍需显式开启。",
+      purpose: "把 storyboard、音频和字幕组合成 HyperFrames HTML 草稿；不生成 MP4，正式渲染仍需显式开启。",
       inputs: [
         episodeAsset(episodeDir, "storyboard/storyboard.json"),
         episodeAsset(episodeDir, "audio/voiceover.wav"),
         episodeAsset(episodeDir, "captions/subtitles.srt")
       ],
-      outputs: [
-        episodeAsset(episodeDir, "renders/hyperframes/ep01_draft.html"),
-        episodeAsset(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4")
-      ]
+      outputs: [episodeAsset(episodeDir, "renders/hyperframes/ep01_draft.html")]
     }, stageStatusForArtifacts([
       episodeAsset(episodeDir, "storyboard/storyboard.json"),
       episodeAsset(episodeDir, "audio/voiceover.wav"),
       episodeAsset(episodeDir, "captions/subtitles.srt")
-    ], [
-      episodeAsset(episodeDir, "renders/hyperframes/ep01_draft.html"),
-      episodeAsset(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4")
-    ], true), notVerifiedWhenMissing(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4")),
+    ], [episodeAsset(episodeDir, "renders/hyperframes/ep01_draft.html")]), notVerifiedWhenMissing(episodeDir, "renders/hyperframes/ep01_draft.html")),
     buildStage({
       id: "publish_pack",
       title: "Publish Pack",
       command: "npm run publish:pack",
       purpose: "生成各平台标题、简介、格式要求和人工审核发布包，不自动发布。",
       inputs: [
-        episodeAsset(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4"),
+        episodeAsset(episodeDir, formalRenderOutputPath),
+        episodeAsset(episodeDir, formalRenderStatusPath),
         episodeAsset(episodeDir, "qa/qa_report.json")
       ],
       outputs: [episodeAsset(episodeDir, "publish/publish_pack.md")]
-    }, publishPackStatus(episodeDir), notVerifiedWhenMissing(episodeDir, "publish/publish_pack.md")),
+    }, publishPackStatus(episodeDir), [
+      ...publishPackBlockingItems(episodeDir),
+      ...notVerifiedWhenMissing(episodeDir, "publish/publish_pack.md")
+    ]),
     buildStage({
       id: "quality_gate",
       title: "Quality Gate",
@@ -323,8 +332,8 @@ function mermaidForMap(map: PipelineMap): string {
     "  hooks_score --> contract_smoke[\"contract_smoke<br/>P0 artifacts\"]",
     "  contract_smoke --> voiceover_audio[\"voiceover_audio<br/>check/import\"]",
     "  voiceover_audio --> captions[\"captions<br/>alignment\"]",
-    "  captions --> video_render[\"video_render<br/>HyperFrames draft\"]",
-    "  video_render --> publish_pack[\"publish_pack<br/>review assets\"]",
+    "  captions --> video_draft[\"video_draft<br/>HyperFrames HTML draft\"]",
+    "  video_draft --> publish_pack[\"publish_pack<br/>review assets\"]",
     "  publish_pack --> quality_gate[\"quality_gate<br/>qa_report\"]",
     "  quality_gate --> pipeline_map[\"pipeline_map<br/>I/O map\"]",
   ];

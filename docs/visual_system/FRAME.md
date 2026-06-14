@@ -15,6 +15,7 @@ This file translates `docs/visual_system/DESIGN.md` into camera-ready frame rule
 ## Frame Sizes
 
 - Primary vertical: `1080x1920`.
+- Note-video vertical: `1080x1440` when the platform profile selects it, such as Xiaohongshu.
 - Landscape: `1920x1080`.
 - Square: `1080x1080`.
 
@@ -92,5 +93,5 @@ Summarize the paper's core mental model and preview the next technical decomposi
 - Subtitle overlap test: captions do not cover formulas, faces, or paper labels.
 - Figure attribution test: original paper figures stay identifiable and referenced in `assets_manifest.json`.
 - Formula legibility test: formulas are readable without shrinking below the typography floor.
-- Platform crop test: vertical, landscape, and square variants declare what is preserved or adapted.
+- Platform crop test: vertical, note-video vertical, landscape, and square variants declare what is preserved or adapted.
 - Render boundary test: real HyperFrames render remains outside default `npm test`.

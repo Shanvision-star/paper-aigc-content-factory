@@ -52,8 +52,9 @@ describe("HyperFrames render smoke", () => {
     const steps = Object.fromEntries(workflow.steps.map((step: { id: string }) => [step.id, step]));
 
     expect(steps.video_render_smoke_mp4).toBeUndefined();
-    expect(steps.video_render.run).toBe("npm run video:hyperframes-draft");
-    expect(steps.publish_pack.depends).toBe("video_render");
+    expect(steps.video_draft.run).toBe("npm run video:hyperframes-draft");
+    expect(steps.video_render).toBeUndefined();
+    expect(steps.publish_pack.depends).toBe("video_draft");
   });
 
   it("keeps the real-audio workflow away from fast noisy F5-TTS review settings", () => {

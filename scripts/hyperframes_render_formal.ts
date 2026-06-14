@@ -3,6 +3,7 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { buildHyperframesFormalProject, runHyperframesDraft } from "./hyperframes_draft.js";
 import { buildHyperframesRenderEnv } from "./hyperframes_render_smoke.js";
+import { buildRenderInputFingerprint } from "./lib/renderFreshness.js";
 import { episodeDirFromTopicPath, runtimeTimestamp, writeJson } from "./lib/runtimeAdapters.js";
 
 type HyperframesFormalRenderResult = {
@@ -12,6 +13,7 @@ type HyperframesFormalRenderResult = {
   exit_code: number | null;
   mux_exit_code?: number | null;
   missing_inputs: string[];
+  input_fingerprint?: string | null;
 };
 
 function nodeBin(commandName: string): string {
@@ -75,6 +77,7 @@ export function runHyperframesFormalRender(topicPath: string, rootDir = "."): Hy
   }
 
   const project = buildHyperframesFormalProject(topicPath, rootDir);
+  const inputFingerprint = buildRenderInputFingerprint(episodeDir);
   const outputPath = path.join(episodeDir, project.output_mp4);
   const audioPath = path.join(episodeDir, "audio/voiceover.wav");
   const hyperframes = nodeBin("hyperframes");
@@ -97,11 +100,13 @@ export function runHyperframesFormalRender(topicPath: string, rootDir = "."): Hy
     output_mp4: project.output_mp4,
     exit_code: result.status,
     mux_exit_code: muxResult?.exitCode ?? null,
-    missing_inputs: []
+    missing_inputs: inputFingerprint.missing_inputs,
+    input_fingerprint: inputFingerprint.input_fingerprint
   };
 
   writeJson(statusPath, {
     ...summary,
+    input_fingerprints: inputFingerprint.input_fingerprints,
     generated_at: runtimeTimestamp,
     stdout_tail: result.stdout?.slice(-2000) ?? "",
     stderr_tail: result.stderr?.slice(-2000) ?? "",

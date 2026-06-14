@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { formalRenderOutputPath, formalRenderReadinessIssue, formalRenderStatusPath } from "./renderFreshness.js";
 
 export type QualityReport = {
   status: "pass" | "partial" | "failed";
@@ -30,7 +31,8 @@ const requiredContractArtifacts = [
 const futureRuntimeArtifacts = [
   "audio/voiceover.wav",
   "captions/subtitles.srt",
-  "renders/douyin_zh_1080x1920_draft.mp4",
+  formalRenderOutputPath,
+  formalRenderStatusPath,
   "publish/publish_pack.md"
 ];
 
@@ -65,9 +67,11 @@ export function buildQualityReport(episodeDir: string): QualityReport {
   const passed = requiredContractArtifacts.filter((relativePath) => artifactExists(episodeDir, relativePath));
   const failed = requiredContractArtifacts.filter((relativePath) => !artifactExists(episodeDir, relativePath));
   const voiceIssue = voiceProfileStatusIssue(episodeDir);
+  const formalRenderIssue = formalRenderReadinessIssue(episodeDir, false);
   const notVerified = [
     ...futureRuntimeArtifacts.filter((relativePath) => !artifactExists(episodeDir, relativePath)),
-    ...(voiceIssue ? ["voice/voice_profile_manifest.json#status"] : [])
+    ...(voiceIssue ? ["voice/voice_profile_manifest.json#status"] : []),
+    ...(formalRenderIssue ? ["renders/hyperframes_formal_status.json#status"] : [])
   ];
   const status = failed.length > 0 ? "failed" : notVerified.length > 0 ? "partial" : "pass";
 
@@ -82,7 +86,8 @@ export function buildQualityReport(episodeDir: string): QualityReport {
       ...futureRuntimeArtifacts
         .filter((relativePath) => !artifactExists(episodeDir, relativePath))
         .map((relativePath) => `Not verified runtime artifact: ${relativePath}`),
-      ...(voiceIssue ? [voiceIssue] : [])
+      ...(voiceIssue ? [voiceIssue] : []),
+      ...(formalRenderIssue ? [`Formal HyperFrames render is not ready: ${formalRenderIssue}`] : [])
     ]
   };
 }
