@@ -107,10 +107,9 @@ describe("Dagu workflow", () => {
     expect(steps.captions.depends).toBe("voiceover_audio");
     expect(steps.video_render.run).toBe("npm run video:hyperframes-draft");
     expect(steps.video_render.depends).toBe("captions");
-    expect(steps.video_render_smoke_mp4.run).toBe("npm run video:hyperframes-render-smoke");
-    expect(steps.video_render_smoke_mp4.depends).toBe("video_render");
+    expect(steps.video_render_smoke_mp4).toBeUndefined();
     expect(steps.publish_pack.run).toBe("npm run publish:pack");
-    expect(steps.publish_pack.depends).toBe("video_render_smoke_mp4");
+    expect(steps.publish_pack.depends).toBe("video_render");
     expect(steps.quality_gate.depends).toBe("publish_pack");
     expect(steps.pipeline_map.run).toBe("npm run pipeline:map");
     expect(steps.pipeline_map.depends).toBe("quality_gate");
