@@ -48,7 +48,6 @@ const contractSmokeOutputs = [
   "script/voice_segments.json",
   "storyboard/storyboard.json",
   "voice/voice_profile_manifest.json",
-  "voice/enrollment/recording_needed.md",
   "review/human_review.md",
   "blog/blog.md"
 ];
@@ -108,6 +107,42 @@ function buildStage(
   };
 }
 
+function stageStatusForArtifacts(
+  inputs: PipelineAsset[],
+  outputs: PipelineAsset[],
+  partialWhenAnyOutputExists = false
+): PipelineStageStatus {
+  if (!allExist(inputs)) {
+    return "blocked";
+  }
+
+  if (allExist(outputs)) {
+    return "pass";
+  }
+
+  if (partialWhenAnyOutputExists && outputs.some((asset) => asset.exists)) {
+    return "partial";
+  }
+
+  return "blocked";
+}
+
+function notVerifiedWhenMissing(episodeDir: string, relativePath: string): string[] {
+  return fs.existsSync(path.join(episodeDir, relativePath)) ? [] : [`Not verified runtime artifact: ${relativePath}`];
+}
+
+function publishPackStatus(episodeDir: string): PipelineStageStatus {
+  if (!fs.existsSync(path.join(episodeDir, "qa/qa_report.json"))) {
+    return "blocked";
+  }
+
+  if (!fs.existsSync(path.join(episodeDir, "publish/publish_pack.md"))) {
+    return "blocked";
+  }
+
+  return fs.existsSync(path.join(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4")) ? "pass" : "partial";
+}
+
 export function buildPipelineMap(topicPath: string, rootDir = "."): PipelineMap {
   const topic = readTopic(topicPath);
   const episodeDir = path.join(rootDir, episodeDirForTopic(topic));
@@ -158,10 +193,91 @@ export function buildPipelineMap(topicPath: string, rootDir = "."): PipelineMap 
       outputs: smokeOutputs
     }),
     buildStage({
+      id: "voiceover_audio",
+      title: "Voiceover Audio",
+      command: "npm run voiceover:check",
+      purpose: "检查个人声音授权与参考音频；仅在显式导入或接入本地 TTS 时生成真实口播音频。",
+      inputs: [
+        episodeAsset(episodeDir, "script/voiceover.md"),
+        episodeAsset(episodeDir, "voice/voice_profile_manifest.json")
+      ],
+      outputs: [episodeAsset(episodeDir, "audio/voiceover.wav")]
+    }, stageStatusForArtifacts([
+      episodeAsset(episodeDir, "script/voiceover.md"),
+      episodeAsset(episodeDir, "voice/voice_profile_manifest.json")
+    ], [episodeAsset(episodeDir, "audio/voiceover.wav")]), notVerifiedWhenMissing(episodeDir, "audio/voiceover.wav")),
+    buildStage({
+      id: "captions",
+      title: "Captions",
+      command: "npm run captions:align",
+      purpose: "根据真实口播音频和 voice segments 生成字幕，并在缺音频时写入缺口状态。",
+      inputs: [
+        episodeAsset(episodeDir, "script/voice_segments.json"),
+        episodeAsset(episodeDir, "audio/voiceover.wav")
+      ],
+      outputs: [episodeAsset(episodeDir, "captions/subtitles.srt")]
+    }, stageStatusForArtifacts([
+      episodeAsset(episodeDir, "script/voice_segments.json"),
+      episodeAsset(episodeDir, "audio/voiceover.wav")
+    ], [episodeAsset(episodeDir, "captions/subtitles.srt")]), notVerifiedWhenMissing(episodeDir, "captions/subtitles.srt")),
+    buildStage({
+      id: "video_render",
+      title: "Video Render",
+      command: "npm run video:hyperframes-draft",
+      purpose: "把 storyboard、音频和字幕组合成 HyperFrames HTML 草稿；MP4 渲染仍需显式开启。",
+      inputs: [
+        episodeAsset(episodeDir, "storyboard/storyboard.json"),
+        episodeAsset(episodeDir, "audio/voiceover.wav"),
+        episodeAsset(episodeDir, "captions/subtitles.srt")
+      ],
+      outputs: [
+        episodeAsset(episodeDir, "renders/hyperframes/ep01_draft.html"),
+        episodeAsset(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4")
+      ]
+    }, stageStatusForArtifacts([
+      episodeAsset(episodeDir, "storyboard/storyboard.json"),
+      episodeAsset(episodeDir, "audio/voiceover.wav"),
+      episodeAsset(episodeDir, "captions/subtitles.srt")
+    ], [
+      episodeAsset(episodeDir, "renders/hyperframes/ep01_draft.html"),
+      episodeAsset(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4")
+    ], true), notVerifiedWhenMissing(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4")),
+    buildStage({
+      id: "video_render_smoke_mp4",
+      title: "HyperFrames MP4 Smoke",
+      command: "npm run video:hyperframes-render-smoke",
+      purpose: "显式运行 HyperFrames CLI 与本地 FFmpeg，提前验证 MP4 渲染环境和 Dagu 节点。",
+      inputs: [
+        episodeAsset(episodeDir, "storyboard/storyboard.json")
+      ],
+      outputs: [
+        episodeAsset(episodeDir, "renders/hyperframes_smoke/index.html"),
+        episodeAsset(episodeDir, "renders/hyperframes_smoke_1080x1920.mp4"),
+        episodeAsset(episodeDir, "renders/hyperframes_smoke_status.json")
+      ]
+    }, stageStatusForArtifacts([
+      episodeAsset(episodeDir, "storyboard/storyboard.json")
+    ], [
+      episodeAsset(episodeDir, "renders/hyperframes_smoke/index.html"),
+      episodeAsset(episodeDir, "renders/hyperframes_smoke_1080x1920.mp4"),
+      episodeAsset(episodeDir, "renders/hyperframes_smoke_status.json")
+    ])),
+    buildStage({
+      id: "publish_pack",
+      title: "Publish Pack",
+      command: "npm run publish:pack",
+      purpose: "生成各平台标题、简介、格式要求和人工审核发布包，不自动发布。",
+      inputs: [
+        episodeAsset(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4"),
+        episodeAsset(episodeDir, "qa/qa_report.json")
+      ],
+      outputs: [episodeAsset(episodeDir, "publish/publish_pack.md")]
+    }, publishPackStatus(episodeDir), notVerifiedWhenMissing(episodeDir, "publish/publish_pack.md")),
+    buildStage({
       id: "quality_gate",
       title: "Quality Gate",
       command: "npm run quality:gate",
-      purpose: "汇总合同产物与未来运行态缺口，阻止把 partial 误报成发布完成。",
+      purpose: "汇总合同产物与运行态缺口，阻止把 partial 误报成发布完成。",
       inputs: [...hookOutputs, ...smokeOutputs],
       outputs: [episodeAsset(episodeDir, "qa/qa_report.json")]
     }, qualityReport?.status ?? "failed", qualityReport?.blocking_items ?? ["Missing quality report: qa/qa_report.json"]),
@@ -178,52 +294,7 @@ export function buildPipelineMap(topicPath: string, rootDir = "."): PipelineMap 
         plannedAsset("qa/pipeline_map.json"),
         plannedAsset("qa/pipeline_map.md")
       ]
-    }),
-    buildStage({
-      id: "voiceover_audio",
-      title: "Voiceover Audio",
-      command: "future: personal voice or built-in TTS",
-      purpose: "后续接入个人声音或内置 TTS 后生成真实口播音频。",
-      inputs: [
-        episodeAsset(episodeDir, "script/voiceover.md"),
-        episodeAsset(episodeDir, "voice/voice_profile_manifest.json")
-      ],
-      outputs: [episodeAsset(episodeDir, "audio/voiceover.wav")]
-    }, "blocked", ["Not verified runtime artifact: audio/voiceover.wav"]),
-    buildStage({
-      id: "captions",
-      title: "Captions",
-      command: "future: caption alignment",
-      purpose: "后续根据口播音频和 voice segments 生成字幕。",
-      inputs: [
-        episodeAsset(episodeDir, "script/voice_segments.json"),
-        episodeAsset(episodeDir, "audio/voiceover.wav")
-      ],
-      outputs: [episodeAsset(episodeDir, "captions/subtitles.srt")]
-    }, "blocked", ["Not verified runtime artifact: captions/subtitles.srt"]),
-    buildStage({
-      id: "video_render",
-      title: "Video Render",
-      command: "future: HyperFrames/Manim render",
-      purpose: "后续把 storyboard、音频和字幕渲染成平台视频草稿。",
-      inputs: [
-        episodeAsset(episodeDir, "storyboard/storyboard.json"),
-        episodeAsset(episodeDir, "audio/voiceover.wav"),
-        episodeAsset(episodeDir, "captions/subtitles.srt")
-      ],
-      outputs: [episodeAsset(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4")]
-    }, "blocked", ["Not verified runtime artifact: renders/douyin_zh_1080x1920_draft.mp4"]),
-    buildStage({
-      id: "publish_pack",
-      title: "Publish Pack",
-      command: "future: platform packaging",
-      purpose: "后续生成各平台标题、封面、简介、标签和发布时间建议。",
-      inputs: [
-        episodeAsset(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4"),
-        episodeAsset(episodeDir, "qa/qa_report.json")
-      ],
-      outputs: [episodeAsset(episodeDir, "publish/publish_pack.md")]
-    }, "blocked", ["Not verified runtime artifact: publish/publish_pack.md"])
+    })
   ];
 
   const blockingItems = stages.flatMap((stage) => stage.blocking_items);
@@ -270,12 +341,13 @@ function mermaidForMap(map: PipelineMap): string {
     "flowchart TD",
     "  validate_topic[\"validate_topic<br/>topic/profile contracts\"] --> hooks_score[\"hooks_score<br/>Hook Lab\"]",
     "  hooks_score --> contract_smoke[\"contract_smoke<br/>P0 artifacts\"]",
-    "  contract_smoke --> quality_gate[\"quality_gate<br/>qa_report\"]",
+    "  contract_smoke --> voiceover_audio[\"voiceover_audio<br/>check/import\"]",
+    "  voiceover_audio --> captions[\"captions<br/>alignment\"]",
+    "  captions --> video_render[\"video_render<br/>HyperFrames draft\"]",
+    "  video_render --> video_render_smoke_mp4[\"video_render_smoke_mp4<br/>MP4 smoke\"]",
+    "  video_render_smoke_mp4 --> publish_pack[\"publish_pack<br/>review assets\"]",
+    "  publish_pack --> quality_gate[\"quality_gate<br/>qa_report\"]",
     "  quality_gate --> pipeline_map[\"pipeline_map<br/>I/O map\"]",
-    "  quality_gate -. blocked .-> voiceover_audio[\"voiceover_audio<br/>future\"]",
-    "  voiceover_audio -. blocked .-> captions[\"captions<br/>future\"]",
-    "  captions -. blocked .-> video_render[\"video_render<br/>future\"]",
-    "  video_render -. blocked .-> publish_pack[\"publish_pack<br/>future\"]"
   ];
 
   return lines.join("\n");

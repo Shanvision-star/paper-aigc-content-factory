@@ -9,14 +9,36 @@
     "episode:contract-smoke": "tsx scripts/run_pipeline.ts episodes/ep01_attention_is_all_you_need/topic.yaml --mode contract-smoke",
     "hooks:score": "tsx scripts/score_hooks.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
     "quality:gate": "tsx scripts/quality_gate.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
-    "pipeline:map": "tsx scripts/pipeline_map.ts episodes/ep01_attention_is_all_you_need/topic.yaml"
+    "pipeline:map": "tsx scripts/pipeline_map.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
+    "voiceover:check": "tsx scripts/voiceover_adapter.ts episodes/ep01_attention_is_all_you_need/topic.yaml --mode check",
+    "voiceover:import": "tsx scripts/voiceover_adapter.ts episodes/ep01_attention_is_all_you_need/topic.yaml --mode import-audio",
+    "voiceover:duplicate-guard": "tsx scripts/voiceover_duplicate_guard.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
+    "captions:align": "tsx scripts/caption_align.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
+    "video:hyperframes-draft": "tsx scripts/hyperframes_draft.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
+    "video:hyperframes-render-smoke": "tsx scripts/hyperframes_render_smoke.ts episodes/ep01_attention_is_all_you_need/topic.yaml --render",
+    "video:hyperframes-render-formal": "tsx scripts/hyperframes_render_formal.ts episodes/ep01_attention_is_all_you_need/topic.yaml --render",
+    "visuals:ep01-formal": "tsx scripts/build_ep01_formal_visuals.ts",
+    "runtime:sync-ep01-formal": "tsx scripts/sync_ep01_formal_runtime.ts",
+    "audio:f5-prepare-segments": "tsx scripts/voiceover_tts_prepare.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
+    "audio:f5-check-reference": "tsx scripts/f5_reference_safety_check.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
+    "audio:f5-generate-samples": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/f5_tts_generate_segmented.ps1 -Device cuda -NfeStep 16 -Speed 0.78 -SegmentIds seg_001,seg_010,seg_014 -Force",
+    "audio:asr-transcript-diff": "tsx scripts/asr_transcript_diff_gate.ts episodes/ep01_attention_is_all_you_need/topic.yaml --sample-ids seg_001,seg_010,seg_014 --allow-missing-asr",
+    "audio:sample-review-gate": "tsx scripts/tts_sample_review_gate.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
+    "audio:f5-merge-segments": "tsx scripts/audio_segment_merge.ts episodes/ep01_attention_is_all_you_need/topic.yaml --pause-ms 90",
+    "audio:apply-segment-timings": "tsx scripts/apply_segment_audio_timings.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
+    "audio:postprocess": "tsx scripts/audio_postprocess.ts episodes/ep01_attention_is_all_you_need/topic.yaml",
+    "publish:pack": "tsx scripts/publish_pack.ts episodes/ep01_attention_is_all_you_need/topic.yaml"
   },
   "dependencies": {
     "yaml": "^2.7.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@types/node": "^22.10.2",
+    "ffmpeg-static": "^5.3.0",
+    "ffprobe-static": "^3.1.0",
+    "hyperframes": "^0.6.97",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"

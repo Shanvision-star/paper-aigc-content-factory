@@ -347,7 +347,7 @@ constraints:
 
 - 读取 `video_script/FRAME.md`、`storyboard.json`、`assets_manifest.json`、`voiceover.wav` 和字幕。
 - 生成 HyperFrames HTML composition。
-- 先输出低清 draft，再输出平台 final render。
+- 先输出低清 draft；平台 final render 只能在显式 render 任务中运行，不进入 P0 或默认测试。
 
 边界：
 

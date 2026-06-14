@@ -34,14 +34,41 @@ const futureRuntimeArtifacts = [
   "publish/publish_pack.md"
 ];
 
+type VoiceProfileManifest = {
+  status?: string;
+};
+
 function artifactExists(episodeDir: string, relativePath: string): boolean {
   return fs.existsSync(path.join(episodeDir, relativePath));
+}
+
+function voiceProfileStatusIssue(episodeDir: string): string | null {
+  const manifestPath = path.join(episodeDir, "voice/voice_profile_manifest.json");
+
+  if (!fs.existsSync(manifestPath)) {
+    return null;
+  }
+
+  try {
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8")) as VoiceProfileManifest;
+    if (manifest.status && manifest.status !== "audio_ready") {
+      return `Voice profile is not audio_ready: ${manifest.status}`;
+    }
+  } catch {
+    return "Voice profile manifest is unreadable";
+  }
+
+  return null;
 }
 
 export function buildQualityReport(episodeDir: string): QualityReport {
   const passed = requiredContractArtifacts.filter((relativePath) => artifactExists(episodeDir, relativePath));
   const failed = requiredContractArtifacts.filter((relativePath) => !artifactExists(episodeDir, relativePath));
-  const notVerified = futureRuntimeArtifacts.filter((relativePath) => !artifactExists(episodeDir, relativePath));
+  const voiceIssue = voiceProfileStatusIssue(episodeDir);
+  const notVerified = [
+    ...futureRuntimeArtifacts.filter((relativePath) => !artifactExists(episodeDir, relativePath)),
+    ...(voiceIssue ? ["voice/voice_profile_manifest.json#status"] : [])
+  ];
   const status = failed.length > 0 ? "failed" : notVerified.length > 0 ? "partial" : "pass";
 
   return {
@@ -52,7 +79,10 @@ export function buildQualityReport(episodeDir: string): QualityReport {
     not_verified: notVerified,
     blocking_items: [
       ...failed.map((relativePath) => `Missing required artifact: ${relativePath}`),
-      ...notVerified.map((relativePath) => `Not verified runtime artifact: ${relativePath}`)
+      ...futureRuntimeArtifacts
+        .filter((relativePath) => !artifactExists(episodeDir, relativePath))
+        .map((relativePath) => `Not verified runtime artifact: ${relativePath}`),
+      ...(voiceIssue ? [voiceIssue] : [])
     ]
   };
 }
