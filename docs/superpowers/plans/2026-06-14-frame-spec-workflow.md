@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build the reusable `DESIGN.md -> FRAME.md -> episode FRAME.md` workflow so every paper episode has a deterministic visual-spec contract before HyperFrames composition.
+**Goal:** Build the reusable `DESIGN.md -> FRAME.md -> episode FRAME.md` workflow so every paper episode has a deterministic visual-spec contract before HyperFrames composition, then add the script-humanizer, short-video-opening, and platform-format-adapter skills needed to make the output easier to watch and easier to package for multiple platforms.
 
-**Architecture:** Keep the visual system in `docs/visual_system/`, episode-specific frame requirements in `episodes/{paper_id}/video_script/FRAME.md`, and reusable agent behavior in `.agents/skills/frame-spec-writer/SKILL.md`. Deterministic Vitest checks protect README, the main spec, the new skill, global visual docs, the ep01 worked example, and the `hyperframes-composer` input boundary without running real HyperFrames, Manim, TTS, or network calls.
+**Architecture:** Keep the visual system in `docs/visual_system/`, episode-specific frame requirements in `episodes/{paper_id}/video_script/FRAME.md`, and reusable agent behavior in `.agents/skills/frame-spec-writer/SKILL.md`, `.agents/skills/script-humanizer-zh/SKILL.md`, `.agents/skills/short-video-opening-optimizer/SKILL.md`, and `.agents/skills/platform-format-adapter/SKILL.md`. Deterministic Vitest checks protect README, the main spec, the new skills, global visual docs, the ep01 worked example, platform profile usage, and the `hyperframes-composer` input boundary without running real HyperFrames, Manim, TTS, provider, network, or publishing calls.
 
 **Tech Stack:** Markdown docs, local Codex skills, Vitest, Node.js `fs` assertions, existing npm scripts.
 
@@ -12,7 +12,7 @@
 
 ## Scope Check
 
-This plan implements one bounded subsystem: the frame-spec workflow. It does not render video, generate voiceover, publish to platforms, replace HyperFrames, or add a new runtime. It only adds documentation, one skill, one worked episode frame contract, and deterministic guard tests.
+This plan implements one bounded subsystem plus three adjacent workflow skills: the frame-spec workflow, script naturalization boundary, opening-hook optimization, and local platform packaging contract. It does not render video, generate voiceover, publish to platforms, replace HyperFrames, or add a new runtime. It only adds documentation, skills, worked episode contracts, and deterministic guard tests.
 
 ## File Structure
 
@@ -20,12 +20,22 @@ This plan implements one bounded subsystem: the frame-spec workflow. It does not
   - Deterministic guard test for the visual-spec chain.
 - Create: `.agents/skills/frame-spec-writer/SKILL.md`
   - Skill instructions for creating/updating global and episode-level frame specs.
+- Create: `.agents/skills/script-humanizer-zh/SKILL.md`
+  - Skill instructions for applying a Chinese-native readability pass without changing approved technical meaning or TTS-locked spoken text.
+- Create: `.agents/skills/short-video-opening-optimizer/SKILL.md`
+  - Skill instructions for platform-aware opening hooks, first-frame retention, and non-clickbait hook scoring.
+- Create: `.agents/skills/platform-format-adapter/SKILL.md`
+  - Skill instructions for preparing local cover/video/caption/metadata variants from `platform_profiles/*.yaml`.
 - Create: `docs/visual_system/DESIGN.md`
   - Global account-level visual identity contract.
 - Create: `docs/visual_system/FRAME.md`
   - Global video-frame translation of the visual identity.
+- Create: `docs/platform_distribution/github_research_notes.md`
+  - Research notes summarizing which GitHub skills are reusable and which are only pattern references.
 - Create: `episodes/ep01_attention_is_all_you_need/video_script/FRAME.md`
   - First paper episode worked example; must remain generic enough to model future papers.
+- Create: `tests/platform_content_workflow.test.ts`
+  - Deterministic guard test for script humanizer, opening optimizer, and platform format adapter.
 - Modify: `README.md`
   - Add project-level explanation of the frame-spec workflow.
 - Modify: `docs/superpowers/specs/2026-06-12-ai-paper-content-factory-design.md`
@@ -638,11 +648,226 @@ Expected:
 
 ---
 
-### Task 4: Validate Deterministic Baseline and Skill Quality
+### Task 4: Add Script Humanizer, Opening Optimizer, and Platform Format Adapter
+
+**Files:**
+- Create: `tests/platform_content_workflow.test.ts`
+- Create: `.agents/skills/script-humanizer-zh/SKILL.md`
+- Create: `.agents/skills/short-video-opening-optimizer/SKILL.md`
+- Create: `.agents/skills/platform-format-adapter/SKILL.md`
+- Create: `docs/platform_distribution/github_research_notes.md`
+- Modify: `README.md`
+- Modify: `docs/superpowers/specs/2026-06-12-ai-paper-content-factory-design.md`
+
+- [ ] **Step 1: Write the failing platform content workflow test**
+
+Create `tests/platform_content_workflow.test.ts` with deterministic filesystem assertions. The test must not use network, real TTS, real HyperFrames, real Manim, or platform publishing APIs.
+
+Required assertions:
+
+- README and the main factory spec contain:
+  - `script-humanizer-zh`
+  - `short-video-opening-optimizer`
+  - `platform-format-adapter`
+  - `platform_profiles/*.yaml`
+  - `publish/platform_manifest.json`
+  - `safe90`
+  - `1080x1920`
+  - `1920x1080`
+  - `1080x1080`
+- `.agents/skills/script-humanizer-zh/SKILL.md` exists and contains:
+  - `name: script-humanizer-zh`
+  - `humanizer-zh`
+  - `technical-script-reviewer`
+  - `Do not change approved technical claims`
+  - `Do not rewrite locked spoken_text`
+  - `Do not alter formulas`
+  - `Chinese-native rhythm`
+  - `English terms remain whole words`
+- `.agents/skills/short-video-opening-optimizer/SKILL.md` exists and contains:
+  - `name: short-video-opening-optimizer`
+  - `0-3s`
+  - `visual hook`
+  - `verbal hook`
+  - `text overlay`
+  - `Douyin`
+  - `Xiaohongshu`
+  - `Bilibili`
+  - `YouTube Shorts`
+  - `not clickbait`
+- `.agents/skills/platform-format-adapter/SKILL.md` exists and contains:
+  - `name: platform-format-adapter`
+  - `platform_profiles/*.yaml`
+  - `publish/platform_manifest.json`
+  - `cover`
+  - `video`
+  - `captions`
+  - `metadata`
+  - `Do not auto-publish`
+  - `partial failure`
+- `docs/platform_distribution/github_research_notes.md` exists and contains:
+  - `ai-zixun/humanizer-zh`
+  - `wpsnote/wpsnote-skills`
+  - `coreyhaines31/marketingskills`
+  - `msitarzewski/agency-agents`
+  - `canva-sdks/canva-claude-skills`
+  - `charlie947/social-media-skills`
+  - `ZeroLu/awesome-nanobanana-pro`
+  - `short-video-opening-optimizer exact match not found`
+
+- [ ] **Step 2: Run the focused test to verify it fails**
+
+Run:
+
+```powershell
+npm test -- tests/platform_content_workflow.test.ts
+```
+
+Expected:
+
+```text
+FAIL tests/platform_content_workflow.test.ts
+```
+
+Expected failure reason: missing skills, missing docs, or missing README/spec references.
+
+- [ ] **Step 3: Add `script-humanizer-zh` skill**
+
+Create `.agents/skills/script-humanizer-zh/SKILL.md`.
+
+Required behavior:
+
+- Use after `technical-script-reviewer` approves claims and before `spoken_text` is locked for TTS.
+- Borrow the mature pattern from `ai-zixun/humanizer-zh`: Chinese-native rhythm, translationese cleanup, empty big-word cleanup, terminology/casing consistency, and fact-preserving revision.
+- Preserve paper facts, formulas, tensor notation, citations, approved risk statements, and English technical terms.
+- Keep pronunciation constraints such as English terms as whole words and Chinese `地` as `de` when the TTS adapter needs it.
+- Output a revision note with `changed`, `unchanged`, and `needs_re_review` sections.
+
+Forbidden behavior:
+
+- Do not change approved technical claims.
+- Do not rewrite locked `spoken_text`.
+- Do not alter formulas or benchmark numbers.
+- Do not add hidden narration cues.
+- Do not run TTS, ASR, HyperFrames, Manim, or provider calls.
+
+- [ ] **Step 4: Add `short-video-opening-optimizer` skill**
+
+Create `.agents/skills/short-video-opening-optimizer/SKILL.md`.
+
+Required behavior:
+
+- Use before storyboard lock and before `FRAME.md` is finalized.
+- Generate or score 3-5 opening variants per target platform family.
+- Evaluate the first `0-3s` using:
+  - visual hook
+  - verbal hook
+  - text overlay
+  - audience promise
+  - technical credibility
+  - platform fit
+  - non-clickbait integrity
+- Support Chinese platforms: Douyin, Xiaohongshu, Bilibili.
+- Support overseas platforms: TikTok, YouTube Shorts, YouTube, X.
+- For paper explainers, prefer knowledge-gap, contradiction, modern-AI relevance, and Feynman analogy hooks over exaggerated claims.
+- Record which hook variant feeds `script-storyboard-writer` and which first-frame notes feed `frame-spec-writer`.
+
+Forbidden behavior:
+
+- Do not invent paper claims.
+- Do not weaken technical accuracy for retention.
+- Do not output title/caption variants that contradict the reviewed script.
+- Do not auto-publish.
+
+- [ ] **Step 5: Add `platform-format-adapter` skill**
+
+Create `.agents/skills/platform-format-adapter/SKILL.md`.
+
+Required behavior:
+
+- Read `platform_profiles/*.yaml`, episode `video_script/FRAME.md`, covers, rendered media, captions, and metadata.
+- Prepare or validate local package variants for:
+  - Douyin / TikTok / Xiaohongshu / YouTube Shorts: vertical `1080x1920`
+  - Bilibili / YouTube: landscape `1920x1080`
+  - X and cross-platform feed preview: square `1080x1080` or landscape when the platform profile selects it
+- Preserve the `safe90` cover rule for vertical short-video covers unless a platform profile explicitly overrides it.
+- Write or validate `episodes/{paper_id}/publish/platform_manifest.json`.
+- Manifest entries must include platform, language mode, cover path, video path, caption path, title, description, hashtags, safe-area note, and status.
+- Continue validating other variants after one platform fails, and report partial failure clearly.
+
+Forbidden behavior:
+
+- Do not auto-publish to any platform.
+- Do not upload media.
+- Do not invent metadata that was not derived from approved script/blog/platform profile inputs.
+- Do not treat a missing cover/video/caption as success.
+
+- [ ] **Step 6: Add GitHub research notes**
+
+Create `docs/platform_distribution/github_research_notes.md`.
+
+Include:
+
+- `ai-zixun/humanizer-zh`: suitable as the main humanizer pattern; use locally with stricter technical/script gates.
+- `op7418/Humanizer-zh`: useful lightweight contrast; not the main implementation pattern.
+- `wpsnote/wpsnote-skills/short-video-copywriter`: useful for original-article-to-short-video structure, `0-3s` hook, short oral sentences, storyboard/image-prompt handoff.
+- `coreyhaines31/marketingskills/social`: useful for hook formulas, content repurposing, and first-second `visual hook + verbal hook + text overlay`.
+- `msitarzewski/agency-agents/marketing-short-video-editing-coach`: useful for subtitle/audio/export QA and multi-platform export optimization.
+- `canva-sdks/canva-claude-skills/resize-for-social-media`: useful as one-design-to-many-platforms pattern, especially exact dimensions, parallel operations, and partial-failure reporting.
+- `charlie947/social-media-skills/youtube-thumbnail`: useful for cover constraints: few large words, high contrast, one focal element, small-screen readability.
+- `ZeroLu/awesome-nanobanana-pro`: useful for cover prompt benchmarking, not a direct execution dependency.
+- `short-video-opening-optimizer exact match not found`: no credible exact GitHub repo found on 2026-06-14; create a local project skill instead.
+
+- [ ] **Step 7: Update README and main factory design spec**
+
+Update `README.md` and `docs/superpowers/specs/2026-06-12-ai-paper-content-factory-design.md` with a concise section that explains:
+
+- `script-humanizer-zh` is optional and must run before `spoken_text` is locked.
+- `short-video-opening-optimizer` runs before storyboard/frame lock and scores hooks by platform.
+- `platform-format-adapter` uses `platform_profiles/*.yaml` and writes `publish/platform_manifest.json`.
+- Default vertical cover export remains `safe90`.
+- Platform adaptation is local packaging only, never auto-publishing.
+
+- [ ] **Step 8: Run focused test**
+
+Run:
+
+```powershell
+npm test -- tests/platform_content_workflow.test.ts
+```
+
+Expected:
+
+```text
+PASS tests/platform_content_workflow.test.ts
+```
+
+- [ ] **Step 9: Commit platform content workflow additions**
+
+Run:
+
+```powershell
+git add -- tests/platform_content_workflow.test.ts .agents/skills/script-humanizer-zh/SKILL.md .agents/skills/short-video-opening-optimizer/SKILL.md .agents/skills/platform-format-adapter/SKILL.md docs/platform_distribution/github_research_notes.md README.md docs/superpowers/specs/2026-06-12-ai-paper-content-factory-design.md
+git commit -m "docs: add platform content workflow skills"
+```
+
+Expected:
+
+```text
+[codex/multi-platform-content-factory-spec <sha>] docs: add platform content workflow skills
+```
+
+---
+
+### Task 5: Validate Deterministic Baseline and Skill Quality
 
 **Files:**
 - Verify: `tests/frame_spec_workflow.test.ts`
+- Verify: `tests/platform_content_workflow.test.ts`
 - Verify: `.agents/skills/frame-spec-writer/SKILL.md`
+- Verify: `.agents/skills/script-humanizer-zh/SKILL.md`
+- Verify: `.agents/skills/short-video-opening-optimizer/SKILL.md`
+- Verify: `.agents/skills/platform-format-adapter/SKILL.md`
 - Verify: existing deterministic test suite
 
 - [ ] **Step 1: Run frame workflow focused test**
@@ -664,7 +889,7 @@ PASS tests/frame_spec_workflow.test.ts
 Run:
 
 ```powershell
-npm test -- tests/cover_constraints.test.ts tests/retrospective_constraints.test.ts tests/frame_spec_workflow.test.ts
+npm test -- tests/cover_constraints.test.ts tests/retrospective_constraints.test.ts tests/frame_spec_workflow.test.ts tests/platform_content_workflow.test.ts
 ```
 
 Expected:
@@ -673,6 +898,7 @@ Expected:
 PASS tests/cover_constraints.test.ts
 PASS tests/retrospective_constraints.test.ts
 PASS tests/frame_spec_workflow.test.ts
+PASS tests/platform_content_workflow.test.ts
 ```
 
 - [ ] **Step 3: Run full deterministic test suite**
@@ -690,7 +916,7 @@ Test Files  all passed
 Tests       all passed
 ```
 
-The exact number of files and tests may be higher than the current baseline because this plan adds one test file.
+The exact number of files and tests may be higher than the current baseline because this plan adds two test files.
 
 - [ ] **Step 4: Run TypeScript typecheck**
 
@@ -715,12 +941,18 @@ Run:
 
 ```powershell
 skill quick_validate .agents/skills/frame-spec-writer
+skill quick_validate .agents/skills/script-humanizer-zh
+skill quick_validate .agents/skills/short-video-opening-optimizer
+skill quick_validate .agents/skills/platform-format-adapter
 ```
 
 Expected:
 
 ```text
 frame-spec-writer passed
+script-humanizer-zh passed
+short-video-opening-optimizer passed
+platform-format-adapter passed
 ```
 
 If the local `skill` command is unavailable, record that explicitly in the final implementation summary and keep the Markdown/test validation evidence.
@@ -740,7 +972,7 @@ Expected: no output.
 If validation found formatting or wording fixes, stage only the files touched by this plan:
 
 ```powershell
-git add -- tests/frame_spec_workflow.test.ts docs/visual_system/DESIGN.md docs/visual_system/FRAME.md .agents/skills/frame-spec-writer/SKILL.md README.md docs/superpowers/specs/2026-06-12-ai-paper-content-factory-design.md .agents/skills/hyperframes-composer/SKILL.md episodes/ep01_attention_is_all_you_need/video_script/FRAME.md
+git add -- tests/frame_spec_workflow.test.ts tests/platform_content_workflow.test.ts docs/visual_system/DESIGN.md docs/visual_system/FRAME.md docs/platform_distribution/github_research_notes.md .agents/skills/frame-spec-writer/SKILL.md .agents/skills/script-humanizer-zh/SKILL.md .agents/skills/short-video-opening-optimizer/SKILL.md .agents/skills/platform-format-adapter/SKILL.md README.md docs/superpowers/specs/2026-06-12-ai-paper-content-factory-design.md .agents/skills/hyperframes-composer/SKILL.md episodes/ep01_attention_is_all_you_need/video_script/FRAME.md
 git commit -m "docs: validate frame spec workflow"
 ```
 
@@ -764,7 +996,8 @@ Spec coverage:
 - Deterministic guard tests are implemented in Task 1.
 - Ep01 worked example is implemented in Task 3.
 - HyperFrames composer input boundary is implemented in Task 3.
-- Default test boundary is verified in Task 4.
+- Script humanizer, opening optimizer, platform adapter, and GitHub research notes are implemented in Task 4.
+- Default test boundary is verified in Task 5.
 
 Red-flag scan:
 
