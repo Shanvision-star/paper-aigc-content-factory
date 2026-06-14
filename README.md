@@ -1,5 +1,125 @@
 # AI Paper Content Factory
 
+<p align="center">
+  <a href="#中文">中文</a> | <a href="#english">English</a>
+</p>
+
+<a id="中文"></a>
+
+## 中文
+
+AI Paper Content Factory 是一个本地优先的论文内容生产线模板仓库，用来把 AI 论文或 AIGC 主题转成可审核的多平台内容资产包：博客、口播脚本、字幕、结构图、HyperFrames 视频草稿、封面约束、平台发布包和质量门禁。
+
+### 核心功能
+
+- 论文输入到结构化资产：`topic.yaml -> claims.json -> voiceover.md -> storyboard.json -> FRAME.md`。
+- 多平台适配：抖音、小红书、B 站、YouTube Shorts、YouTube、TikTok、X。
+- 中英文模式：国内平台中文表达，海外平台英文表达，平台 profile 控制尺寸、字幕和 hook 风格。
+- 视频编排：HyperFrames 负责最终 HTML composition 和显式视频渲染；默认测试不跑真实渲染。
+- 公式标准化：公式必须完整、清晰、可标注，可用论文截图、公式软件截图、KaTeX/MathJax/SVG 或 Manim。
+- 个人声音口播：支持本地 TTS / F5-TTS / GPT-SoVITS 适配，但必须 sample-first、ASR diff 和人工审核。
+- 发布前质量门：`qa_report.json`、pipeline map、render freshness fingerprint、封面 safe area、字幕避让和人工审核。
+
+### Skills
+
+| Skill | 作用 |
+| --- | --- |
+| `episode-orchestrator` | 创建 episode 工作区并协调流程 |
+| `source-harvester` | 采集论文、arXiv、GitHub、官方文档等来源 |
+| `research-to-claims` | 把研究资料转成可追溯 claims |
+| `script-storyboard-writer` | 生成 hook、口播、分镜和博客草稿 |
+| `technical-script-reviewer` | 审核论文解释是否技术准确 |
+| `script-humanizer-zh` | 中文自然化，但不改变技术含义 |
+| `short-video-opening-optimizer` | 优化 0-3 秒开场、首帧和平台 hook |
+| `frame-spec-writer` | 生成 `DESIGN.md -> FRAME.md -> episode FRAME.md` 视觉合同 |
+| `visual-orchestrator` | 分配 SVG、Manim、HyperFrames、图表等视觉引擎 |
+| `voiceover-adapter` | 管理授权声音、导入或生成口播音频 |
+| `tts-voiceover-quality-gate` | 阻断噪音、重复、漏词、参考文本回灌等 TTS 风险 |
+| `caption-aligner` | 根据口播音频生成 SRT/VTT 字幕 |
+| `hyperframes-composer` | 组合 storyboard、资产、音频和字幕为 HyperFrames composition |
+| `platform-format-adapter` | 生成本地多平台发布包和尺寸检查，不自动发布 |
+| `quality-gate` | 汇总合同产物和运行态缺口 |
+| `workflow-optimizer` | 从 QA 和人工审核中提炼下一轮改进建议 |
+
+### 安全与边界
+
+- 不提交 API key、`.env`、个人声音原始 wav、MP4 渲染产物或平台登录信息。
+- 不自动发布到任何平台。
+- 默认 `npm test` 不调用真实 LLM、TTS、HyperFrames render、Manim 或网络服务。
+- 个人声音必须有授权录音和 voice profile manifest。
+
+### 快速开始
+
+```bash
+npm install
+npm run validate:topic
+npm run hooks:score
+npm run episode:contract-smoke
+npm run quality:gate
+npm test
+npm run typecheck
+```
+
+<a id="english"></a>
+
+## English
+
+AI Paper Content Factory is a local-first template repository for turning AI papers or AIGC topics into reviewable multi-platform content packages: blog drafts, voiceover scripts, subtitles, diagrams, HyperFrames video drafts, cover constraints, publish packs, and quality gates.
+
+### Features
+
+- Paper-to-assets pipeline: `topic.yaml -> claims.json -> voiceover.md -> storyboard.json -> FRAME.md`.
+- Multi-platform output: Douyin, Xiaohongshu, Bilibili, YouTube Shorts, YouTube, TikTok, and X.
+- Chinese and English modes: domestic platforms use Chinese-native writing, overseas platforms use English adaptation, while platform profiles control size, subtitles, and hook style.
+- Video composition: HyperFrames builds the final HTML composition and explicit renders; default tests never run real rendering.
+- Formula standardization: formulas must be complete, sharp, and annotatable via paper crops, formula-editor screenshots, KaTeX/MathJax/SVG, or Manim.
+- Personal voiceover workflow: local TTS, F5-TTS, or GPT-SoVITS can be integrated only behind sample-first, ASR diff, and human approval gates.
+- Review-before-render gates: `qa_report.json`, pipeline maps, render freshness fingerprints, cover safe areas, subtitle overlap checks, and human review.
+
+### Skills
+
+| Skill | Purpose |
+| --- | --- |
+| `episode-orchestrator` | Creates episode workspaces and coordinates the workflow |
+| `source-harvester` | Collects paper, arXiv, GitHub, and official documentation sources |
+| `research-to-claims` | Converts research material into traceable claims |
+| `script-storyboard-writer` | Produces hooks, voiceover, storyboard, and blog drafts |
+| `technical-script-reviewer` | Checks technical correctness of paper explanations |
+| `script-humanizer-zh` | Improves Chinese readability without changing technical meaning |
+| `short-video-opening-optimizer` | Optimizes the first 0-3 seconds, first frame, and platform hooks |
+| `frame-spec-writer` | Builds the `DESIGN.md -> FRAME.md -> episode FRAME.md` visual contract |
+| `visual-orchestrator` | Assigns SVG, Manim, HyperFrames, and chart engines |
+| `voiceover-adapter` | Manages authorized voice input and voiceover import/generation |
+| `tts-voiceover-quality-gate` | Blocks noise, repetition, skipped words, and reference-text leakage |
+| `caption-aligner` | Generates SRT/VTT subtitles from voiceover audio |
+| `hyperframes-composer` | Combines storyboard, assets, audio, and captions into HyperFrames compositions |
+| `platform-format-adapter` | Builds local platform publish manifests and format checks without auto-publishing |
+| `quality-gate` | Reports contract artifacts and runtime gaps |
+| `workflow-optimizer` | Turns QA and human review feedback into workflow improvements |
+
+### Safety Boundaries
+
+- Do not commit API keys, `.env` files, raw personal-voice wav files, MP4 render outputs, or platform login material.
+- Do not auto-publish to any platform.
+- Default `npm test` does not call real LLM, TTS, HyperFrames render, Manim, or network services.
+- Personal voice workflows require consent audio and a voice profile manifest.
+
+### Quick Start
+
+```bash
+npm install
+npm run validate:topic
+npm run hooks:score
+npm run episode:contract-smoke
+npm run quality:gate
+npm test
+npm run typecheck
+```
+
+---
+
+## 详细中文文档
+
 本仓库用于把 AI 论文或 AIGC 主题生产成可审核的多平台内容资产包。P0 阶段的目标不是生成最终成片或自动发布，而是先把每集内容生产的输入、平台适配、Hook、合同烟测产物和质量报告固定下来，让后续真实声音、字幕、视频渲染和发布包可以在明确边界内继续推进。
 
 ## P0 Scope
