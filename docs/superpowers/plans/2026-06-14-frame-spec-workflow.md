@@ -129,6 +129,8 @@ describe("frame-spec workflow constraints", () => {
     expect(skill).toContain("Do not invent paper facts");
     expect(skill).toContain("Do not rewrite spoken narration");
     expect(skill).toContain("Do not run real HyperFrames render");
+    expect(skill).toContain("Do not run real Manim render");
+    expect(skill).toContain("Do not run provider, LLM, or network calls");
     expect(skill).toContain("Chinese `地`");
   });
 

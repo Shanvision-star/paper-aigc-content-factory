@@ -313,7 +313,12 @@ Hard boundaries:
 - Do not invent paper facts.
 - Do not rewrite spoken narration.
 - Do not run real HyperFrames render.
+- Do not run real Manim render.
+- Do not run provider, LLM, or network calls.
+- Do not run TTS or voice cloning.
 - Do not replace technical review, TTS gates, or human approval.
+- Do not put hidden narration cues into `spoken_text`.
+- Only report required Manim scenes, missing source images, missing formulas, or missing manifest entries; route real rendering to the appropriate explicit render task.
 
 ## Integration With Existing Skills
 
