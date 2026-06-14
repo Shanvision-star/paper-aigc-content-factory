@@ -173,6 +173,16 @@ sample -> asr_diff -> human_approval -> full_tts -> merge -> captions -> render
 
 `frame-spec-writer` 负责生成或更新 episode FRAME；`hyperframes-composer` 必须读取 episode FRAME 后再生成 HTML composition。这个链路不运行真实 HyperFrames render，不替代 technical-script-reviewer、tts-voiceover-quality-gate 或人工审核。
 
+## Platform Content Workflow Skills
+
+脚本、开场和发布包现在拆成三个可复用 skill，避免每个平台临时改提示词：
+
+- `script-humanizer-zh` 是可选中文自然化层，必须在 `technical-script-reviewer` 之后、`spoken_text` 锁定之前运行；它只能改善中文节奏和术语一致性，不能改 approved claim、公式或锁定口播。
+- `short-video-opening-optimizer` 在 storyboard/frame lock 之前运行，按 Douyin、Xiaohongshu、Bilibili、TikTok、YouTube Shorts、YouTube、X 的平台语境评分 `0-3s` opening hook、visual hook、verbal hook 和 text overlay。
+- `platform-format-adapter` 使用 `platform_profiles/*.yaml`，把 cover、video、captions 和 metadata 整理为本地 `publish/platform_manifest.json`；默认竖版 cover 仍遵守 `safe90`，常见尺寸包括 `1080x1920`、`1920x1080`、`1080x1080`。
+
+这些 skill 只做本地审核、文本优化和平台包准备，不 auto-publish、不上传媒体、不绕过人工审核。
+
 ## Pipeline Map
 
 运行：
