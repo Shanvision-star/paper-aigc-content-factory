@@ -176,10 +176,6 @@
           "exists": true
         },
         {
-          "path": "voice/enrollment/recording_needed.md",
-          "exists": true
-        },
-        {
           "path": "review/human_review.md",
           "exists": true
         },
@@ -192,10 +188,114 @@
       "blocking_items": []
     },
     {
+      "id": "voiceover_audio",
+      "title": "Voiceover Audio",
+      "command": "npm run voiceover:check",
+      "purpose": "检查个人声音授权与参考音频；仅在显式导入或接入本地 TTS 时生成真实口播音频。",
+      "inputs": [
+        {
+          "path": "script/voiceover.md",
+          "exists": true
+        },
+        {
+          "path": "voice/voice_profile_manifest.json",
+          "exists": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "audio/voiceover.wav",
+          "exists": true
+        }
+      ],
+      "status": "pass",
+      "blocking_items": []
+    },
+    {
+      "id": "captions",
+      "title": "Captions",
+      "command": "npm run captions:align",
+      "purpose": "根据真实口播音频和 voice segments 生成字幕，并在缺音频时写入缺口状态。",
+      "inputs": [
+        {
+          "path": "script/voice_segments.json",
+          "exists": true
+        },
+        {
+          "path": "audio/voiceover.wav",
+          "exists": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "captions/subtitles.srt",
+          "exists": true
+        }
+      ],
+      "status": "pass",
+      "blocking_items": []
+    },
+    {
+      "id": "video_render",
+      "title": "Video Render",
+      "command": "npm run video:hyperframes-draft",
+      "purpose": "把 storyboard、音频和字幕组合成 HyperFrames HTML 草稿；MP4 渲染仍需显式开启。",
+      "inputs": [
+        {
+          "path": "storyboard/storyboard.json",
+          "exists": true
+        },
+        {
+          "path": "audio/voiceover.wav",
+          "exists": true
+        },
+        {
+          "path": "captions/subtitles.srt",
+          "exists": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "renders/hyperframes/ep01_draft.html",
+          "exists": true
+        },
+        {
+          "path": "renders/douyin_zh_1080x1920_draft.mp4",
+          "exists": true
+        }
+      ],
+      "status": "pass",
+      "blocking_items": []
+    },
+    {
+      "id": "publish_pack",
+      "title": "Publish Pack",
+      "command": "npm run publish:pack",
+      "purpose": "生成各平台标题、简介、格式要求和人工审核发布包，不自动发布。",
+      "inputs": [
+        {
+          "path": "renders/douyin_zh_1080x1920_draft.mp4",
+          "exists": true
+        },
+        {
+          "path": "qa/qa_report.json",
+          "exists": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "publish/publish_pack.md",
+          "exists": true
+        }
+      ],
+      "status": "pass",
+      "blocking_items": []
+    },
+    {
       "id": "quality_gate",
       "title": "Quality Gate",
       "command": "npm run quality:gate",
-      "purpose": "汇总合同产物与未来运行态缺口，阻止把 partial 误报成发布完成。",
+      "purpose": "汇总合同产物与运行态缺口，阻止把 partial 误报成发布完成。",
       "inputs": [
         {
           "path": "script/hooks.json",
@@ -238,10 +338,6 @@
           "exists": true
         },
         {
-          "path": "voice/enrollment/recording_needed.md",
-          "exists": true
-        },
-        {
           "path": "review/human_review.md",
           "exists": true
         },
@@ -256,13 +352,8 @@
           "exists": true
         }
       ],
-      "status": "partial",
-      "blocking_items": [
-        "Not verified runtime artifact: audio/voiceover.wav",
-        "Not verified runtime artifact: captions/subtitles.srt",
-        "Not verified runtime artifact: renders/douyin_zh_1080x1920_draft.mp4",
-        "Not verified runtime artifact: publish/publish_pack.md"
-      ]
+      "status": "pass",
+      "blocking_items": []
     },
     {
       "id": "pipeline_map",
@@ -291,147 +382,14 @@
       ],
       "status": "pass",
       "blocking_items": []
-    },
-    {
-      "id": "voiceover_audio",
-      "title": "Voiceover Audio",
-      "command": "future: personal voice or built-in TTS",
-      "purpose": "后续接入个人声音或内置 TTS 后生成真实口播音频。",
-      "inputs": [
-        {
-          "path": "script/voiceover.md",
-          "exists": true
-        },
-        {
-          "path": "voice/voice_profile_manifest.json",
-          "exists": true
-        }
-      ],
-      "outputs": [
-        {
-          "path": "audio/voiceover.wav",
-          "exists": false
-        }
-      ],
-      "status": "blocked",
-      "blocking_items": [
-        "Not verified runtime artifact: audio/voiceover.wav",
-        "Missing output: audio/voiceover.wav"
-      ]
-    },
-    {
-      "id": "captions",
-      "title": "Captions",
-      "command": "future: caption alignment",
-      "purpose": "后续根据口播音频和 voice segments 生成字幕。",
-      "inputs": [
-        {
-          "path": "script/voice_segments.json",
-          "exists": true
-        },
-        {
-          "path": "audio/voiceover.wav",
-          "exists": false
-        }
-      ],
-      "outputs": [
-        {
-          "path": "captions/subtitles.srt",
-          "exists": false
-        }
-      ],
-      "status": "blocked",
-      "blocking_items": [
-        "Not verified runtime artifact: captions/subtitles.srt",
-        "Missing input: audio/voiceover.wav",
-        "Missing output: captions/subtitles.srt"
-      ]
-    },
-    {
-      "id": "video_render",
-      "title": "Video Render",
-      "command": "future: HyperFrames/Manim render",
-      "purpose": "后续把 storyboard、音频和字幕渲染成平台视频草稿。",
-      "inputs": [
-        {
-          "path": "storyboard/storyboard.json",
-          "exists": true
-        },
-        {
-          "path": "audio/voiceover.wav",
-          "exists": false
-        },
-        {
-          "path": "captions/subtitles.srt",
-          "exists": false
-        }
-      ],
-      "outputs": [
-        {
-          "path": "renders/douyin_zh_1080x1920_draft.mp4",
-          "exists": false
-        }
-      ],
-      "status": "blocked",
-      "blocking_items": [
-        "Not verified runtime artifact: renders/douyin_zh_1080x1920_draft.mp4",
-        "Missing input: audio/voiceover.wav",
-        "Missing input: captions/subtitles.srt",
-        "Missing output: renders/douyin_zh_1080x1920_draft.mp4"
-      ]
-    },
-    {
-      "id": "publish_pack",
-      "title": "Publish Pack",
-      "command": "future: platform packaging",
-      "purpose": "后续生成各平台标题、封面、简介、标签和发布时间建议。",
-      "inputs": [
-        {
-          "path": "renders/douyin_zh_1080x1920_draft.mp4",
-          "exists": false
-        },
-        {
-          "path": "qa/qa_report.json",
-          "exists": true
-        }
-      ],
-      "outputs": [
-        {
-          "path": "publish/publish_pack.md",
-          "exists": false
-        }
-      ],
-      "status": "blocked",
-      "blocking_items": [
-        "Not verified runtime artifact: publish/publish_pack.md",
-        "Missing input: renders/douyin_zh_1080x1920_draft.mp4",
-        "Missing output: publish/publish_pack.md"
-      ]
     }
   ],
   "summary": {
-    "status": "partial",
-    "passed_stages": 4,
-    "partial_stages": 1,
+    "status": "pass",
+    "passed_stages": 9,
+    "partial_stages": 0,
     "failed_stages": 0,
-    "blocked_stages": 4,
-    "blocking_items": [
-      "Not verified runtime artifact: audio/voiceover.wav",
-      "Not verified runtime artifact: captions/subtitles.srt",
-      "Not verified runtime artifact: renders/douyin_zh_1080x1920_draft.mp4",
-      "Not verified runtime artifact: publish/publish_pack.md",
-      "Not verified runtime artifact: audio/voiceover.wav",
-      "Missing output: audio/voiceover.wav",
-      "Not verified runtime artifact: captions/subtitles.srt",
-      "Missing input: audio/voiceover.wav",
-      "Missing output: captions/subtitles.srt",
-      "Not verified runtime artifact: renders/douyin_zh_1080x1920_draft.mp4",
-      "Missing input: audio/voiceover.wav",
-      "Missing input: captions/subtitles.srt",
-      "Missing output: renders/douyin_zh_1080x1920_draft.mp4",
-      "Not verified runtime artifact: publish/publish_pack.md",
-      "Missing input: renders/douyin_zh_1080x1920_draft.mp4",
-      "Missing output: publish/publish_pack.md"
-    ]
+    "blocked_stages": 0,
+    "blocking_items": []
   }
 }

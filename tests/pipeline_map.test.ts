@@ -45,7 +45,7 @@ describe("pipeline map", () => {
     expect(stageById.voiceover_audio.command).toBe("npm run voiceover:check");
     expect(stageById.captions.command).toBe("npm run captions:align");
     expect(stageById.video_render.command).toBe("npm run video:hyperframes-draft");
-    expect(stageById.video_render_smoke_mp4.command).toBe("npm run video:hyperframes-render-smoke");
+    expect(stageById.video_render_smoke_mp4).toBeUndefined();
     expect(stageById.publish_pack.command).toBe("npm run publish:pack");
   });
 

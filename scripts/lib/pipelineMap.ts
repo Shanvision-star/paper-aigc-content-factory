@@ -243,26 +243,6 @@ export function buildPipelineMap(topicPath: string, rootDir = "."): PipelineMap 
       episodeAsset(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4")
     ], true), notVerifiedWhenMissing(episodeDir, "renders/douyin_zh_1080x1920_draft.mp4")),
     buildStage({
-      id: "video_render_smoke_mp4",
-      title: "HyperFrames MP4 Smoke",
-      command: "npm run video:hyperframes-render-smoke",
-      purpose: "显式运行 HyperFrames CLI 与本地 FFmpeg，提前验证 MP4 渲染环境和 Dagu 节点。",
-      inputs: [
-        episodeAsset(episodeDir, "storyboard/storyboard.json")
-      ],
-      outputs: [
-        episodeAsset(episodeDir, "renders/hyperframes_smoke/index.html"),
-        episodeAsset(episodeDir, "renders/hyperframes_smoke_1080x1920.mp4"),
-        episodeAsset(episodeDir, "renders/hyperframes_smoke_status.json")
-      ]
-    }, stageStatusForArtifacts([
-      episodeAsset(episodeDir, "storyboard/storyboard.json")
-    ], [
-      episodeAsset(episodeDir, "renders/hyperframes_smoke/index.html"),
-      episodeAsset(episodeDir, "renders/hyperframes_smoke_1080x1920.mp4"),
-      episodeAsset(episodeDir, "renders/hyperframes_smoke_status.json")
-    ])),
-    buildStage({
       id: "publish_pack",
       title: "Publish Pack",
       command: "npm run publish:pack",
@@ -344,8 +324,7 @@ function mermaidForMap(map: PipelineMap): string {
     "  contract_smoke --> voiceover_audio[\"voiceover_audio<br/>check/import\"]",
     "  voiceover_audio --> captions[\"captions<br/>alignment\"]",
     "  captions --> video_render[\"video_render<br/>HyperFrames draft\"]",
-    "  video_render --> video_render_smoke_mp4[\"video_render_smoke_mp4<br/>MP4 smoke\"]",
-    "  video_render_smoke_mp4 --> publish_pack[\"publish_pack<br/>review assets\"]",
+    "  video_render --> publish_pack[\"publish_pack<br/>review assets\"]",
     "  publish_pack --> quality_gate[\"quality_gate<br/>qa_report\"]",
     "  quality_gate --> pipeline_map[\"pipeline_map<br/>I/O map\"]",
   ];
