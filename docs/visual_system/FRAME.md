@@ -67,6 +67,59 @@ Reveal operation order first, then notation. For Attention, show QK matching, so
 - Annotated formulas must highlight the exact operation order used by the narration, such as `QK^T -> scale by sqrt(d_k) -> softmax -> weighted V`.
 - Pre-render keyframes must prove the full formula is sharp, complete, and readable on phone-sized playback.
 
+## Source-Backed HyperFrames Composition Hard Gate
+
+- Paper figures and formulas are not just style references. They must become source-backed assets before HyperFrames composition.
+- Required chain: `source_capture -> crop_formula_or_figure -> visual_asset_manifest -> episode FRAME.md -> component implementation -> review keyframes -> render`.
+- If a scene explains a technical derivation, the animation must preserve the reasoning path instead of falling back to generic explanatory cards.
+- For formula-heavy scenes, the frame contract must specify the source asset, full formula bounding box, annotation targets, operation order, caption exclusion zone, and keyframe review points.
+- The composition must fail review if original paper figures, formula crops, or required operation steps are missing from the rendered keyframes.
+- Reference infographics can inspire layout, but they do not count as implementation unless their structure is translated into explicit components, coordinates, assets, and review gates.
+
+## Formula Derivation Chain Hard Gate
+
+- Formula animation must show the computation sequence that the narration describes, not only the final equation.
+- Use staged reveal for dense equations: source figure or formula first, then operation blocks, then the complete formula.
+- Each formula scene must identify whether it needs an original formula crop, a derivation animation, an explanatory card, or a combination of all three.
+- For Scaled Dot-Product Attention, the minimum derivation chain is `Q -> K matching -> score matrix QK^T -> /sqrt(d_k) -> row-wise softmax -> weighted V -> output O`.
+- Visual, caption, and spoken channels must preserve the same formula meaning. Example: the visual shows `√(d_k)` or a true radical form, while spoken text says the square root of d k.
+- Do not place formula fragments inside normal paragraph text when the scene requires mathematical inspection; use a protected formula object or source-backed image instead.
+
+## Connector And Arrow Geometry Hard Gate
+
+- Diagrams that use arrows, weighted lines, graph edges, or data-flow connectors must use explicit source and target anchors.
+- Connectors must start and end on the visible boundary of the intended object, not inside cards, nodes, formulas, labels, or icons.
+- Arrowheads must point to a clear semantic target such as a card edge midpoint, node boundary point, matrix cell, formula term, or callout anchor.
+- Arrowheads must use fixed marker sizing across the scene. Emphasis should use color, opacity, or reveal timing, not larger arrowheads.
+- Arrowheads and connector strokes must not pass through load-bearing text, formula symbols, node centers, card interiors, subtitles, or source labels unless the overlap is an intentional highlight with enough padding.
+- Fan-out or fan-in diagrams should use symmetrical or consistently spaced target anchors when the concept is parallel, such as one `Q` matching multiple `K` cards.
+- Use SVG paths, Manim vectors, or a layout engine with computed bounding boxes for connectors; do not use rotated CSS rectangles or hard-coded line spans as final arrows.
+- Connector types must be chosen by semantic role:
+  - step-by-step process: straight process arrows;
+  - relation fan-out or fan-in: single-segment flow arcs with consistent curvature;
+  - aggregation into one output: aligned flow arcs converging to the target boundary;
+  - callouts: short leader lines that never cross the main equation or subtitle band.
+- Do not use arbitrary multi-bend curves for technical flow. If a curve is required, use a readable single flow arc with stable curvature and a clean terminal tangent.
+- Connector curves should preserve visual rhythm: consistent stroke width, rounded caps, clear z-index behind foreground objects, and enough spacing between adjacent arrows.
+- Pre-render keyframes must check connector geometry before approval: no穿模, no漂移, no ambiguous target, no inconsistent arrowhead size, no arbitrary bending, and no broken visual hierarchy.
+
+## Visual Centering And Whitespace Hard Gate
+
+- Load-bearing diagrams, icons, formulas, and step labels must sit around the visible center of the phone frame, not drift into the top third.
+- Do not leave large unused gaps between the primary visual object and the supporting step rail, caption, formula, or legend.
+- Asset frames must be content-fit: shrink the frame, scale the visual, or tighten internal rows instead of filling unused canvas with blank paper.
+- Repeated cards, icons, or graph nodes should use balanced horizontal and vertical spacing so the viewer can scan without feeling the content is floating.
+- Visual review must inspect the rendered keyframe, not only the HTML source: the dominant object should pass a squint test at phone size.
+- If a scene intentionally uses negative space, the episode `FRAME.md` must document the reason and identify the single focal object preserved by that space.
+
+## Specific Scene Matcher Priority Hard Gate
+
+- HyperFrames scene selection must match the most specific `visual_type` or component contract before any generic fallback.
+- Composite names such as `kv_cache_cached_projection`, `formula_derivation_complete`, or `softmax_rowwise_matrix` must not be swallowed by generic checks such as `projection`, `formula`, or `matrix`.
+- Scene matchers should be ordered from specific to generic, or use an explicit registry map keyed by full `visual_type`.
+- If a scene falls back to a generic explanatory card while a specific asset/component exists in the episode `FRAME.md`, the render is a visual contract failure.
+- Keyframe review must compare scene title, asset id, and rendered component role. A `KV Cache` scene must show runtime reuse of projected Key/Value, not generic QKV projection cards.
+
 ### Modern LLM Connection
 
 Connect the paper mechanism to current GPT, Claude, Gemini, Qwen, DeepSeek, Sora, Agent, MCP, KV Cache, vLLM, or FlashAttention context only when the technical-script review has approved the connection.

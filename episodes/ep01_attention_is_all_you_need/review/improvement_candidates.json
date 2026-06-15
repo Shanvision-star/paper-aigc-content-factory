@@ -1,0 +1,219 @@
+{
+  "status": "reviewable",
+  "generated_at": "1970-01-01T00:00:00.000Z",
+  "source_feedback": [
+    "User reported unclear key content, unclear English pronunciation, segment discontinuities, breakpoints, and repeated content in F5-TTS full-length voiceover.",
+    "User reported repeated leakage of the phrase 为什么重要 after switching to a neutral F5 reference recording.",
+    "User requested a hard sample-first review gate and a local ASR transcript diff gate before full segmented generation and render.",
+    "User requested a standing pronunciation rule: the 地 in 动态地 must be read de, not di, across future document, voiceover, and prompt generation.",
+    "User requested a post-episode retrospective for the first successful video: summarize prompt patterns, recurring failures, voiceover requirements, and identify what should become README hard constraints or dedicated workflow skills."
+  ],
+  "implemented_candidates": [
+    {
+      "id": "tts_spoken_text_normalizer",
+      "change": "Add a TTS preparation layer that rewrites numbers, acronyms, English terms, formulas, and key concepts into Chinese-friendly spoken text.",
+      "expected_impact": "Improves pronunciation of ChatGPT, Claude, AI Agent, BERT, GPT, MCP, KV Cache, vLLM, 2017, QKV, and core Transformer terms.",
+      "risk": "Spoken audio can become longer than existing video timing.",
+      "verification": "Run npm run audio:f5-prepare-segments and review audio/f5_tts/segments/segment_manifest.json."
+    },
+    {
+      "id": "f5_segmented_generation",
+      "change": "Generate one scene at a time and merge scene audio with short pauses instead of sending the whole 3-minute script to F5-TTS.",
+      "expected_impact": "Reduces long-text batch artifacts, reference phrase leakage, and repeated content; allows per-segment regeneration.",
+      "risk": "Per-scene generation is slower and may create slight voice/prosody resets between scenes.",
+      "verification": "Run powershell -File scripts/f5_tts_generate_segmented.ps1 and review individual seg_*.wav files before merge."
+    },
+    {
+      "id": "f5_reference_leakage_guard",
+      "change": "Shorten the canonical neutral F5 reference text to remove 为什么重要 and block leak-prone phrases such as 为什么重要, 改变了模型阅读序列的方式, and 改变了模型理解语言的方式 before any TTS call.",
+      "expected_impact": "Prevents reference-text content from being repeatedly injected into every generated segment.",
+      "risk": "A shorter reference clip gives F5-TTS slightly less prosody context, so human timbre review remains required.",
+      "verification": "Run npm run audio:f5-check-reference and confirm status=ready, duration is 7-10.5s, blocking_items is empty, and reference text has no leak-prone phrase."
+    },
+    {
+      "id": "strict_tts_source_of_truth",
+      "change": "Keep script/voice_segments.json as the only narration source; the TTS preparation layer may normalize pronunciation but must not inject hidden cue phrases absent from source_text.",
+      "expected_impact": "Keeps generated audio aligned with reviewed voiceover text and reduces unexplained narration drift.",
+      "risk": "Hook emphasis must now be written explicitly into the script instead of silently added by the adapter.",
+      "verification": "Run npm run audio:f5-prepare-segments and inspect audio/f5_tts/segments/segment_manifest.json for source_text/spoken_text drift."
+    },
+    {
+      "id": "tts_sample_first_review_gate",
+      "change": "Add a hard sample-first gate: generate seg_001, seg_010, and seg_014 before full generation, then require review/sample_audio_review.json.status=approved with the current segment_text_hash.",
+      "expected_impact": "Prevents expensive full-length audio and video renders when representative F5-TTS samples show leakage, repetition, pronunciation drift, or pacing problems.",
+      "risk": "Full generation now intentionally stops until human approval is recorded.",
+      "verification": "Run npm run audio:f5-generate-samples followed by npm run audio:sample-review-gate; the gate must block until the sample review is approved."
+    },
+    {
+      "id": "asr_transcript_diff_gate",
+      "change": "Add a local ASR transcript diff gate that compares ASR transcript segments against spoken_text and blocks leak-prone phrases or large transcript distance when ASR output exists.",
+      "expected_impact": "Adds an automated QA path for repeated phrases, reference-text leakage, and spoken_text drift before full rendering.",
+      "risk": "Local ASR is not currently installed; until transcript artifacts exist, the gate records asr_missing and keeps human listening review mandatory.",
+      "verification": "Run npm run audio:asr-transcript-diff and inspect audio/asr/transcript_diff_report.json."
+    },
+    {
+      "id": "zh_pronunciation_disambiguation",
+      "change": "Add a standing pronunciation rule for Chinese ambiguous particles: 动态地 uses 地 as the adverbial particle pronounced de. TTS spoken_text may rewrite it as 以动态方式 to avoid di misreading.",
+      "expected_impact": "Prevents future voiceovers and generated prompts from mispronouncing high-frequency technical phrases such as 动态地建立关系.",
+      "risk": "The display text and spoken_text can differ slightly for pronunciation safety, so source_text/spoken_text separation must remain visible in review.",
+      "verification": "Run npm test -- tests/runtime_adapters.test.ts and inspect audio/f5_tts/segments/segment_manifest.json after audio:f5-prepare-segments."
+    }
+  ],
+  "recommended_next_candidates": [
+    {
+      "id": "cosyvoice_backend_adapter",
+      "source": "https://github.com/FunAudioLLM/CosyVoice",
+      "reason": "CosyVoice highlights multilingual and cross-lingual zero-shot cloning, pronunciation inpainting for Chinese Pinyin and English CMU phonemes, text normalization, and repetition-aware sampling.",
+      "expected_impact": "Best next backend to test for mixed Chinese-English technical narration.",
+      "human_approval_required": true
+    },
+    {
+      "id": "gpt_sovits_backend_adapter",
+      "source": "https://github.com/RVC-Boss/GPT-SoVITS",
+      "reason": "GPT-SoVITS supports zero-shot/few-shot cloning, cross-lingual inference, and integrated segmentation/ASR/text labeling tools.",
+      "expected_impact": "Strong candidate if the priority is Chinese timbre similarity and long-term personal voice series quality.",
+      "human_approval_required": true
+    },
+    {
+      "id": "indextts2_duration_control_adapter",
+      "source": "https://github.com/index-tts/index-tts",
+      "reason": "IndexTTS2 focuses on duration control for audio-visual synchronization and reports strong zero-shot clarity metrics.",
+      "expected_impact": "Good candidate when video duration matching becomes more important than fastest local setup.",
+      "human_approval_required": true
+    }
+  ],
+  "retention_guidance": [
+    "Keep segmented TTS generation even if the backend changes.",
+    "Keep spoken_text separate from source_text so captions can remain technical while audio uses natural Chinese phrasing.",
+    "Do not import a longer review audio into the canonical video track until human audio review approves it."
+  ],
+  "post_episode_retrospective": {
+    "status": "reviewable",
+    "generated_at": "1970-01-01T00:00:00.000Z",
+    "scope": "ep01_attention_is_all_you_need first-video landing review",
+    "boundary": "workflow-optimizer suggestions only; do not auto-edit README, SKILL.md, platform profiles, or quality gates before human approval",
+    "evidence_inputs": [
+      "qa/qa_report.json status=pass",
+      "review/sample_audio_review_gate_report.json status=approved for seg_001, seg_010, seg_014",
+      "review/improvement_candidates.json existing F5-TTS and pronunciation findings",
+      "README Cover Export Constraint",
+      "memory notes for F5 sample/ASR gates and safe90 cover constraint"
+    ],
+    "recommended_readme_hard_constraints": [
+      {
+        "id": "readme_voiceover_hard_gates",
+        "priority": "P0",
+        "target": "README.md",
+        "change": "Add a Voiceover Hard Gates section: consent and voice manifest required; neutral 8-10s F5 reference; sample-first gate before full TTS; ASR transcript diff when available; duplicate/reference-leak checks before merge and render.",
+        "reason": "The first video repeatedly hit noisy audio, reference-text leakage, unclear English terms, repeated phrases, and segment discontinuities before the gate was introduced.",
+        "expected_impact": "Prevents expensive full audio/video reruns when representative samples already show drift or leakage.",
+        "risk": "The README can become too procedural if it duplicates script-level details.",
+        "verification": "Add or extend a docs constraint test that checks README mentions sample-first, ASR diff, neutral reference, duplicate guard, and source_text/spoken_text separation.",
+        "human_approval_required": true
+      },
+      {
+        "id": "readme_script_quality_contract",
+        "priority": "P0",
+        "target": "README.md",
+        "change": "Add a Script Quality Contract section: the script must explain why the paper matters in today's AI era; include Hook, Feynman explanation, engineering accuracy, modern LLM connection, risk/cost, and next-episode CTA.",
+        "reason": "The strongest user feedback was that the script should not be only a paper explainer; it must connect Transformer to ChatGPT, Claude, Agent, Sora, MCP, and modern inference engineering without mixing system layers.",
+        "expected_impact": "Keeps future videos aligned with the channel thesis and reduces late-stage script rewrites.",
+        "risk": "Too many required beats can make short videos feel overloaded.",
+        "verification": "Require script/storyboard review to confirm one core thesis, first-scene hook, Feynman explanation, engineering correction notes, and platform-specific opening.",
+        "human_approval_required": true
+      },
+      {
+        "id": "readme_review_before_render",
+        "priority": "P0",
+        "target": "README.md",
+        "change": "Add a Review Before Render section: do not claim completion until qa_report passes; keep real TTS/render separate from deterministic tests; Dagu progress must point to manifests/reports, not just command execution.",
+        "reason": "Several issues became visible only after listening or checking generated artifacts; command success alone was not enough.",
+        "expected_impact": "Makes completion claims evidence-based and easier to audit from Dagu or pipeline_map.",
+        "risk": "May slow iteration if every draft is treated as publish-ready review.",
+        "verification": "Run npm test, npm run typecheck, audio sample gate, quality gate, and inspect manifest/report paths for the latest episode.",
+        "human_approval_required": true
+      }
+    ],
+    "recommended_skill_candidates": [
+      {
+        "id": "skill_tts_voiceover_quality_gate",
+        "priority": "P0",
+        "target": ".agents/skills/tts-voiceover-quality-gate/SKILL.md",
+        "change": "Create a focused skill for cloned/personal-voice TTS QA: reference safety, sample-first review, ASR diff, duplicate guard, spoken_text normalization, English term handling, segment merge, and import rules.",
+        "reason": "Voiceover failures caused the most rework and are reusable across every future paper video.",
+        "expected_impact": "Turns F5-TTS/CosyVoice/GPT-SoVITS usage into an auditable workflow instead of ad hoc generation commands.",
+        "risk": "May overlap with voiceover-adapter unless boundaries are explicit: adapter creates/imports audio; quality-gate skill approves whether generation may proceed.",
+        "verification": "Forward-test with a request to generate full voiceover and confirm the agent stops at sample approval before full generation.",
+        "human_approval_required": true
+      },
+      {
+        "id": "skill_technical_script_reviewer",
+        "priority": "P0",
+        "target": ".agents/skills/technical-script-reviewer/SKILL.md",
+        "change": "Create a reviewer skill that checks paper scripts for technical correctness, Feynman clarity, modern LLM engineering context, and over-simplification risks before TTS.",
+        "reason": "The first script needed review corrections: Attention is weighted aggregation rather than magically seeing the full sentence; Q/K/V are learned projection spaces; Multi-Head roles are learned rather than manually assigned; Sora, Agent, and MCP are different system layers.",
+        "expected_impact": "Catches conceptual drift before animation/audio production, where changes are more expensive.",
+        "risk": "Can make scripts too academic if the reviewer over-corrects all analogies.",
+        "verification": "Review one existing script and produce a pass/fix list with blocking and non-blocking issues.",
+        "human_approval_required": true
+      },
+      {
+        "id": "skill_platform_hook_packager",
+        "priority": "P1",
+        "target": ".agents/skills/script-storyboard-writer/SKILL.md or a new platform-hook-packager skill",
+        "change": "Codify platform hooks: Douyin strong hook, Xiaohongshu save-worthy cover/title, Bilibili credible agenda, YouTube Shorts global context, X visual summary.",
+        "reason": "The user repeatedly asked how to attract viewers and support domestic Chinese vs overseas English platform modes.",
+        "expected_impact": "Reduces generic openings and makes platform outputs more native.",
+        "risk": "Could become formulaic if every episode uses identical hook patterns.",
+        "verification": "Ensure hooks.json includes at least three candidates per platform with scores, risk flags, visual cue, and selected rationale.",
+        "human_approval_required": true
+      },
+      {
+        "id": "skill_paper_visual_asset_contract",
+        "priority": "P1",
+        "target": ".agents/skills/visual-orchestrator/SKILL.md and .agents/skills/hyperframes-composer/SKILL.md",
+        "change": "Require scene-to-asset mapping for original paper figures, formulas, architecture diagrams, and explanatory animations; verify subtitles do not cover key formulas.",
+        "reason": "The user explicitly required original paper images/formulas plus HyperFrames animation, not generic abstract visuals.",
+        "expected_impact": "Improves educational trust and visual comprehension.",
+        "risk": "Copyright/source attribution and visual clutter need review.",
+        "verification": "Inspect storyboard/assets_manifest and render keyframes for original figure/formula presence and safe caption placement.",
+        "human_approval_required": true
+      }
+    ],
+    "recommended_quality_gate_candidates": [
+      {
+        "id": "quality_gate_cover_constraints",
+        "priority": "P1",
+        "target": "quality-gate or publish-pack scripts",
+        "change": "Check cover file format, 1080x1920 canvas, 90% content scale metadata or safe90 filename, and platform-safe margins before publish pack.",
+        "reason": "Douyin cover upload overflow required a safe90 export rule.",
+        "expected_impact": "Prevents last-minute platform upload failures.",
+        "risk": "Image content-scale detection may need metadata or naming convention if pixel analysis is too brittle.",
+        "verification": "Run cover constraint test and inspect publish pack cover paths.",
+        "human_approval_required": true
+      },
+      {
+        "id": "quality_gate_tts_transcript_evidence",
+        "priority": "P1",
+        "target": "qa_report.json and pipeline_map.json",
+        "change": "Surface sample review status, ASR diff status, duplicate guard status, and reference safety status in QA and pipeline map outputs.",
+        "reason": "The user wanted to see GPT-SoVITS/F5 progress and failure reasons in Dagu rather than hidden terminal steps.",
+        "expected_impact": "Makes audio progress auditable from the dashboard and review files.",
+        "risk": "QA report can become noisy if every intermediate artifact is listed.",
+        "verification": "Run pipeline_map after audio gates and confirm each status is visible with input/output paths.",
+        "human_approval_required": true
+      }
+    ],
+    "do_not_promote_to_hard_constraints": [
+      "Do not hard-code F5-TTS as the only future voice backend; keep backend bakeoff open for CosyVoice, GPT-SoVITS, and IndexTTS-style duration-control options.",
+      "Do not enforce a fixed 60-90s or 108s duration for every episode; prefer clarity, subtitles, and visual alignment over arbitrary time caps.",
+      "Do not treat phone-side playback speed reduction as the production audio quality solution; it can be a publishing workaround, not a generation standard.",
+      "Do not let hidden prompt cues such as 重点来了 or 需要关注 be injected after script approval; write them explicitly into source_text if needed."
+    ],
+    "retention_guidance": [
+      "After each successful episode, workflow-optimizer should produce retrospective candidates before mainline README or skill edits.",
+      "Promote only repeated, high-impact failures into README hard constraints; put operational procedures into skills or scripts.",
+      "Every candidate promoted to mainline should add a small docs or contract test so the rule remains visible to future agents."
+    ]
+  }
+}

@@ -30,6 +30,7 @@ description: Use when composing storyboard, assets, audio, and captions into Hyp
 - Preserve formula assets as complete visual objects. Formulas may come from a clear paper crop, a high-resolution screenshot from a formula editor, KaTeX/MathJax/SVG output, or a Manim-rendered still/scene, but the composition must not crop, truncate, wrap, or blur the formula.
 - Add or preserve annotation layers for formulas when the episode `FRAME.md` requests explanation points such as `QK^T`, `sqrt(d_k)`, `softmax`, or weighted `V`.
 - Keep captions, titles, and callouts outside the formula bounding box unless the callout is an intentional annotation with enough padding.
+- Match scene components from the most specific `visual_type` or explicit registry entry before any generic fallback. For example, `kv_cache_cached_projection` must render the KV Cache component, not a generic QKV projection card.
 
 ## Formula Asset Contract
 
@@ -50,4 +51,5 @@ Before composing a formula scene, verify that the episode `FRAME.md` or asset ma
 - Do not bypass missing audio, captions, or assets by fabricating outputs.
 - Do not use raw, unrendered LaTeX text as the final visible formula.
 - Do not split a single required formula into disconnected fragments unless the full formula also appears in the same beat or immediately adjacent staged reveal.
+- Do not let generic substring matchers such as `projection`, `formula`, or `matrix` swallow more specific scene contracts such as `kv_cache_cached_projection`, `formula_derivation_complete`, or `softmax_rowwise_matrix`.
 - Do not publish rendered media to any platform.

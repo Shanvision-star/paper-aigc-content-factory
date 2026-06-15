@@ -29,6 +29,8 @@ description: Use when drafting platform-aware hooks, voiceover, segments, storyb
 - Adapt opening style and pacing to the selected platform profiles.
 - Keep one core thesis and make the first scene reference the selected hook.
 - Record hook choices, rejected variants, and source-backed rationale.
+- Add pronunciation notes for ambiguous Chinese particles and technical terms when drafting voiceover prompts; in particular, `动态地` uses the adverbial particle `地` and must be read as `de`, not `di`.
+- Prefer low-ambiguity spoken phrasing for TTS-sensitive lines, such as `以动态方式建立关系`, when the visible script may contain `动态地建立关系`.
 
 ## Forbidden Actions
 

@@ -40,14 +40,15 @@ function writeMinimalWav(filePath: string): void {
   fs.writeFileSync(filePath, header);
 }
 
-function writeSegmentManifest(episodeDir: string): void {
-  const manifestPath = path.join(episodeDir, "audio/f5_tts/segments/segment_manifest.json");
+function writeSegmentManifest(episodeDir: string, engine: "f5_tts" | "indextts2" = "f5_tts"): void {
+  const segmentDir = engine === "indextts2" ? "audio/indextts2/segments" : "audio/f5_tts/segments";
+  const manifestPath = path.join(episodeDir, segmentDir, "segment_manifest.json");
   fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
   fs.writeFileSync(
     manifestPath,
     `${JSON.stringify({
       status: "prepared",
-      engine_hint: "f5_tts_local_segmented",
+      engine_hint: engine === "indextts2" ? "indextts2_local_segmented" : "f5_tts_local_segmented",
       generated_at: "1970-01-01T00:00:00.000Z",
       source: "script/voice_segments.json",
       text_hash: "sample-manifest-hash",
@@ -58,24 +59,24 @@ function writeSegmentManifest(episodeDir: string): void {
           source_text: "重点来了。如果你每天都在用 ChatGPT。",
           spoken_text: "重点来了。 如果你每天都在用 Chat G P T。",
           focus_terms: [],
-          gen_file: "audio/f5_tts/segments/seg_001.txt",
-          output_audio: "audio/f5_tts/segments/seg_001.wav"
+          gen_file: `${segmentDir}/seg_001.txt`,
+          output_audio: `${segmentDir}/seg_001.wav`
         },
         {
           segment_id: "seg_010",
           source_text: "这就是它真正影响今天 AI 的原因。",
           spoken_text: "这就是它真正影响今天 AI 的原因。",
           focus_terms: [],
-          gen_file: "audio/f5_tts/segments/seg_010.txt",
-          output_audio: "audio/f5_tts/segments/seg_010.wav"
+          gen_file: `${segmentDir}/seg_010.txt`,
+          output_audio: `${segmentDir}/seg_010.wav`
         },
         {
           segment_id: "seg_014",
           source_text: "下一集，我们把 Q 和 K 的相乘过程拆开。",
           spoken_text: "下一集， 我们把 Q 和 K 的相乘过程拆开。",
           focus_terms: [],
-          gen_file: "audio/f5_tts/segments/seg_014.txt",
-          output_audio: "audio/f5_tts/segments/seg_014.wav"
+          gen_file: `${segmentDir}/seg_014.txt`,
+          output_audio: `${segmentDir}/seg_014.wav`
         }
       ]
     }, null, 2)}\n`,
@@ -108,10 +109,51 @@ describe("runtime adapters", () => {
     expect(formula).not.toContain("这里的工程重点是");
     expect(formula.startsWith("但 Transformer")).toBe(true);
     expect(formula).toContain("Transformer");
-    expect(formula).toContain("Flash Attention");
+    expect(formula).toContain("FlashAttention");
     expect(formula).toContain("KV Cache");
     expect(formula).toContain("vLLM");
     expect(explicitCue.match(/重点来了/g)?.length).toBe(1);
+  });
+
+  it("normalizes EP02 QKV formula and polyphone phrases before TTS", () => {
+    const spoken = normalizeForTts(
+      "更准确地说，QK^T 先除以 sqrt(d_k)，softmax 会按行归一化。模型要判断，“它”到底指谁。它会一个 token，一个 token 地往后生成。如果每次都重新算，Attention 不是神奇地理解一句话。",
+      "seg_010"
+    );
+
+    expect(spoken).toContain("准确一点说");
+    expect(spoken).toContain("Q 乘 K 转置");
+    expect(spoken).toContain("根号下 d k");
+    expect(spoken).toContain("softmax");
+    expect(spoken).toContain("模型要判断， 它到底指谁");
+    expect(spoken).toContain("对每个当前 token 的那一组分数分别做归一化");
+    expect(spoken).toContain("逐个 token， 往后生成");
+    expect(spoken).toContain("从头再算");
+    expect(spoken).toContain("Attention 不是模型突然就理解了这句话");
+    expect(spoken).not.toContain("更准确地说");
+    expect(spoken).not.toContain("QK^T");
+    expect(spoken).not.toContain("sqrt(d_k)");
+    expect(spoken).not.toContain("“它”");
+    expect(spoken).not.toContain("按行归一化");
+    expect(spoken).not.toContain("一个 token 地");
+    expect(spoken).not.toContain("重新算");
+    expect(spoken).not.toContain("神奇地理解一句话");
+  });
+
+  it("keeps EP02 seg_010 English terms continuous with pronunciation-stable pauses", () => {
+    const spoken = normalizeForTts(
+      "现在看一个今天大模型还在用的例子。当 ChatGPT 或 Claude 生成回答时，它通常不是一次性把整段话吐出来。它会一个 token，一个 token 地往后生成。每生成一个新 token，模型都会产生新的 Q，去匹配前面上下文里的 K，再读取对应的 V。问题来了：前面那些 token 的 K 和 V，如果每次都重新算，推理会很慢，显存也会浪费。所以推理系统会用 KV Cache。",
+      "seg_010"
+    );
+
+    expect(spoken).toContain("当 ChatGPT， 或者 Claude， 生成回答时");
+    expect(spoken).toContain("它会逐个 token， 往后生成");
+    expect(spoken).toContain("每生成一个新的 token，");
+    expect(spoken.match(/\btoken\b/g)?.length).toBe(3);
+    expect(spoken).toContain("KV Cache");
+    expect(spoken).not.toContain("Chat G P T");
+    expect(spoken).not.toContain("托肯");
+    expect(spoken).not.toContain("tok en");
   });
 
   it("does not inject segment-level cue phrases that are absent from the source script", () => {
@@ -239,6 +281,39 @@ describe("runtime adapters", () => {
     });
   });
 
+  it("does not reuse F5 sample approval for IndexTTS2 sample review", () => {
+    withTempEpisode((tempRoot, episodeDir) => {
+      writeSegmentManifest(episodeDir, "f5_tts");
+      writeSegmentManifest(episodeDir, "indextts2");
+      for (const segmentId of ["seg_001", "seg_010", "seg_014"]) {
+        writeMinimalWav(path.join(episodeDir, "audio/f5_tts/segments", `${segmentId}.wav`));
+        writeMinimalWav(path.join(episodeDir, "audio/indextts2/segments", `${segmentId}.wav`));
+      }
+
+      const f5Result = runTtsSampleReviewGate(topicPath, tempRoot, { engine: "f5_tts" });
+      fs.writeFileSync(
+        path.join(episodeDir, "review/sample_audio_review.json"),
+        `${JSON.stringify({
+          status: "approved",
+          reviewed_at: "2026-06-14T00:00:00+08:00",
+          reviewer: "Rome",
+          approved_segment_ids: ["seg_001", "seg_010", "seg_014"],
+          segment_text_hash: f5Result.segment_text_hash,
+          notes: "Old F5 approval must not approve IndexTTS2 samples."
+        }, null, 2)}\n`,
+        "utf8"
+      );
+
+      const indexResult = runTtsSampleReviewGate(topicPath, tempRoot, { engine: "indextts2" });
+
+      expect(indexResult.status).toBe("pending_review");
+      expect(indexResult.engine).toBe("indextts2");
+      expect(indexResult.review_file).toBe("review/sample_audio_review.indextts2.json");
+      expect(indexResult.sample_audio.every((item) => item.output_audio.startsWith("audio/indextts2/segments/"))).toBe(true);
+      expect(indexResult.blocking_items).toContain("Sample audio review is not approved.");
+    });
+  });
+
   it("fails ASR transcript diff when generated audio drifts from spoken_text or leaks reference phrases", () => {
     withTempEpisode((tempRoot, episodeDir) => {
       writeSegmentManifest(episodeDir);
@@ -354,11 +429,48 @@ describe("runtime adapters", () => {
       const result = runCaptionAligner(topicPath, tempRoot);
       const srt = fs.readFileSync(path.join(episodeDir, "captions/subtitles.srt"), "utf8");
       const vtt = fs.readFileSync(path.join(episodeDir, "captions/subtitles.vtt"), "utf8");
+      const shortSrt = fs.readFileSync(path.join(episodeDir, "captions/subtitles.short.srt"), "utf8");
+      const ass = fs.readFileSync(path.join(episodeDir, "captions/subtitles.ass"), "utf8");
 
       expect(result.status).toBe("captions_ready");
+      expect(result.outputs).toContain("captions/subtitles.short.srt");
+      expect(result.outputs).toContain("captions/subtitles.ass");
       expect(srt).toContain("00:00:00,000 --> 00:00:08,000");
       expect(srt).toContain("如果你一看到 QKV 就断片");
       expect(vtt.startsWith("WEBVTT")).toBe(true);
+      expect(shortSrt).toContain("00:00:00,000 -->");
+      expect(ass).toContain("[V4+ Styles]");
+      expect(ass).toContain("Dialogue:");
+    });
+  });
+
+  it("protects caption display for formulas and multiword English terms", () => {
+    withTempEpisode((tempRoot, episodeDir) => {
+      const sourceAudio = path.join(tempRoot, "manual", "voiceover.wav");
+      writeMinimalWav(sourceAudio);
+      fs.writeFileSync(path.join(episodeDir, "script/voice_segments.json"), JSON.stringify([{
+        segment_id: "seg_001",
+        start: 0,
+        duration: 8,
+        text: "Q 乘 K 转置，再除以根号下 d k。ChatGPT 使用 KV Cache，并引出 Multi-Head Attention。",
+        claim_ids: ["c_attention_core"]
+      }], null, 2));
+      runVoiceoverAdapter({ topicPath, rootDir: tempRoot, mode: "import-audio", inputAudioPath: sourceAudio });
+
+      const result = runCaptionAligner(topicPath, tempRoot);
+      const srt = fs.readFileSync(path.join(episodeDir, "captions/subtitles.srt"), "utf8");
+      const shortSrt = fs.readFileSync(path.join(episodeDir, "captions/subtitles.short.srt"), "utf8");
+      const ass = fs.readFileSync(path.join(episodeDir, "captions/subtitles.ass"), "utf8");
+
+      expect(result.status).toBe("captions_ready");
+      expect(srt).toContain("QK^T（Q 乘 K 转置）");
+      expect(srt).toContain("√(d_k)");
+      expect(srt).toContain("KV Cache（Key-Value Cache）");
+      expect(srt).toContain("Multi\u2011Head\u00A0Attention");
+      expect(srt).not.toContain("根号下 d k");
+      expect(shortSrt).toContain("QK^T（Q 乘 K 转置）");
+      expect(ass).toContain("√(d_k)");
+      expect(ass).toContain("KV Cache（Key-Value Cache）");
     });
   });
 
@@ -382,11 +494,13 @@ describe("runtime adapters", () => {
       runCaptionAligner(topicPath, tempRoot);
 
       const result = runHyperframesDraft(topicPath, tempRoot);
-      const html = fs.readFileSync(path.join(episodeDir, "renders/hyperframes/ep01_draft.html"), "utf8");
+      const draftOutput = result.outputs.find((output) => output.startsWith("renders/hyperframes/") && output.endsWith("_draft.html"));
+      expect(draftOutput).toBeTruthy();
+      const html = fs.readFileSync(path.join(episodeDir, draftOutput!), "utf8");
       const design = fs.readFileSync(path.join(episodeDir, "renders/hyperframes_formal/DESIGN.md"), "utf8");
 
       expect(result.status).toBe("composition_ready");
-      expect(html).toContain("data-composition-id=\"ep01-attention-draft\"");
+      expect(html).toContain("data-composition-id=\"ep01-attention-is-all-you-need-draft\"");
       expect(html).toContain("Attention Is All You Need");
       expect(design).toContain("Formula Asset Contract");
       expect(design).toContain("KaTeX/MathJax/SVG");

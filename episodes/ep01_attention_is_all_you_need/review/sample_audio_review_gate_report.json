@@ -1,0 +1,29 @@
+{
+  "status": "approved",
+  "sample_segment_ids": [
+    "seg_001",
+    "seg_010",
+    "seg_014"
+  ],
+  "segment_text_hash": "ad8383535a30dced544f9f3fcfa6a7a55454591a48b0068924397087c560a2b2",
+  "review_file": "review/sample_audio_review.json",
+  "sample_audio": [
+    {
+      "segment_id": "seg_001",
+      "output_audio": "audio/f5_tts/segments/seg_001.wav",
+      "exists": true
+    },
+    {
+      "segment_id": "seg_010",
+      "output_audio": "audio/f5_tts/segments/seg_010.wav",
+      "exists": true
+    },
+    {
+      "segment_id": "seg_014",
+      "output_audio": "audio/f5_tts/segments/seg_014.wav",
+      "exists": true
+    }
+  ],
+  "blocking_items": [],
+  "generated_at": "1970-01-01T00:00:00.000Z"
+}

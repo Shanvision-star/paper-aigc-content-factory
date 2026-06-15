@@ -1,23 +1,119 @@
-# Attention Is All You Need 改变了什么 Voiceover
+# Douyin Voiceover V5 Focus-Cue Audio-Timed
 
-> Contract-smoke draft. No TTS, no voice cloning, no real audio generated.
+## Title
 
-## seg_001
+《Attention Is All You Need》为什么改变了今天的 AI？
 
-如果你一看到 QKV 就断片，先看这 20 秒。
+## Production Notes
 
-## seg_002
+- Target platform: Douyin / Xiaohongshu Chinese vertical draft.
+- Final configured duration: 08:47.5 from segmented voiceover audio.
+- Teaching method: Feynman learning method first, formula second.
+- Core thesis: Transformer changed AI by moving sequence understanding from sequential message passing to global relationship modeling.
+- Source boundary: Transformer claims trace to the paper; Sora/MCP references stay at system-layer context and do not imply they are Transformer variants.
+- Focus cue strategy: use short oral prompts such as "重点来了", "需要关注", and "公式不用背" to help short-video viewers notice conceptual turns.
+- Timing source: audio/f5_tts/segments/segmented_merge_report.json.
 
-这篇论文的关键，不是把模型堆得更大，而是改变模型阅读序列的方式。
+## Voiceover
 
-## seg_003
+### 00:00.0-00:17.6
 
-Q 像是在提问，K 像是在被匹配，V 则承载真正要被汇总的信息。
+重点来了。
+如果你每天都在用 ChatGPT、Claude，或者 AI Agent，却不知道它为什么能理解上下文，那你其实绕不开一篇 2017 年的论文。
 
-## seg_004
+### 00:17.6-00:42.1
 
-当所有 token 可以同时看见彼此，长距离关系就不再只能排队传递。
+它叫《Attention Is All You Need》。
+这篇论文问的不是“怎么把模型做大”，而是一个更底层的问题：机器读一句话，真的必须一个词一个词排队读吗？
 
-## seg_005
+### 00:42.1-01:11.9
 
-这也是后来许多大语言模型都绕不开 Transformer 的原因之一。
+在 Transformer 之前，很多模型像排队传话。
+第一个词把信息传给第二个词，第二个词再传给第三个词。
+这样能工作，但问题是：信息传得越远，路径越长；路径越长，学习长期依赖就越难；而且这种递归结构，也很难充分并行。
+
+### 01:11.9-01:54.3
+
+需要关注这里。
+Transformer 的反常识点是：它不再让信息只沿着一条队伍传下去。
+它让每个 token，也就是被切分后的词片段，去计算自己和其他 token 的相关性。
+不是神奇地“看懂全句”，而是通过 Attention 权重，把相关的信息加权汇聚回来。
+这就是 Self-Attention，也就是让 token 和 token 之间，动态建立关系。
+
+### 01:54.3-02:27.8
+
+用费曼方式理解：假设一句话里有一个“它”。
+模型要判断，“它”到底指谁。
+Self-Attention 做的事，不是让“它”等前面的记忆慢慢传过来，而是让“它”去和句子里的其他词片段计算关系：谁和我最相关？谁的信息应该被我多读一点？
+
+### 02:27.8-03:09.5
+
+重点来了，Q、K、V 不要死背。
+Q 可以理解成：我在找什么？K 可以理解成：你有什么特征？V 才是真正要被拿走的信息。
+但要注意，Q、K、V 不是三个有性格的小人。
+在工程上，它们是同一个 token 表示，经过三个不同线性投影之后，进入了三个不同的表示空间。
+所以 Q 和 K 负责算相关性，V 负责提供要汇聚的内容。
+
+### 03:09.5-03:56.4
+
+公式不用背，抓住三步。
+论文里的 Attention 公式，其实就按这个顺序工作：先用 Q 和 K 相乘，得到 token 之间的匹配分数；再经过 softmax，变成注意力权重；最后按照这些权重，去加权读取 V。
+一句话：先匹配，再分配权重，再汇聚信息。
+更工程一点说：Attention 学到的是一个动态关系矩阵。
+你也可以把它理解成：每一层都在重新画一张 token 之间的关系图。
+
+### 03:56.4-04:49.9
+
+但一个关系空间还不够。
+所以论文用了 Multi-Head Attention。
+不要把它理解成：程序员提前安排好一个头看语法，一个头看指代，一个头看长距离关系。
+更准确地说，多个 head 会在不同的表示子空间里并行计算关系。
+有些 head 可能学到语法，有些可能学到位置偏好，有些可能学到指代关系。
+但这些分工不是人工写死的，而是训练过程中自己形成的。
+最后，模型再把这些不同视角合并起来。
+
+### 04:49.9-05:37.6
+
+需要关注另一个问题：Attention 能建关系，但它本身不自带顺序感。
+如果每个 token 都能和其他 token 计算关系，那模型怎么知道谁在前，谁在后？原始论文的做法是加入位置编码。
+用正弦和余弦，给每个 token 加上位置坐标。
+到了现代大模型里，这个部分也继续演化。
+很多模型会用 RoPE，也就是旋转位置编码；长上下文模型还会用 YaRN、ALiBi，或者其他位置扩展方法。
+
+### 05:37.6-06:40.8
+
+所以这篇论文真正改变 AI 的地方，不是多了几个复杂符号。
+而是它把语言理解，从“沿着序列一步步传递”，改成了“在每一层里重建 token 之间的关系”。
+这就是它影响今天 AI 的原因。
+从 BERT、GPT，到 Llama、Qwen、DeepSeek，都沿着 Transformer 这条主线继续发展。
+当然，它们不是完全照搬 2017 年的结构。
+现代 LLM 会加入很多工程改造：比如 RoPE，比如 GQA，比如 KV Cache，比如 MoE，比如更强的归一化和前馈网络设计。
+但核心问题仍然在这里：怎么让模型高效地建模上下文里的关系。
+
+### 06:40.8-07:33.8
+
+到了今天，这条线还在继续扩展。
+Sora 这类视频模型，会把图像、时间、空间也变成可建模的片段。
+Agent 系统，则是在大模型之上，加入任务规划、工具调用和记忆管理。
+MCP 不是 Transformer 本身，它更像是工具和上下文接入协议。
+所以这里要分清楚：Transformer 是模型底座；Sora 是多模态生成系统；Agent 是任务编排系统；MCP 是工具连接层。
+它们不是同一个东西，但很多能力都建立在大模型的表示能力之上。
+
+### 07:33.8-08:12.4
+
+工程上要注意：Attention 很强，但也很贵。
+因为 token 越多，token 和 token 之间要比较的关系就越多。
+这就是为什么长上下文推理会很吃显存和计算。
+所以今天你会看到：FlashAttention、KV Cache、GQA、MLA、vLLM。
+这些优化，本质上都在解决一个问题：让 Attention 更快，让上下文更长，让推理成本更低。
+
+### 08:12.4-08:33.6
+
+最后用一句费曼式总结：Transformer 不是让 AI 一个字一个字读得更快。
+它是让 AI 在每一层里，重新计算信息之间的关系。
+而 Attention，就是那张不断变化的关系图。
+
+### 08:33.6-08:47.5
+
+这，就是今天大模型时代的起点。
+下一集，我们把 Q 和 K 的相乘过程拆开，看 Attention 机制到底在算什么。

@@ -1,0 +1,155 @@
+name: ai-paper-content-factory-ep02-real-audio
+group: AI Paper Content Factory
+type: graph
+retry_policy:
+  limit: 0
+description: >
+  EP02 QKV production workflow using the approved V4 script.
+  Runs local deterministic prep, then enters the gated IndexTTS2 audio chain.
+  No auto-publish.
+
+steps:
+  - id: validate_topic
+    description: Validate the EP02 topic contract.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run validate:topic:ep02
+
+  - id: contract_smoke
+    description: Generate deterministic EP02 contract artifacts before applying the approved V4 script.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run episode:contract-smoke:ep02
+    depends: validate_topic
+
+  - id: sync_runtime
+    description: Sync the approved EP02 V4 script/storyboard into runtime voice segments and TTS input text.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run runtime:sync-ep02-v4
+    depends: contract_smoke
+
+  - id: copy_voice_reference
+    description: Reuse the authorized neutral personal-voice reference from EP01 for this local EP02 run.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run voice:copy-reference:ep02
+    depends: sync_runtime
+
+  - id: voiceover_duplicate_guard
+    description: Block exact or near-duplicate EP02 voiceover sentences before TTS generation.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run voiceover:duplicate-guard:ep02
+    depends: copy_voice_reference
+
+  - id: reference_safety
+    description: Require neutral 8-10s reference audio to prevent reference-text leakage before IndexTTS2 samples.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:f5-check-reference:ep02
+    depends: voiceover_duplicate_guard
+
+  - id: prepare_tts_segments
+    description: Normalize EP02 formula terms, English words, and Chinese polyphones into spoken_text.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:indextts2-prepare-segments:ep02
+    depends: reference_safety
+
+  - id: sample
+    description: Generate representative EP02 IndexTTS2 samples before any full-length generation.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:indextts2-generate-samples:ep02
+    depends: prepare_tts_segments
+
+  - id: asr_diff
+    description: Compare ASR transcripts against spoken_text when available; keep human listening review mandatory if ASR is missing.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:asr-transcript-diff:ep02
+    depends: sample
+
+  - id: human_approval
+    description: Hard gate requiring human approval of seg_001, seg_010, and seg_014 before full generation.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:sample-review-gate:ep02
+    depends: asr_diff
+
+  - id: full_tts
+    description: Generate EP02 IndexTTS2 audio one segment at a time after sample approval.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:indextts2-generate-full:ep02
+    depends: human_approval
+
+  - id: merge
+    description: Merge generated EP02 scene audio with short natural pauses.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:indextts2-merge-segments:ep02
+    depends: full_tts
+
+  - id: apply_audio_timings
+    description: Apply real segmented audio durations back to EP02 script, storyboard, captions source, and video timeline.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:apply-segment-timings:ep02
+    depends: merge
+
+  - id: audio_postprocess
+    description: Denoise, limit, and normalize the generated EP02 voiceover before canonical import.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run audio:postprocess:ep02
+    depends: apply_audio_timings
+
+  - id: import_voiceover
+    description: Import the postprocessed EP02 WAV into audio/voiceover.wav.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run voiceover:import-postprocessed:ep02
+    depends: audio_postprocess
+
+  - id: captions
+    description: Generate EP02 SRT/VTT captions from the real voiceover and segment timings.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run captions:align:ep02
+    depends: import_voiceover
+
+  - id: render
+    description: Render the EP02 1080x1920 HyperFrames MP4 draft and mux generated voiceover audio.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run video:hyperframes-render-formal:ep02
+    depends: captions
+
+  - id: publish_pack
+    description: Write EP02 platform publish pack for human review without posting.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run publish:pack:ep02
+    depends: render
+
+  - id: quality_gate
+    description: Recompute EP02 quality status and keep remaining runtime gaps explicit.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run quality:gate:ep02
+    depends: publish_pack
+
+  - id: pipeline_map
+    description: Refresh the EP02 visual input/output map.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run pipeline:map:ep02
+    depends: quality_gate
+
+  - id: test
+    description: Run deterministic Vitest contract tests.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm test
+    depends: pipeline_map
+
+  - id: typecheck
+    description: Run TypeScript type checking.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: npm run typecheck
+    depends: test
+
+  - id: inspect_artifacts
+    description: Print EP02 audio, render, and quality status.
+    working_dir: C:/Users/Rome/Documents/Paper_every_day
+    run: >
+      node -e "const fs=require('fs');
+      const safe=p=>fs.existsSync(p)?JSON.parse(fs.readFileSync(p,'utf8')):null;
+      const base='./episodes/ep02_attention_qkv';
+      const merge=safe(base+'/audio/indextts2/segments/segmented_merge_report.json');
+      const timing=safe(base+'/video_script/timing_report.json');
+      const render=safe(base+'/renders/hyperframes_formal_status.json');
+      const qa=safe(base+'/qa/qa_report.json');
+      console.log(JSON.stringify({audio:merge?.status||'not_merged', audio_duration:merge?.duration_sec||null, timeline_duration:timing?.total_duration_sec||null, render:render?.status||'not_rendered', qa:qa?.status||'not_run', blocking_items:qa?.blocking_items||null}, null, 2));"
+    depends: typecheck

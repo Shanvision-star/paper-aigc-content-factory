@@ -1,0 +1,250 @@
+[
+  {
+    "scene_id": "S01",
+    "start": 0,
+    "duration": 12.237,
+    "voiceover": "Attention is like a relationship map that changes at every layer. Today we open that map and focus on one line: Q times K transpose.",
+    "visual_type": "hook_relation_graph_qk_reveal",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_qk_relation_graph_svg"
+    ],
+    "caption": "Q times K transpose",
+    "claim_ids": [
+      "c_attention_core",
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "scene_id": "S02",
+    "start": 12.327,
+    "duration": 6.943,
+    "voiceover": "The question is simple: for the current token, which tokens in the context should it read from?",
+    "visual_type": "soft_adjacency_matrix_explainer",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_qk_relation_graph_svg"
+    ],
+    "caption": "Which tokens should it read from?",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "scene_id": "S03",
+    "start": 19.36,
+    "duration": 10.553,
+    "voiceover": "This is not a fixed graph, and not a Graph Neural Network. It is a soft attention matrix, rebuilt at each layer.",
+    "visual_type": "soft_adjacency_matrix_explainer",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_qk_relation_graph_svg"
+    ],
+    "caption": "A soft attention matrix",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "scene_id": "S04",
+    "start": 30.003,
+    "duration": 11.297,
+    "voiceover": "So what are Q, K, and V? They are not three different data sources. In self-attention, they usually come from the same token representation.",
+    "visual_type": "qkv_projection_spaces",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_qkv_projection_pipeline_svg"
+    ],
+    "caption": "Q, K, V come from the same input",
+    "claim_ids": [
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "scene_id": "S05",
+    "start": 41.39,
+    "duration": 14.512,
+    "voiceover": "The same input X is projected three ways: X times W Q becomes Query, X times W K becomes Key, and X times W V becomes Value.",
+    "visual_type": "qkv_projection_spaces",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_qkv_projection_pipeline_svg"
+    ],
+    "caption": "XW_Q, XW_K, XW_V",
+    "claim_ids": [
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "scene_id": "S06",
+    "start": 55.992,
+    "duration": 10.762,
+    "voiceover": "Use a meeting room analogy. Query is your question. Key is each person's label. Value is the actual information they can give you.",
+    "visual_type": "meeting_room_feynman_qkv",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_qkv_projection_pipeline_svg"
+    ],
+    "caption": "Query = question. Key = label. Value = content.",
+    "claim_ids": [
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "scene_id": "S07",
+    "start": 66.844,
+    "duration": 9.416,
+    "voiceover": "For a pronoun like it, the model does not magically understand the reference. The current token's Query is matched against every Key.",
+    "visual_type": "pronoun_reference_qk_score",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_qk_relation_graph_svg"
+    ],
+    "caption": "Query matches every Key",
+    "claim_ids": [
+      "c_attention_core",
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "scene_id": "S08",
+    "start": 76.35,
+    "duration": 9.334,
+    "voiceover": "That matching step is Q times K transpose. It produces a matrix of compatibility scores.",
+    "visual_type": "pronoun_reference_qk_score",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_qk_relation_graph_svg"
+    ],
+    "caption": "QK^T gives compatibility scores",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "scene_id": "S09",
+    "start": 85.774,
+    "duration": 11.691,
+    "voiceover": "Next, the scores are divided by the square root of d k. In the paper, d k is the Query and Key vector dimension. Scaling keeps softmax stable.",
+    "visual_type": "scale_by_sqrt_dk",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_formula_scaled_dot_product_attention_svg",
+      "ep02_harvard_attention_code_svg"
+    ],
+    "caption": "divide by √(dₖ)",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "scene_id": "S10",
+    "start": 97.555,
+    "duration": 8.406,
+    "voiceover": "Then softmax normalizes each row. For each current token, the row becomes attention weights that add up to one.",
+    "visual_type": "row_wise_softmax_weights",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_qk_relation_graph_svg"
+    ],
+    "caption": "softmax normalizes each row",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "scene_id": "S11",
+    "start": 106.051,
+    "duration": 11.355,
+    "voiceover": "Finally, the model uses those weights to read Value vectors and combine them into a new representation. Match, normalize, then read.",
+    "visual_type": "weighted_v_aggregation_formula",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_formula_scaled_dot_product_attention_svg",
+      "ep02_harvard_attention_code_svg"
+    ],
+    "caption": "match → normalize → read Value",
+    "claim_ids": [
+      "c_attention_core",
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "scene_id": "S12",
+    "start": 117.496,
+    "duration": 11.622,
+    "voiceover": "That is Scaled Dot-Product Attention: softmax of Q K transpose divided by the square root of d k, then multiplied by V.",
+    "visual_type": "complete_scaled_dot_product_attention",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_formula_scaled_dot_product_attention_svg",
+      "ep02_harvard_attention_code_svg"
+    ],
+    "caption": "Scaled Dot-Product Attention",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "scene_id": "S13",
+    "start": 129.208,
+    "duration": 14.571,
+    "voiceover": "ChatGPT and Claude still use this path. A new Query is produced for the next token, while old Key and Value projections can be reused through KV Cache, or Key-Value Cache.",
+    "visual_type": "kv_cache_cached_projection",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_qkv_projection_pipeline_svg"
+    ],
+    "caption": "KV Cache (Key-Value Cache)",
+    "claim_ids": [
+      "c_transformer_impact",
+      "c_attention_core"
+    ]
+  },
+  {
+    "scene_id": "S14",
+    "start": 143.869,
+    "duration": 11.494,
+    "voiceover": "Modern systems optimize the same path: FlashAttention at the kernel level, GQA and MQA at the model level, and KV Cache at runtime.",
+    "visual_type": "modern_attention_optimization_layers",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_kv_cache_engineering_svg"
+    ],
+    "caption": "kernel · model · runtime",
+    "claim_ids": [
+      "c_transformer_impact",
+      "c_transformer_parallelism"
+    ]
+  },
+  {
+    "scene_id": "S15",
+    "start": 155.453,
+    "duration": 12.098,
+    "voiceover": "Feynman summary: Query is the question. Key is the index. Value is the content. Attention is a differentiable routing system for information.",
+    "visual_type": "feynman_summary_information_routing",
+    "engine": "hyperframes",
+    "assets": [
+      "ep02_formula_scaled_dot_product_attention_svg",
+      "ep02_harvard_attention_code_svg"
+    ],
+    "caption": "Attention routes information",
+    "claim_ids": [
+      "c_attention_core",
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "scene_id": "S16",
+    "start": 167.641,
+    "duration": 9.555,
+    "voiceover": "Next episode: if one attention view works, why does Transformer use many heads at once? That is Multi-Head Attention.",
+    "visual_type": "next_episode_multi_head_cta",
+    "engine": "hyperframes",
+    "assets": [],
+    "caption": "Next: Multi-Head Attention",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  }
+]

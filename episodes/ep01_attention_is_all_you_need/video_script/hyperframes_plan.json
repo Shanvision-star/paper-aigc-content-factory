@@ -1,0 +1,44 @@
+{
+  "composition_id": "ep01-attention-formal-douyin-v4",
+  "target": "douyin.zh-CN",
+  "resolution": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "duration_target_sec": 180,
+  "style": {
+    "background": "#0f172a",
+    "paper_surface": "#f8fafc",
+    "accent": "#f59e0b",
+    "relation": "#38bdf8",
+    "risk": "#fb7185",
+    "font_stack": "Arial, Microsoft YaHei, sans-serif"
+  },
+  "safe_zones": {
+    "top_px": 140,
+    "bottom_px": 260,
+    "side_px": 72
+  },
+  "audio": "audio/voiceover.wav",
+  "captions": "captions/subtitles.srt",
+  "storyboard": "video_script/storyboard.json",
+  "visual_manifest": "visuals/assets_manifest.json",
+  "output": "renders/douyin_zh_1080x1920_draft.mp4",
+  "scenes": [
+    "modern_ai_hook",
+    "paper_anchor",
+    "rnn_chain",
+    "self_attention_roundtable",
+    "pronoun_relation",
+    "qkv_cards",
+    "attention_formula",
+    "multihead_experts",
+    "positional_encoding",
+    "model_lineage",
+    "system_layers",
+    "attention_cost",
+    "summary",
+    "next_episode"
+  ]
+}

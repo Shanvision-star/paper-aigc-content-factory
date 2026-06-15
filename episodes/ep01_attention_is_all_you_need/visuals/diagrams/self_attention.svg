@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; }
+      .panel { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 3; }
+      .muted { fill: #94a3b8; font-family: Arial, "Microsoft YaHei", sans-serif; }
+      .text { fill: #f8fafc; font-family: Arial, "Microsoft YaHei", sans-serif; font-weight: 700; }
+      .dark { fill: #0f172a; font-family: Arial, "Microsoft YaHei", sans-serif; font-weight: 700; }
+      .small { font-size: 30px; }
+      .medium { font-size: 44px; }
+      .large { font-size: 64px; }
+      .accent { fill: #f59e0b; }
+      .blue { fill: #38bdf8; }
+      .green { fill: #34d399; }
+      .pink { fill: #fb7185; }
+      .line { stroke: #38bdf8; stroke-width: 5; fill: none; stroke-linecap: round; }
+      .softline { stroke: #94a3b8; stroke-width: 3; fill: none; stroke-linecap: round; opacity: .65; }
+      .hotline { stroke: #f59e0b; stroke-width: 8; fill: none; stroke-linecap: round; }
+      .token { fill: #1e293b; stroke: #38bdf8; stroke-width: 3; }
+    </style>
+  </defs>
+  <rect class="bg" width="1080" height="1920"/>
+  <text x="80" y="128" class="text large">Self-Attention = 加权汇聚</text>
+  
+  <path class="softline" d="M 540 420 L 260 620"/>
+<path class="softline" d="M 540 420 L 820 620"/>
+<path class="hotline" d="M 540 420 L 260 940"/>
+<path class="softline" d="M 540 420 L 820 940"/>
+<path class="softline" d="M 260 620 L 820 620"/>
+<path class="hotline" d="M 260 620 L 260 940"/>
+<path class="softline" d="M 260 620 L 820 940"/>
+<path class="hotline" d="M 820 620 L 260 940"/>
+<path class="softline" d="M 820 620 L 820 940"/>
+<path class="hotline" d="M 260 940 L 820 940"/>
+  <rect x="450" y="374" rx="28" ry="28" width="180" height="92" class="token"/>
+  <text x="540" y="434" text-anchor="middle" class="text medium">我</text>
+<rect x="170" y="574" rx="28" ry="28" width="180" height="92" class="token"/>
+  <text x="260" y="634" text-anchor="middle" class="text medium">看见</text>
+<rect x="730" y="574" rx="28" ry="28" width="180" height="92" class="token"/>
+  <text x="820" y="634" text-anchor="middle" class="text medium">猫</text>
+<rect x="170" y="894" rx="28" ry="28" width="180" height="92" class="token"/>
+  <text x="260" y="954" text-anchor="middle" class="text medium">它</text>
+<rect x="730" y="894" rx="28" ry="28" width="180" height="92" class="token"/>
+  <text x="820" y="954" text-anchor="middle" class="text medium">很快</text>
+<rect x="450" y="1114" rx="28" ry="28" width="180" height="92" class="token"/>
+  <text x="540" y="1174" text-anchor="middle" class="text medium">关系</text>
+  <text x="120" y="1480" class="text medium">每个 token 计算相关性，</text>
+  <text x="120" y="1550" class="text medium">再按 Attention 权重汇聚信息。</text>
+  <text x="80" y="1830" class="muted small">EP01 · Attention Is All You Need · Formal Visual Asset</text>
+</svg>

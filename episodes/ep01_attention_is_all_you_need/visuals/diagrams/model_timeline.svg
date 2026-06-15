@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; }
+      .panel { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 3; }
+      .muted { fill: #94a3b8; font-family: Arial, "Microsoft YaHei", sans-serif; }
+      .text { fill: #f8fafc; font-family: Arial, "Microsoft YaHei", sans-serif; font-weight: 700; }
+      .dark { fill: #0f172a; font-family: Arial, "Microsoft YaHei", sans-serif; font-weight: 700; }
+      .small { font-size: 30px; }
+      .medium { font-size: 44px; }
+      .large { font-size: 64px; }
+      .accent { fill: #f59e0b; }
+      .blue { fill: #38bdf8; }
+      .green { fill: #34d399; }
+      .pink { fill: #fb7185; }
+      .line { stroke: #38bdf8; stroke-width: 5; fill: none; stroke-linecap: round; }
+      .softline { stroke: #94a3b8; stroke-width: 3; fill: none; stroke-linecap: round; opacity: .65; }
+      .hotline { stroke: #f59e0b; stroke-width: 8; fill: none; stroke-linecap: round; }
+      .token { fill: #1e293b; stroke: #38bdf8; stroke-width: 3; }
+    </style>
+  </defs>
+  <rect class="bg" width="1080" height="1920"/>
+  <text x="80" y="128" class="text large">Transformer Lineage</text>
+  
+  <path class="line" d="M 160 700 L 340 700"/>
+    <circle cx="160" cy="700" r="42" class="accent"/>
+    <text x="160" y="610" text-anchor="middle" class="text medium">2017</text>
+    <text x="160" y="810" text-anchor="middle" class="text small">Transformer</text>
+<path class="line" d="M 400 700 L 580 700"/>
+    <circle cx="400" cy="700" r="42" class="accent"/>
+    <text x="400" y="610" text-anchor="middle" class="text medium">2018</text>
+    <text x="400" y="810" text-anchor="middle" class="text small">BERT</text>
+<path class="line" d="M 640 700 L 820 700"/>
+    <circle cx="640" cy="700" r="42" class="accent"/>
+    <text x="640" y="610" text-anchor="middle" class="text medium">2020+</text>
+    <text x="640" y="810" text-anchor="middle" class="text small">GPT</text>
+<path class="line" d="M 880 700 L 1060 700"/>
+    <circle cx="880" cy="700" r="42" class="accent"/>
+    <text x="880" y="610" text-anchor="middle" class="text medium">Now</text>
+    <text x="880" y="810" text-anchor="middle" class="text small">Claude / 多模态</text>
+  <text x="120" y="1060" class="text medium">核心延续：用 Attention 组织信息，</text>
+  <text x="120" y="1130" class="text medium">用并行计算扩大规模。</text>
+  <text x="80" y="1830" class="muted small">EP01 · Attention Is All You Need · Formal Visual Asset</text>
+</svg>

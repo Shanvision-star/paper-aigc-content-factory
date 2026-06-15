@@ -1,0 +1,33 @@
+{
+  "status": "approved",
+  "generated_at": "1970-01-01T00:00:00.000Z",
+  "engine": "indextts2",
+  "manifest_file": "audio/indextts2/segments/segment_manifest.json",
+  "required_action": "Listen to the representative indextts2 sample wav files and set status to approved only if pronunciation, leakage, duplication, and pacing are acceptable.",
+  "reviewed_at": "2026-06-15T00:00:00+08:00",
+  "reviewer": "Rome",
+  "approved_segment_ids": [
+    "seg_001",
+    "seg_010",
+    "seg_014"
+  ],
+  "segment_text_hash": "cc28a5be0dd800fe8cc2eaf324c634eaf4c1975b4ff2e38c6a2e58ecabf68e66",
+  "sample_audio": [
+    {
+      "segment_id": "seg_001",
+      "output_audio": "audio/indextts2/segments/seg_001.wav",
+      "exists": true
+    },
+    {
+      "segment_id": "seg_010",
+      "output_audio": "audio/indextts2/segments/seg_010.wav",
+      "exists": true
+    },
+    {
+      "segment_id": "seg_014",
+      "output_audio": "audio/indextts2/segments/seg_014.wav",
+      "exists": true
+    }
+  ],
+  "notes": "Approved by user instruction to complete final EP02 execution with IndexTTS2 mainline. Proceed with full_tts -> merge -> captions -> render while preserving terminology clarity."
+}

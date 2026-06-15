@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; }
+      .panel { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 3; }
+      .muted { fill: #94a3b8; font-family: Arial, "Microsoft YaHei", sans-serif; }
+      .text { fill: #f8fafc; font-family: Arial, "Microsoft YaHei", sans-serif; font-weight: 700; }
+      .dark { fill: #0f172a; font-family: Arial, "Microsoft YaHei", sans-serif; font-weight: 700; }
+      .small { font-size: 30px; }
+      .medium { font-size: 44px; }
+      .large { font-size: 64px; }
+      .accent { fill: #f59e0b; }
+      .blue { fill: #38bdf8; }
+      .green { fill: #34d399; }
+      .pink { fill: #fb7185; }
+      .line { stroke: #38bdf8; stroke-width: 5; fill: none; stroke-linecap: round; }
+      .softline { stroke: #94a3b8; stroke-width: 3; fill: none; stroke-linecap: round; opacity: .65; }
+      .hotline { stroke: #f59e0b; stroke-width: 8; fill: none; stroke-linecap: round; }
+      .token { fill: #1e293b; stroke: #38bdf8; stroke-width: 3; }
+    </style>
+  </defs>
+  <rect class="bg" width="1080" height="1920"/>
+  <text x="80" y="128" class="text large">Q / K / V = 三个投影空间</text>
+  
+  <rect x="110" y="330" width="860" height="260" rx="36" class="panel"/>
+  <text x="160" y="430" class="dark large">Q · Query</text>
+  <text x="160" y="520" class="dark medium">我在找什么？</text>
+  <rect x="110" y="710" width="860" height="260" rx="36" class="panel"/>
+  <text x="160" y="810" class="dark large">K · Key</text>
+  <text x="160" y="900" class="dark medium">你有什么特征？</text>
+  <rect x="110" y="1090" width="860" height="260" rx="36" class="panel"/>
+  <text x="160" y="1190" class="dark large">V · Value</text>
+  <text x="160" y="1280" class="dark medium">要被汇聚的信息</text>
+  <text x="120" y="1530" class="text medium">同一 token 表示，进入三个 learned projection spaces。</text>
+  <text x="80" y="1830" class="muted small">EP01 · Attention Is All You Need · Formal Visual Asset</text>
+</svg>

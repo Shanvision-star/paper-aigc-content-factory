@@ -1,0 +1,27 @@
+episode_id: ep02_attention_qkv
+title: "EP02 QKV 到底在算什么"
+paper:
+  title: "Attention Is All You Need"
+  arxiv_id: "1706.03762"
+  local_research_report: "D:/Shanvisorin_platform/Paper_everyday/paper_desgin/attention_is_all_you_nedd_deep-research-report.md"
+audience:
+  primary: "工程师 + AI 内容初学者"
+targets:
+  - douyin.zh-CN
+  - xiaohongshu.zh-CN
+  - bilibili.zh-CN
+  - youtube-shorts.en-US
+  - youtube-long.en-US
+  - x.en-US
+outputs:
+  blog: true
+  pdf: true
+  video: true
+  voiceover: true
+  publish_pack: true
+constraints:
+  auto_publish: false
+  require_primary_sources: true
+  require_citation_gate: true
+  require_human_review: true
+  voice_mode: personal_voice_or_builtin_fallback

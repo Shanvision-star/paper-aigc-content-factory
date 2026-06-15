@@ -1,0 +1,124 @@
+{
+  "episode_id": "ep01_attention_is_all_you_need",
+  "generated_by": "scripts/build_ep01_formal_visuals.ts",
+  "attribution": "Source: Vaswani et al., Attention Is All You Need, NeurIPS 2017 / arXiv:1706.03762",
+  "assets": [
+    {
+      "asset_id": "diagram_title_card",
+      "kind": "diagram",
+      "path": "visuals\\diagrams\\title_card.svg",
+      "concept": "paper authority",
+      "feynman_analogy": "original source card",
+      "source": "arXiv/paper metadata",
+      "status": "generated"
+    },
+    {
+      "asset_id": "diagram_rnn_chain",
+      "kind": "diagram",
+      "path": "visuals\\diagrams\\rnn_chain.svg",
+      "concept": "sequential recurrence bottleneck",
+      "feynman_analogy": "排队传话",
+      "source": "paper framing",
+      "status": "generated"
+    },
+    {
+      "asset_id": "diagram_self_attention",
+      "kind": "diagram",
+      "path": "visuals\\diagrams\\self_attention.svg",
+      "concept": "self-attention relation modeling",
+      "feynman_analogy": "加权汇聚",
+      "source": "paper attention mechanism",
+      "status": "generated"
+    },
+    {
+      "asset_id": "diagram_qkv_cards",
+      "kind": "diagram",
+      "path": "visuals\\diagrams\\qkv_cards.svg",
+      "concept": "QKV projections",
+      "feynman_analogy": "三个 learned projection spaces",
+      "source": "attention formula",
+      "status": "generated"
+    },
+    {
+      "asset_id": "formula_attention",
+      "kind": "formula",
+      "path": "visuals\\formulas\\attention_formula.svg",
+      "concept": "scaled dot-product attention",
+      "feynman_analogy": "先匹配再读取",
+      "source": "paper formula",
+      "status": "generated"
+    },
+    {
+      "asset_id": "diagram_multihead",
+      "kind": "diagram",
+      "path": "visuals\\diagrams\\multihead.svg",
+      "concept": "multi-head attention",
+      "feynman_analogy": "并行表示子空间",
+      "source": "paper formula",
+      "status": "generated"
+    },
+    {
+      "asset_id": "diagram_position_encoding",
+      "kind": "diagram",
+      "path": "visuals\\diagrams\\position_encoding.svg",
+      "concept": "positional encoding",
+      "feynman_analogy": "位置坐标",
+      "source": "paper formula",
+      "status": "generated"
+    },
+    {
+      "asset_id": "formula_positional_encoding",
+      "kind": "formula",
+      "path": "visuals\\formulas\\positional_encoding.svg",
+      "concept": "sinusoidal positional encoding",
+      "feynman_analogy": "正弦余弦坐标",
+      "source": "paper formula",
+      "status": "generated"
+    },
+    {
+      "asset_id": "diagram_model_timeline",
+      "kind": "diagram",
+      "path": "visuals\\diagrams\\model_timeline.svg",
+      "concept": "modern model lineage",
+      "feynman_analogy": "技术家族树",
+      "source": "paper plus modern context",
+      "status": "generated"
+    },
+    {
+      "asset_id": "diagram_system_layers",
+      "kind": "diagram",
+      "path": "visuals\\diagrams\\system_layers.svg",
+      "concept": "model agent MCP layers",
+      "feynman_analogy": "底座/编排/接口",
+      "source": "official MCP/Sora context",
+      "status": "generated"
+    },
+    {
+      "asset_id": "diagram_attention_cost",
+      "kind": "diagram",
+      "path": "visuals\\diagrams\\attention_cost.svg",
+      "concept": "attention cost",
+      "feynman_analogy": "所有人互相对话会变贵",
+      "source": "engineering context",
+      "status": "generated"
+    },
+    {
+      "asset_id": "paper_original_readme",
+      "kind": "paper_original_note",
+      "path": "visuals\\paper_original\\README.md",
+      "concept": "paper source assets",
+      "feynman_analogy": "论文原始图锚点",
+      "source": "paper attribution",
+      "status": "reference_note"
+    },
+    {
+      "asset_id": "manim_or_frames_readme",
+      "kind": "frames_note",
+      "path": "visuals\\manim_or_frames\\README.md",
+      "concept": "optional frames",
+      "feynman_analogy": "复杂动画预留",
+      "source": "local rendering contract",
+      "status": "reference_note"
+    }
+  ]
+}

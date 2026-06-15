@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sound Cue Designer"
+  short_description: "Design restrained sound cues for educational paper videos."
+  default_prompt: "Design sound cues for this paper explainer without overpowering the voiceover."

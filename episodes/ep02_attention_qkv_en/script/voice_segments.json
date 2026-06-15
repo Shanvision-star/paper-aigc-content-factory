@@ -1,0 +1,168 @@
+[
+  {
+    "segment_id": "seg_001",
+    "start": 0,
+    "duration": 12.237,
+    "text": "Attention is like a relationship map that changes at every layer. Today we open that map and focus on one line: Q times K transpose.",
+    "spoken_text": "Attention is like a relationship map that changes at every layer. Today we open that map and focus on one line: Q times K transpose.",
+    "claim_ids": [
+      "c_attention_core",
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "segment_id": "seg_002",
+    "start": 12.327,
+    "duration": 6.943,
+    "text": "The question is simple: for the current token, which tokens in the context should it read from?",
+    "spoken_text": "The question is simple: for the current token, which tokens in the context should it read from?",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "segment_id": "seg_003",
+    "start": 19.36,
+    "duration": 10.553,
+    "text": "This is not a fixed graph, and not a Graph Neural Network. It is a soft attention matrix, rebuilt at each layer.",
+    "spoken_text": "This is not a fixed graph, and not a Graph Neural Network. It is a soft attention matrix, rebuilt at each layer.",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "segment_id": "seg_004",
+    "start": 30.003,
+    "duration": 11.297,
+    "text": "So what are Q, K, and V? They are not three different data sources. In self-attention, they usually come from the same token representation.",
+    "spoken_text": "So what are Q, K, and V? They are not three different data sources. In self-attention, they usually come from the same token representation.",
+    "claim_ids": [
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "segment_id": "seg_005",
+    "start": 41.39,
+    "duration": 14.512,
+    "text": "The same input X is projected three ways: X times W Q becomes Query, X times W K becomes Key, and X times W V becomes Value.",
+    "spoken_text": "The same input X is projected three ways: X times W Q becomes Query, X times W K becomes Key, and X times W V becomes Value.",
+    "claim_ids": [
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "segment_id": "seg_006",
+    "start": 55.992,
+    "duration": 10.762,
+    "text": "Use a meeting room analogy. Query is your question. Key is each person's label. Value is the actual information they can give you.",
+    "spoken_text": "Use a meeting room analogy. Query is your question. Key is each person's label. Value is the actual information they can give you.",
+    "claim_ids": [
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "segment_id": "seg_007",
+    "start": 66.844,
+    "duration": 9.416,
+    "text": "For a pronoun like it, the model does not magically understand the reference. The current token's Query is matched against every Key.",
+    "spoken_text": "For a pronoun like it, the model does not magically understand the reference. The current token's Query is matched against every Key.",
+    "claim_ids": [
+      "c_attention_core",
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "segment_id": "seg_008",
+    "start": 76.35,
+    "duration": 9.334,
+    "text": "That matching step is Q times K transpose. It produces a matrix of compatibility scores.",
+    "spoken_text": "That matching step is Q times K transpose. It produces a matrix of compatibility scores.",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "segment_id": "seg_009",
+    "start": 85.774,
+    "duration": 11.691,
+    "text": "Next, the scores are divided by the square root of d k. In the paper, d k is the Query and Key vector dimension. Scaling keeps softmax stable.",
+    "spoken_text": "Next, the scores are divided by the square root of d k. In the paper, d k is the Query and Key vector dimension. Scaling keeps softmax stable.",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "segment_id": "seg_010",
+    "start": 97.555,
+    "duration": 8.406,
+    "text": "Then softmax normalizes each row. For each current token, the row becomes attention weights that add up to one.",
+    "spoken_text": "Then softmax normalizes each row. For each current token, the row becomes attention weights that add up to one.",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "segment_id": "seg_011",
+    "start": 106.051,
+    "duration": 11.355,
+    "text": "Finally, the model uses those weights to read Value vectors and combine them into a new representation. Match, normalize, then read.",
+    "spoken_text": "Finally, the model uses those weights to read Value vectors and combine them into a new representation. Match, normalize, then read.",
+    "claim_ids": [
+      "c_attention_core",
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "segment_id": "seg_012",
+    "start": 117.496,
+    "duration": 11.622,
+    "text": "That is Scaled Dot-Product Attention: softmax of Q K transpose divided by the square root of d k, then multiplied by V.",
+    "spoken_text": "That is Scaled Dot-Product Attention: softmax of Q K transpose divided by the square root of d k, then multiplied by V.",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "segment_id": "seg_013",
+    "start": 129.208,
+    "duration": 14.571,
+    "text": "ChatGPT and Claude still use this path. A new Query is produced for the next token, while old Key and Value projections can be reused through KV Cache, or Key-Value Cache.",
+    "spoken_text": "ChatGPT and Claude still use this path. A new Query is produced for the next token, while old Key and Value projections can be reused through KV Cache, or Key Value Cache.",
+    "claim_ids": [
+      "c_transformer_impact",
+      "c_attention_core"
+    ]
+  },
+  {
+    "segment_id": "seg_014",
+    "start": 143.869,
+    "duration": 11.494,
+    "text": "Modern systems optimize the same path: FlashAttention at the kernel level, GQA and MQA at the model level, and KV Cache at runtime.",
+    "spoken_text": "Modern systems optimize the same path: FlashAttention at the kernel level, GQA and MQA at the model level, and KV Cache at runtime.",
+    "claim_ids": [
+      "c_transformer_impact",
+      "c_transformer_parallelism"
+    ]
+  },
+  {
+    "segment_id": "seg_015",
+    "start": 155.453,
+    "duration": 12.098,
+    "text": "Feynman summary: Query is the question. Key is the index. Value is the content. Attention is a differentiable routing system for information.",
+    "spoken_text": "Feynman summary: Query is the question. Key is the index. Value is the content. Attention is a differentiable routing system for information.",
+    "claim_ids": [
+      "c_attention_core",
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "segment_id": "seg_016",
+    "start": 167.641,
+    "duration": 9.555,
+    "text": "Next episode: if one attention view works, why does Transformer use many heads at once? That is Multi-Head Attention.",
+    "spoken_text": "Next episode: if one attention view works, why does Transformer use many heads at once? That is Multi-Head Attention.",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  }
+]

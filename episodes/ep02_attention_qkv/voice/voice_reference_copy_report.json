@@ -1,0 +1,11 @@
+{
+  "status": "copied",
+  "source_episode": "ep01_attention_is_all_you_need",
+  "target_episode": "ep02_attention_qkv",
+  "copied": [
+    "voice/enrollment/consent.wav",
+    "voice/enrollment/reference_neutral_f5_8s.wav",
+    "audio/f5_tts/reference_text_f5_neutral.txt"
+  ],
+  "missing": []
+}

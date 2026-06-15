@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; }
+      .panel { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 3; }
+      .muted { fill: #94a3b8; font-family: Arial, "Microsoft YaHei", sans-serif; }
+      .text { fill: #f8fafc; font-family: Arial, "Microsoft YaHei", sans-serif; font-weight: 700; }
+      .dark { fill: #0f172a; font-family: Arial, "Microsoft YaHei", sans-serif; font-weight: 700; }
+      .small { font-size: 30px; }
+      .medium { font-size: 44px; }
+      .large { font-size: 64px; }
+      .accent { fill: #f59e0b; }
+      .blue { fill: #38bdf8; }
+      .green { fill: #34d399; }
+      .pink { fill: #fb7185; }
+      .line { stroke: #38bdf8; stroke-width: 5; fill: none; stroke-linecap: round; }
+      .softline { stroke: #94a3b8; stroke-width: 3; fill: none; stroke-linecap: round; opacity: .65; }
+      .hotline { stroke: #f59e0b; stroke-width: 8; fill: none; stroke-linecap: round; }
+      .token { fill: #1e293b; stroke: #38bdf8; stroke-width: 3; }
+    </style>
+  </defs>
+  <rect class="bg" width="1080" height="1920"/>
+  <text x="80" y="128" class="text large">Multi-Head = 表示子空间</text>
+  
+  <rect x="130" y="360" width="360" height="150" rx="28" class="panel"/>
+    <text x="310" y="452" text-anchor="middle" class="dark medium">子空间 A</text>
+    <path class="softline" d="M 310 510 L 540 1240"/>
+<rect x="590" y="360" width="360" height="150" rx="28" class="panel"/>
+    <text x="770" y="452" text-anchor="middle" class="dark medium">子空间 B</text>
+    <path class="softline" d="M 770 510 L 540 1240"/>
+<rect x="130" y="600" width="360" height="150" rx="28" class="panel"/>
+    <text x="310" y="692" text-anchor="middle" class="dark medium">子空间 C</text>
+    <path class="softline" d="M 310 750 L 540 1240"/>
+<rect x="590" y="600" width="360" height="150" rx="28" class="panel"/>
+    <text x="770" y="692" text-anchor="middle" class="dark medium">子空间 D</text>
+    <path class="softline" d="M 770 750 L 540 1240"/>
+<rect x="130" y="840" width="360" height="150" rx="28" class="panel"/>
+    <text x="310" y="932" text-anchor="middle" class="dark medium">子空间 E</text>
+    <path class="softline" d="M 310 990 L 540 1240"/>
+<rect x="590" y="840" width="360" height="150" rx="28" class="panel"/>
+    <text x="770" y="932" text-anchor="middle" class="dark medium">子空间 F</text>
+    <path class="softline" d="M 770 990 L 540 1240"/>
+  <rect x="300" y="1240" width="480" height="150" rx="32" class="token"/>
+  <text x="540" y="1332" text-anchor="middle" class="text medium">Concat + Linear</text>
+  <text x="120" y="1540" class="text medium">不是人工分工，是训练中形成的并行表示子空间。</text>
+  <text x="80" y="1830" class="muted small">EP01 · Attention Is All You Need · Formal Visual Asset</text>
+</svg>

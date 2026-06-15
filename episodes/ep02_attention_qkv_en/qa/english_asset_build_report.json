@@ -1,0 +1,27 @@
+{
+  "status": "prepared",
+  "generated_at": "1970-01-01T00:00:00.000Z",
+  "episode_dir": "episodes/ep02_attention_qkv_en",
+  "source_episode_dir": "episodes/ep02_attention_qkv",
+  "total_duration_sec": 177.196,
+  "timing_source": "indextts2_segmented_merge_report",
+  "segments": 16,
+  "platforms": [
+    {
+      "id": "youtube-shorts.en-US",
+      "video_path": "renders/youtube_shorts_en_1080x1920_static_review_burned_subs.mp4",
+      "exists": true
+    },
+    {
+      "id": "x.en-US",
+      "video_path": "renders/x_en_1080x1080_static_review_burned_subs.mp4",
+      "exists": true
+    }
+  ],
+  "no_chinese_materials_modified": true,
+  "next_steps": [
+    "Human review the YouTube Shorts review render and X square review render.",
+    "If publishing to X with a strict short-video limit, cut a shorter platform edit under 140 seconds.",
+    "Only replace the static review render with the HyperFrames animated branch after scene-sync QA passes."
+  ]
+}
