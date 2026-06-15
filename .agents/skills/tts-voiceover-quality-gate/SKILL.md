@@ -24,7 +24,7 @@ Do not proceed to `full_tts`, audio merge, captions, or HyperFrames render until
 - Generate representative samples first: `seg_001`, one mid-script technical segment such as `seg_010`, and the ending or CTA segment such as `seg_014`.
 - Run ASR transcript diff when transcripts exist. If local ASR is missing, report that clearly and keep human listening review mandatory.
 - Keep `source_text` and `spoken_text` separate. `source_text` is the reviewed narration; `spoken_text` may normalize numbers, English terms, formulas, and pronunciation.
-- If teaching-style or emotional delivery is needed, run `voiceover-emotion-coach` after `spoken_text` is locked and before sample generation. Its `delivery_style` and engine emotion prompts must not change `spoken_text`.
+- If delivery tuning is needed, run `voiceover-emotion-coach` after `spoken_text` is locked and before sample generation. Its default is `preserve_original_ai_voice` with low-intensity prosody; it must not change `spoken_text` or replace the original AI voice character.
 - Apply the Pronunciation Normalization Contract before sample generation. High-risk phrases such as `更准确地说`, adverbial `地`, ambiguous `重`, `按行归一化`, `QK^T`, `sqrt(d_k)`, and `d_k` must be rewritten or annotated in `spoken_text` so TTS does not guess the reading.
 - Keep English technical and product terms as stable whole terms in `spoken_text`; for example `ChatGPT`, `Claude`, `token`, `Attention`, `softmax`, `KV Cache`, and `Multi-Head Attention` must not be split, translated, or phonetically rewritten unless the source script explicitly requires spelling an acronym.
 - Run duplicate and near-duplicate checks before TTS so repeated narration is blocked before audio exists.

@@ -176,7 +176,7 @@ describe("first-video retrospective constraints", () => {
     expect(ep02SoundCueTimeline.cues.map((cue: { cue_id: string }) => cue.cue_id)).toContain("cue_007_engineering_layers");
   });
 
-  it("adds a reusable voiceover emotion coach without polluting spoken text", () => {
+  it("adds a reusable voiceover emotion coach that preserves the original AI voice", () => {
     const readme = fs.readFileSync(readmePath, "utf8");
     const spec = fs.readFileSync(specPath, "utf8");
 
@@ -185,7 +185,8 @@ describe("first-video retrospective constraints", () => {
       expect(doc).toContain("voiceover-emotion-coach");
       expect(doc).toContain("delivery_style");
       expect(doc).toContain("emo_text");
-      expect(doc).toContain("teaching-style prosody");
+      expect(doc).toContain("preserve_original_ai_voice");
+      expect(doc).toContain("low_intensity_prosody");
       expect(doc).toContain("no hidden narration cues");
       expect(doc).toContain("sample-first");
     }
@@ -196,9 +197,12 @@ describe("first-video retrospective constraints", () => {
     expect(skill).toContain("engine_emotion_prompt");
     expect(skill).toContain("emo_text");
     expect(skill).toContain("emo_alpha");
+    expect(skill).toContain("preserve_original_ai_voice");
+    expect(skill).toContain("use_emo_text=false");
     expect(skill).toContain("spoken_text");
     expect(skill).toContain("Do not add emotion tags to spoken_text");
     expect(skill).toContain("Do not skip sample-first");
+    expect(skill).toContain("Do not replace the original AI voice character");
     expect(skill).toContain("ChatGPT");
     expect(skill).toContain("KV Cache");
 

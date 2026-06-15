@@ -1,47 +1,48 @@
 ---
 name: voiceover-emotion-coach
-description: Use when improving TTS delivery, teaching tone, emotional expressiveness, prosody, pacing, emphasis, or IndexTTS2/CosyVoice emotion prompts for reusable paper explainer voiceovers.
+description: Use when adjusting TTS delivery, preserving original AI voice character, controlling low-intensity prosody, pacing, emphasis, or optional IndexTTS2/CosyVoice emotion prompts for reusable paper explainer voiceovers.
 ---
 
 # Voiceover Emotion Coach
 
 ## Core Rule
 
-Make the voice sound like a clear teacher, not like a new script. Emotional direction belongs in `delivery_style` and `engine_emotion_prompt`; it must not be inserted into `source_text`, `spoken_text`, captions, or hidden narration cues.
+Preserve the original AI voice character first. Delivery direction belongs in `delivery_style` and optional `engine_emotion_prompt`; it must not replace the voice personality or be inserted into `source_text`, `spoken_text`, captions, or hidden narration cues.
 
 ## Workflow
 
 Use this after `technical-script-reviewer` and pronunciation normalization, and before representative TTS samples.
 
 ```text
-reviewed script -> spoken_text -> delivery_style -> engine_emotion_prompt -> sample-first TTS -> ASR/human review -> workflow-optimizer
+reviewed script -> spoken_text -> delivery_style -> optional engine_emotion_prompt -> sample-first TTS -> ASR/human review -> workflow-optimizer
 ```
 
 ## Output Contract
 
-Create or update an episode-level delivery sidecar, usually near the TTS manifest:
+Create or update an episode-level delivery sidecar, usually near the TTS manifest. Default to `preserve_original_ai_voice`, not a new acting style:
 
 ```json
 {
   "status": "planned",
   "scope": "reusable_across_episodes",
   "delivery_style": {
-    "role": "patient teacher explaining AI papers to smart beginners",
-    "tone": "warm, clear, curious, lightly energetic",
-    "pace": "slightly slower than fast short-video delivery",
-    "energy": "medium, never salesy or theatrical"
+    "mode": "preserve_original_ai_voice",
+    "prosody": "low_intensity_prosody",
+    "tone": "clear, stable, lightly AI-like, not theatrical",
+    "pace": "keep original pacing unless a formula needs clarity",
+    "energy": "low to medium-low"
   },
   "engine_emotion_prompt": {
     "engine": "indextts2",
-    "use_emo_text": true,
-    "emo_text": "像一位耐心的老师在给学生讲一个重要公式。整体温和、清晰、有启发感。重点句稍微提高能量，公式处放慢，英文术语读清楚。不要夸张，不要广告腔。",
-    "emo_alpha": 0.45,
+    "use_emo_text": false,
+    "emo_text": null,
+    "emo_alpha": 0.0,
     "use_random": false
   },
   "segment_overrides": {
-    "seg_001": { "intent": "curious hook, clearer emphasis" },
-    "seg_formula": { "intent": "slow down around formulas" },
-    "seg_summary": { "intent": "warm Feynman recap" }
+    "seg_001": { "intent": "keep original AI voice, only clarify hook emphasis" },
+    "seg_formula": { "intent": "preserve voice; slow formula words only if needed" },
+    "seg_summary": { "intent": "stable recap without theatrical warmth" }
   }
 }
 ```
@@ -50,16 +51,16 @@ Create or update an episode-level delivery sidecar, usually near the TTS manifes
 
 | Situation | Delivery direction |
 | --- | --- |
-| Opening hook | Curious, focused, a little brighter |
-| Feynman analogy | Warm, conversational, patient |
-| Formula or symbol | Slower, precise, no drama |
-| Modern LLM example | Practical, lightly excited |
+| Opening hook | Original AI voice, slightly clearer emphasis |
+| Feynman analogy | Clear and stable, not overly humanized |
+| Formula or symbol | Precise, maybe slightly slower, no acting |
+| Modern LLM example | Practical, steady, no forced excitement |
 | Risk or caveat | Calm, credible, not alarming |
-| Ending CTA | Conclusive, inviting, no hype |
+| Ending CTA | Conclusive, restrained, no hype |
 
 ## Engine Notes
 
-- IndexTTS2: prefer `use_emo_text=true`, `use_random=false`, and a restrained `emo_text` for teaching-style prosody. Record `emo_alpha` for comparability even if a local runner ignores it for text-emotion mode.
+- IndexTTS2: default to `use_emo_text=false`, `use_random=false`, and preserve the reference prompt's original delivery. Use `emo_text` only as an experimental escalation after human approval.
 - CosyVoice: keep emotion and pacing instructions in the engine prompt or instruction field, not in `spoken_text`.
 - F5-TTS or GPT-SoVITS: use only neutral reference audio and external delivery notes; do not put emotion tags in the target text.
 - English terms such as `ChatGPT`, `Claude`, `token`, `Attention`, `softmax`, `KV Cache`, and `Multi-Head Attention` remain whole words. Emotion must never cause spelling, drifting, translation, or repeated terms.
@@ -68,10 +69,11 @@ Create or update an episode-level delivery sidecar, usually near the TTS manifes
 
 After sample review, write improvement candidates instead of silently changing the mainline:
 
-- If the voice is flat, suggest increasing warmth or curiosity in `delivery_style`.
+- If the voice is flat but still acceptable, prefer subtitle/visual/sound-cue support before changing voice character.
 - If formulas are rushed, suggest formula-specific pacing overrides.
 - If English terms drift, lower expressiveness and prioritize pronunciation normalization.
 - If the delivery becomes theatrical, reduce energy and remove excited wording from `emo_text`.
+- If the voice feels pressured, teacher-like, or unlike the original AI voice, switch back to `preserve_original_ai_voice` with `use_emo_text=false`.
 - Route durable changes through `workflow-optimizer`; do not auto-update shared skills without human approval.
 
 ## Forbidden Actions
@@ -79,5 +81,6 @@ After sample review, write improvement candidates instead of silently changing t
 - Do not add emotion tags to spoken_text; keep all emotion hints in `delivery_style` or `engine_emotion_prompt`.
 - Do not add cue words like "重点来了" unless they already exist in approved `source_text`.
 - Do not skip sample-first, ASR transcript diff, or human listening review.
+- Do not replace the original AI voice character with a teacher, host, broadcaster, or sales style.
 - Do not use unlicensed emotion reference audio.
 - Do not trade term clarity, formula clarity, or transcript fidelity for expressiveness.

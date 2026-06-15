@@ -392,7 +392,7 @@ constraints:
 
 - `script-humanizer-zh`：可选中文自然化层，必须在 `technical-script-reviewer` 之后、`spoken_text` 锁定之前运行；它借鉴 `humanizer-zh` 的 Chinese-native rhythm、翻译腔清理和术语统一，但不能改变 approved claim、公式、数字或锁定口播。
 - `short-video-opening-optimizer`：在 storyboard/frame lock 前运行，按 Douyin、Xiaohongshu、Bilibili、TikTok、YouTube Shorts、YouTube、X 的平台语境评分 `0-3s` opening hook、visual hook、verbal hook、text overlay、技术可信度和 not clickbait 边界。
-- `voiceover-emotion-coach`：在 `spoken_text` 锁定后、TTS sample-first 前运行，生成跨论文复用的 `delivery_style` 和 `engine_emotion_prompt`，让口播形成 teaching-style prosody；它不改 `source_text`、不改 `spoken_text`、不写字幕、保持 no hidden narration cues，并把听审反馈交给 `workflow-optimizer`。
+- `voiceover-emotion-coach`：在 `spoken_text` 锁定后、TTS sample-first 前运行，生成跨论文复用的 `delivery_style` 和可选 `engine_emotion_prompt`；默认 `preserve_original_ai_voice`，只做 `low_intensity_prosody`，不改 `source_text`、不改 `spoken_text`、不写字幕、保持 no hidden narration cues，并把听审反馈交给 `workflow-optimizer`。
 - `sound-cue-designer`：在 storyboard/frame lock 和 HyperFrames prompt 前运行，把 opening、QK reveal、Q/K/V card taps、softmax normalization、weighted V aggregation、工程层级切换和 CTA 转成克制的 auditory bookmarks；它不生成音频素材，不改 `spoken_text`，不绕过 ASR transcript diff 或人工听审。
 - `platform-format-adapter`：读取 `platform_profiles/*.yaml`、cover、video、captions 和 metadata，整理本地 `publish/platform_manifest.json`。默认竖版封面沿用 `safe90`，平台尺寸只能来自 profile，当前至少覆盖 `1080x1920`、小红书 `1080x1440`、`1920x1080` 和 `1080x1080`。
 
@@ -478,9 +478,9 @@ constraints:
 ### Voiceover Emotion Contract
 
 - 口播表达力必须作为可审核元数据存在，不能作为隐藏台词混入 `source_text`、`spoken_text`、字幕或 HyperFrames narration cue。
-- `voiceover-emotion-coach` 在 `spoken_text` 锁定后、TTS 小样前运行，输出通用 `delivery_style` 和引擎级 `engine_emotion_prompt`，适用于后续不同论文和不同 episode。
-- 默认风格是 teaching-style prosody：像耐心老师解释论文，温和、清晰、有启发感；公式处慢，重点句稍微有能量，但不进入广告腔或表演腔。
-- IndexTTS2 可以使用 `use_emo_text=true`、`emo_text`、`emo_alpha`、`use_random=false`；IndexTTS 1.5、CosyVoice 等备选引擎用各自 instruction/prompt 字段承接同一 `delivery_style`。
+- `voiceover-emotion-coach` 在 `spoken_text` 锁定后、TTS 小样前运行，输出通用 `delivery_style` 和可选引擎级 `engine_emotion_prompt`，适用于后续不同论文和不同 episode。
+- 默认风格是 `preserve_original_ai_voice`：保留原版 AI 声线特有的清晰、稳定和轻微机器感；只允许 `low_intensity_prosody`，不能改成老师训话感、主持腔、播音腔或广告腔。
+- IndexTTS2 默认使用 `use_emo_text=false`、`use_random=false`；`emo_text` / `emo_alpha` 只作为实验项，必须人工确认后再使用。IndexTTS 1.5、CosyVoice 等备选引擎用各自 instruction/prompt 字段承接同一 `delivery_style`。
 - 情绪增强不能破坏 `ChatGPT`、`Claude`、`token`、`Attention`、`softmax`、`KV Cache`、`Multi-Head Attention` 等整体英文读法，不能制造重复、漏词、长停顿或术语漂移。
 - 该流程仍受 sample-first、ASR transcript diff 和人工听审约束；如果表达力影响文本一致性，优先降低情绪强度而不是放宽 TTS 质量门禁。
 - 每次小样反馈只生成 `workflow-optimizer` 改进候选；未经人工确认，不自动更新共享 skill、锁定脚本或全局模板。

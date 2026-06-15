@@ -1,4 +1,4 @@
 interface:
   display_name: "Voiceover Emotion Coach"
-  short_description: "Plan reusable teaching-style prosody and emotion prompts for TTS voiceovers"
-  default_prompt: "Create a delivery_style and engine_emotion_prompt sidecar for this paper explainer voiceover without changing source_text, spoken_text, or captions."
+  short_description: "Preserve original AI voice character while applying low-intensity delivery controls"
+  default_prompt: "Create a preserve_original_ai_voice delivery_style sidecar for this paper explainer voiceover without changing source_text, spoken_text, captions, or the original voice character."
