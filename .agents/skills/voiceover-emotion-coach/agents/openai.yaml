@@ -1,0 +1,4 @@
+interface:
+  display_name: "Voiceover Emotion Coach"
+  short_description: "Plan reusable teaching-style prosody and emotion prompts for TTS voiceovers"
+  default_prompt: "Create a delivery_style and engine_emotion_prompt sidecar for this paper explainer voiceover without changing source_text, spoken_text, or captions."

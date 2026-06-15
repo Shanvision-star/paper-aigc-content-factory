@@ -14,6 +14,7 @@ const specPath = path.join(
 );
 const ttsSkillPath = path.join(rootDir, ".agents", "skills", "tts-voiceover-quality-gate", "SKILL.md");
 const voiceoverAdapterSkillPath = path.join(rootDir, ".agents", "skills", "voiceover-adapter", "SKILL.md");
+const voiceoverEmotionSkillPath = path.join(rootDir, ".agents", "skills", "voiceover-emotion-coach", "SKILL.md");
 const scriptReviewerSkillPath = path.join(rootDir, ".agents", "skills", "technical-script-reviewer", "SKILL.md");
 const soundCueSkillPath = path.join(rootDir, ".agents", "skills", "sound-cue-designer", "SKILL.md");
 const ep02SoundCuePlanPath = path.join(
@@ -51,6 +52,8 @@ const ep02AudioPromptPath = path.join(
   "audio",
   "voiceover_audio_prompt.md"
 );
+const indextts2RunnerPath = path.join(rootDir, "scripts", "indextts2_infer_segments.py");
+const indextts2PowerShellPath = path.join(rootDir, "scripts", "indextts2_generate_segmented.ps1");
 
 describe("first-video retrospective constraints", () => {
   it("records voiceover, script, and render-review hard gates in README and spec", () => {
@@ -171,6 +174,43 @@ describe("first-video retrospective constraints", () => {
       visual_action_anchor: "Relation graph and center token appear"
     });
     expect(ep02SoundCueTimeline.cues.map((cue: { cue_id: string }) => cue.cue_id)).toContain("cue_007_engineering_layers");
+  });
+
+  it("adds a reusable voiceover emotion coach without polluting spoken text", () => {
+    const readme = fs.readFileSync(readmePath, "utf8");
+    const spec = fs.readFileSync(specPath, "utf8");
+
+    for (const doc of [readme, spec]) {
+      expect(doc).toContain("Voiceover Emotion Contract");
+      expect(doc).toContain("voiceover-emotion-coach");
+      expect(doc).toContain("delivery_style");
+      expect(doc).toContain("emo_text");
+      expect(doc).toContain("teaching-style prosody");
+      expect(doc).toContain("no hidden narration cues");
+      expect(doc).toContain("sample-first");
+    }
+
+    expect(fs.existsSync(voiceoverEmotionSkillPath)).toBe(true);
+    const skill = fs.readFileSync(voiceoverEmotionSkillPath, "utf8");
+    expect(skill).toContain("delivery_style");
+    expect(skill).toContain("engine_emotion_prompt");
+    expect(skill).toContain("emo_text");
+    expect(skill).toContain("emo_alpha");
+    expect(skill).toContain("spoken_text");
+    expect(skill).toContain("Do not add emotion tags to spoken_text");
+    expect(skill).toContain("Do not skip sample-first");
+    expect(skill).toContain("ChatGPT");
+    expect(skill).toContain("KV Cache");
+
+    const indextts2Runner = fs.readFileSync(indextts2RunnerPath, "utf8");
+    expect(indextts2Runner).toContain("--delivery-style-manifest");
+    expect(indextts2Runner).toContain("use_emo_text");
+    expect(indextts2Runner).toContain("emo_text");
+    expect(indextts2Runner).toContain("use_random");
+
+    const indextts2PowerShell = fs.readFileSync(indextts2PowerShellPath, "utf8");
+    expect(indextts2PowerShell).toContain("DeliveryStyleManifest");
+    expect(indextts2PowerShell).toContain("--delivery-style-manifest");
   });
 
   it("records pronunciation normalization and EP02 prompt contracts", () => {

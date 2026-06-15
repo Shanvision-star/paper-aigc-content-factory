@@ -48,6 +48,54 @@ def parse_segment_ids(raw_values: list[str]) -> set[str] | None:
     return values or None
 
 
+def load_delivery_manifest(path: Path | None) -> dict[str, Any]:
+    if path is None or not path.exists():
+        return {}
+
+    return load_json(path)
+
+
+def resolve_engine_emotion_kwargs(
+    *,
+    delivery_manifest: dict[str, Any],
+    episode_dir: Path,
+    segment_id: str,
+) -> dict[str, Any]:
+    """读取可选的情绪表达 sidecar，但不改变 spoken_text。
+
+    delivery sidecar 是跨 episode 的表达配置；它只能影响引擎参数，
+    不能作为隐藏台词进入 TTS 文本。
+    """
+
+    if not delivery_manifest:
+        return {}
+
+    global_prompt = delivery_manifest.get("engine_emotion_prompt", {})
+    segment_override = delivery_manifest.get("segment_overrides", {}).get(segment_id, {})
+    segment_prompt = segment_override.get("engine_emotion_prompt", {})
+
+    raw_kwargs = {**global_prompt, **segment_prompt}
+    allowed_keys = {
+        "emo_audio_prompt",
+        "emo_alpha",
+        "emo_vector",
+        "use_emo_text",
+        "emo_text",
+        "use_random",
+        "interval_silence",
+    }
+    kwargs = {key: value for key, value in raw_kwargs.items() if key in allowed_keys and value is not None}
+
+    emo_audio_prompt = kwargs.get("emo_audio_prompt")
+    if isinstance(emo_audio_prompt, str) and emo_audio_prompt:
+        emo_audio_path = Path(emo_audio_prompt)
+        if not emo_audio_path.is_absolute():
+            emo_audio_path = episode_dir / emo_audio_path
+        kwargs["emo_audio_prompt"] = str(emo_audio_path.resolve())
+
+    return kwargs
+
+
 def install_local_w2v_bert_patch(local_dir: Path) -> None:
     """让 IndexTTS2 的硬编码 W2V-BERT 依赖优先读取本地目录。"""
 
@@ -140,6 +188,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Generate segmented EP voiceover with IndexTTS2.")
     parser.add_argument("--episode-dir", required=True)
     parser.add_argument("--manifest", default="audio/indextts2/segments/segment_manifest.json")
+    parser.add_argument("--delivery-style-manifest", default="audio/indextts2/delivery_style.json")
     parser.add_argument("--reference-audio", required=True)
     parser.add_argument("--cfg-path", required=True)
     parser.add_argument("--model-dir", required=True)
@@ -155,6 +204,7 @@ def main() -> int:
 
     episode_dir = Path(args.episode_dir).resolve()
     manifest_path = episode_dir / args.manifest
+    delivery_manifest_path = episode_dir / args.delivery_style_manifest if args.delivery_style_manifest else None
     reference_audio = (episode_dir / args.reference_audio).resolve()
     cfg_path = Path(args.cfg_path).resolve()
     model_dir = Path(args.model_dir).resolve()
@@ -178,6 +228,7 @@ def main() -> int:
     from indextts.infer_v2 import IndexTTS2  # type: ignore
 
     manifest = load_json(manifest_path)
+    delivery_manifest = load_delivery_manifest(delivery_manifest_path)
     requested_ids = parse_segment_ids(args.segment_id)
     segments = manifest["segments"]
     if requested_ids is not None:
@@ -214,6 +265,11 @@ def main() -> int:
     for segment in segments:
         output_path = episode_dir / segment["output_audio"]
         output_path.parent.mkdir(parents=True, exist_ok=True)
+        emotion_kwargs = resolve_engine_emotion_kwargs(
+            delivery_manifest=delivery_manifest,
+            episode_dir=episode_dir,
+            segment_id=segment["segment_id"],
+        )
 
         if output_path.exists() and not args.force:
             print(f"segment={segment['segment_id']} status=skipped_existing output={output_path}", flush=True)
@@ -224,6 +280,7 @@ def main() -> int:
                 text=segment["spoken_text"],
                 output_path=str(output_path),
                 verbose=True,
+                **emotion_kwargs,
             )
 
         if not output_path.exists() or output_path.stat().st_size <= 44:
@@ -247,9 +304,11 @@ def main() -> int:
             "generated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
             "source_manifest": args.manifest.replace("\\", "/"),
             "reference_audio": args.reference_audio.replace("\\", "/"),
+            "delivery_style_manifest": args.delivery_style_manifest.replace("\\", "/") if args.delivery_style_manifest else None,
             "settings": {
                 "use_fp16": args.use_fp16,
                 "use_cuda_kernel": args.use_cuda_kernel,
+                "use_delivery_style": bool(delivery_manifest),
                 "w2v_bert_dir": str(w2v_bert_dir) if w2v_bert_dir is not None else None,
                 "maskgct_semantic_codec": str(maskgct_semantic_codec) if maskgct_semantic_codec is not None else None,
                 "campplus_ckpt": str(campplus_ckpt) if campplus_ckpt is not None else None,
