@@ -1,0 +1,95 @@
+{
+  "status": "timings_applied",
+  "generated_at": "1970-01-01T00:00:00.000Z",
+  "source_report": "audio/f5_tts/segments/segmented_merge_report.json",
+  "total_duration_sec": 461.114,
+  "segment_count": 11,
+  "scene_count": 9,
+  "scene_to_segments": [
+    [
+      "seg_001"
+    ],
+    [
+      "seg_002"
+    ],
+    [
+      "seg_003"
+    ],
+    [
+      "seg_004"
+    ],
+    [
+      "seg_005"
+    ],
+    [
+      "seg_006"
+    ],
+    [
+      "seg_007"
+    ],
+    [
+      "seg_008",
+      "seg_009"
+    ],
+    [
+      "seg_010",
+      "seg_011"
+    ]
+  ],
+  "scenes": [
+    {
+      "scene_id": "S01_hook_one_head_not_enough",
+      "start": 0,
+      "duration": 42.585,
+      "end": 42.585
+    },
+    {
+      "scene_id": "S02_projection_subspaces",
+      "start": 42.585,
+      "duration": 45.988,
+      "end": 88.573
+    },
+    {
+      "scene_id": "S03_head_formula",
+      "start": 88.573,
+      "duration": 43.257,
+      "end": 131.83
+    },
+    {
+      "scene_id": "S04_no_manual_experts",
+      "start": 131.83,
+      "duration": 47.652,
+      "end": 179.482
+    },
+    {
+      "scene_id": "S05_concat_wo",
+      "start": 179.482,
+      "duration": 54.834,
+      "end": 234.316
+    },
+    {
+      "scene_id": "S06_dimension_split",
+      "start": 234.316,
+      "duration": 49.711,
+      "end": 284.027
+    },
+    {
+      "scene_id": "S07_source_figure_spotlight",
+      "start": 284.027,
+      "duration": 33.75,
+      "end": 317.777
+    },
+    {
+      "scene_id": "S08_engineering_boundary",
+      "start": 317.777,
+      "duration": 76.695,
+      "end": 394.472
+    },
+    {
+      "scene_id": "S09_feynman_summary_and_next",
+      "start": 394.472,
+      "duration": 66.642,
+      "end": 461.114
+    }
+  ]
+}

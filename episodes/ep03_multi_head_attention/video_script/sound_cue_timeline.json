@@ -1,0 +1,61 @@
+{
+  "status": "ready",
+  "episode_id": "ep03_multi_head_attention",
+  "policy": "Sound cues are low-level comprehension bookmarks. They must not mask voiceover, English terms, formulas, or captions.",
+  "cues": [
+    {
+      "cue_id": "cue_001_opening",
+      "absolute_time_sec": 0.35,
+      "relative_loudness_db": -18,
+      "clarity_rule": "Opening sonic logo before the hook phrase; remove if it masks Transformer or Attention."
+    },
+    {
+      "cue_id": "cue_003_qkv_cards",
+      "absolute_time_sec": 42.6,
+      "relative_loudness_db": -18,
+      "clarity_rule": "Projection split cue after the scene turns to W Q, W K, W V cards."
+    },
+    {
+      "cue_id": "cue_002_qk_reveal",
+      "absolute_time_sec": 88.7,
+      "relative_loudness_db": -18,
+      "clarity_rule": "Formula reveal cue after the phrase 核心公式, not over Attention."
+    },
+    {
+      "cue_id": "cue_003_qkv_cards",
+      "absolute_time_sec": 131.4,
+      "relative_loudness_db": -19,
+      "clarity_rule": "Parallel-head lane cue; keep subdued and non-game-like."
+    },
+    {
+      "cue_id": "cue_006_weighted_v",
+      "absolute_time_sec": 179.2,
+      "relative_loudness_db": -18,
+      "clarity_rule": "Concat to W O merge cue; do not cover Concat or W O pronunciation."
+    },
+    {
+      "cue_id": "cue_004_scale",
+      "absolute_time_sec": 234.1,
+      "relative_loudness_db": -19,
+      "clarity_rule": "Dimension split cue after d k, d v, d model phrase."
+    },
+    {
+      "cue_id": "cue_006_weighted_v",
+      "absolute_time_sec": 283.7,
+      "relative_loudness_db": -20,
+      "clarity_rule": "Paper Figure 2 source spotlight; keep academic and low."
+    },
+    {
+      "cue_id": "cue_007_engineering_layers",
+      "absolute_time_sec": 317.4,
+      "relative_loudness_db": -18,
+      "clarity_rule": "Engineering boundary cue must not cover MQA, GQA, FlashAttention, or MoE."
+    },
+    {
+      "cue_id": "cue_008_cta",
+      "absolute_time_sec": 442.0,
+      "relative_loudness_db": -20,
+      "clarity_rule": "CTA tail under the Position Encoding teaser only."
+    }
+  ]
+}

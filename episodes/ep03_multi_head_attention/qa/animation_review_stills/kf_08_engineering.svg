@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+    <defs>
+      <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+        <path d="M36 0H0V36" fill="none" stroke="#E5E7EB" stroke-width="1" opacity="0.52"/>
+      </pattern>
+      <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+        <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#0F172A" flood-opacity="0.11"/>
+      </filter>
+      <marker id="arrow-q" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#4C78FF"/>
+  </marker>
+      <marker id="arrow-k" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#F58518"/>
+  </marker>
+      <marker id="arrow-v" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#54A24B"/>
+  </marker>
+      <marker id="arrow-muted" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#94A3B8"/>
+  </marker>
+      <marker id="arrow-wo" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#E45756"/>
+  </marker>
+    </defs>
+    <rect width="1080" height="1920" fill="#F7F7F5"/>
+    <rect width="1080" height="1920" fill="url(#grid)" opacity="0.76"/>
+    <rect x="0" y="0" width="18" height="1920" fill="#F4ECF7"/>
+    <rect x="18" y="0" width="4" height="1920" fill="#E2E8F0"/>
+    <rect x="42" y="48" width="996" height="1812" rx="34" fill="#FFFFFF" opacity="0.20" stroke="#E2E8F0"/>
+    <g opacity="0.18">
+      <circle cx="1000" cy="210" r="36" fill="#F4ECF7"/>
+      <circle cx="70" cy="1680" r="28" fill="#EFF6FF"/>
+      <path d="M78 1760H1002" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="10 14"/>
+    </g>
+    <rect x="305" y="66" width="470" height="70" rx="16" fill="#F4ECF7" stroke="#B279A2" stroke-opacity="0.5"/>
+    <text x="540" y="112" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="31" font-weight="950" fill="#111827">第3集 · 为什么一个 Head 不够</text>
+    <text x="64" y="222" font-family="Microsoft YaHei, Arial, sans-serif" font-size="58" font-weight="950" fill="#111827">
+    <tspan x="64" dy="0">2026 工程延伸：先分清层级</tspan>
+  </text>
+    <text x="70" y="360" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="850" fill="#475569">
+    <tspan x="70" dy="0">MHA 是注意力结构；MQA/GQA 改 K/V 成本；MoE 是另一层</tspan>
+<tspan x="70" dy="38">路由，不要混成一条线。</tspan>
+  </text>
+    <g>
+      <rect x="90" y="610" width="400" height="286" rx="24" fill="#FFFFFF" stroke="#4C78FF" stroke-opacity="0.48" filter="url(#shadow)"/>
+      <text x="128" y="680" text-anchor="start" font-family="Microsoft YaHei, Arial, sans-serif" font-size="45" font-weight="950" fill="#4C78FF">MHA</text>
+      <text x="128" y="738" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#111827">
+    <tspan x="128" dy="0">Multi-Head Attention</tspan>
+  </text>
+      <text x="128" y="808" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="850" fill="#475569">
+    <tspan x="128" dy="0">多头注意力</tspan>
+  </text>
+      <g>
+    <rect x="132" y="835" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.34" stroke="#4C78FF" stroke-opacity="0.55"/>
+<rect x="164" y="835" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.18" stroke="#4C78FF" stroke-opacity="0.55"/>
+<rect x="196" y="835" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.34" stroke="#4C78FF" stroke-opacity="0.55"/>
+<rect x="228" y="835" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.18" stroke="#4C78FF" stroke-opacity="0.55"/>
+    <text x="196" y="890" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#475569">many heads</text>
+  </g>
+      <path d="M288 847L350 847" stroke="#4C78FF" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-muted)"/>
+      <g>
+    <rect x="362" y="835" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.34" stroke="#4C78FF" stroke-opacity="0.55"/>
+<rect x="394" y="835" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.18" stroke="#4C78FF" stroke-opacity="0.55"/>
+<rect x="426" y="835" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.34" stroke="#4C78FF" stroke-opacity="0.55"/>
+<rect x="458" y="835" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.18" stroke="#4C78FF" stroke-opacity="0.55"/>
+    <text x="426" y="890" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#475569">parallel attention</text>
+  </g>
+    </g>
+<g>
+      <rect x="550" y="610" width="400" height="286" rx="24" fill="#FFFFFF" stroke="#F58518" stroke-opacity="0.48" filter="url(#shadow)"/>
+      <text x="588" y="680" text-anchor="start" font-family="Microsoft YaHei, Arial, sans-serif" font-size="45" font-weight="950" fill="#F58518">MQA</text>
+      <text x="588" y="738" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#111827">
+    <tspan x="588" dy="0">Multi-Query Attention</tspan>
+  </text>
+      <text x="588" y="808" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="850" fill="#475569">
+    <tspan x="588" dy="0">共享 K/V 降成本</tspan>
+  </text>
+      <g>
+    <rect x="592" y="835" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.34" stroke="#4C78FF" stroke-opacity="0.55"/>
+<rect x="624" y="835" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.18" stroke="#4C78FF" stroke-opacity="0.55"/>
+<rect x="656" y="835" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.34" stroke="#4C78FF" stroke-opacity="0.55"/>
+<rect x="688" y="835" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.18" stroke="#4C78FF" stroke-opacity="0.55"/>
+<rect x="720" y="835" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.34" stroke="#4C78FF" stroke-opacity="0.55"/>
+    <text x="672" y="890" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#475569">many Q</text>
+  </g>
+      <path d="M756 847L818 847" stroke="#F58518" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-muted)"/>
+      <g>
+    <rect x="830" y="835" width="24" height="24" rx="5" fill="#F58518" opacity="0.34" stroke="#F58518" stroke-opacity="0.55"/>
+<rect x="862" y="835" width="24" height="24" rx="5" fill="#F58518" opacity="0.18" stroke="#F58518" stroke-opacity="0.55"/>
+    <text x="862" y="890" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#475569">shared K/V</text>
+  </g>
+    </g>
+<g>
+      <rect x="90" y="930" width="400" height="286" rx="24" fill="#FFFFFF" stroke="#54A24B" stroke-opacity="0.48" filter="url(#shadow)"/>
+      <text x="128" y="1000" text-anchor="start" font-family="Microsoft YaHei, Arial, sans-serif" font-size="45" font-weight="950" fill="#54A24B">GQA</text>
+      <text x="128" y="1058" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#111827">
+    <tspan x="128" dy="0">Grouped-Query Attention</tspan>
+  </text>
+      <text x="128" y="1128" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="850" fill="#475569">
+    <tspan x="128" dy="0">分组共享 K/V</tspan>
+  </text>
+      <g>
+    <rect x="132" y="1155" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.34" stroke="#4C78FF" stroke-opacity="0.55"/>
+<rect x="164" y="1155" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.18" stroke="#4C78FF" stroke-opacity="0.55"/>
+<rect x="196" y="1155" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.34" stroke="#4C78FF" stroke-opacity="0.55"/>
+    <text x="180" y="1210" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#475569">group 1</text>
+  </g>
+      <g>
+    <rect x="294" y="1155" width="24" height="24" rx="5" fill="#54A24B" opacity="0.34" stroke="#54A24B" stroke-opacity="0.55"/>
+<rect x="326" y="1155" width="24" height="24" rx="5" fill="#54A24B" opacity="0.18" stroke="#54A24B" stroke-opacity="0.55"/>
+<rect x="358" y="1155" width="24" height="24" rx="5" fill="#54A24B" opacity="0.34" stroke="#54A24B" stroke-opacity="0.55"/>
+    <text x="342" y="1210" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#475569">group 2</text>
+  </g>
+    </g>
+<g>
+      <rect x="550" y="930" width="400" height="286" rx="24" fill="#FFFFFF" stroke="#B279A2" stroke-opacity="0.48" filter="url(#shadow)"/>
+      <text x="588" y="1000" text-anchor="start" font-family="Microsoft YaHei, Arial, sans-serif" font-size="45" font-weight="950" fill="#B279A2">MoE</text>
+      <text x="588" y="1058" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#111827">
+    <tspan x="588" dy="0">Mixture of Experts</tspan>
+  </text>
+      <text x="588" y="1128" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="850" fill="#475569">
+    <tspan x="588" dy="0">另一层稀疏路由</tspan>
+  </text>
+      <g>
+    <rect x="592" y="1155" width="24" height="24" rx="5" fill="#4C78FF" opacity="0.34" stroke="#4C78FF" stroke-opacity="0.55"/>
+    <text x="608" y="1210" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#475569">token</text>
+  </g>
+      <path d="M638 1167L698 1167" stroke="#B279A2" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-muted)"/>
+      <g>
+    <rect x="710" y="1155" width="24" height="24" rx="5" fill="#B279A2" opacity="0.34" stroke="#B279A2" stroke-opacity="0.55"/>
+<rect x="742" y="1155" width="24" height="24" rx="5" fill="#B279A2" opacity="0.18" stroke="#B279A2" stroke-opacity="0.55"/>
+<rect x="774" y="1155" width="24" height="24" rx="5" fill="#B279A2" opacity="0.34" stroke="#B279A2" stroke-opacity="0.55"/>
+<rect x="806" y="1155" width="24" height="24" rx="5" fill="#B279A2" opacity="0.18" stroke="#B279A2" stroke-opacity="0.55"/>
+    <text x="774" y="1210" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#475569">experts</text>
+  </g>
+    </g>
+    <rect x="100" y="1328" width="880" height="198" rx="24" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="140" y="1390" text-anchor="start" font-family="Microsoft YaHei, Arial, sans-serif" font-size="26" font-weight="950" fill="#111827">Conclusion</text>
+    <text x="140" y="1434" text-anchor="start" font-family="Microsoft YaHei, Arial, sans-serif" font-size="24" font-weight="900" fill="#111827">Multi-Head Attention（多头注意力）仍是 cost center（成本中心）。</text>
+    <text x="140" y="1474" text-anchor="start" font-family="Microsoft YaHei, Arial, sans-serif" font-size="24" font-weight="900" fill="#111827">MQA、GQA、MoE 属于不同 optimization layer（优化层）。</text>
+    <g>
+    <rect x="564" y="1594" width="420" height="50" rx="14" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <text x="774" y="1627" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="21" font-weight="850" fill="#64748B">Source: Harvard Annotated Transformer</text>
+  </g>
+  </svg>

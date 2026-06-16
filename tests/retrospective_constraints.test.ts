@@ -15,8 +15,13 @@ const specPath = path.join(
 const ttsSkillPath = path.join(rootDir, ".agents", "skills", "tts-voiceover-quality-gate", "SKILL.md");
 const voiceoverAdapterSkillPath = path.join(rootDir, ".agents", "skills", "voiceover-adapter", "SKILL.md");
 const voiceoverEmotionSkillPath = path.join(rootDir, ".agents", "skills", "voiceover-emotion-coach", "SKILL.md");
+const ogilvyCreativeDirectorSkillPath = path.join(rootDir, ".agents", "skills", "ogilvy-creative-director", "SKILL.md");
+const scriptStoryboardSkillPath = path.join(rootDir, ".agents", "skills", "script-storyboard-writer", "SKILL.md");
+const frameSpecWriterSkillPath = path.join(rootDir, ".agents", "skills", "frame-spec-writer", "SKILL.md");
+const hyperframesComposerSkillPath = path.join(rootDir, ".agents", "skills", "hyperframes-composer", "SKILL.md");
 const scriptReviewerSkillPath = path.join(rootDir, ".agents", "skills", "technical-script-reviewer", "SKILL.md");
 const soundCueSkillPath = path.join(rootDir, ".agents", "skills", "sound-cue-designer", "SKILL.md");
+const globalFramePath = path.join(rootDir, "docs", "visual_system", "FRAME.md");
 const ep02SoundCuePlanPath = path.join(
   rootDir,
   "episodes",
@@ -76,6 +81,33 @@ describe("first-video retrospective constraints", () => {
       expect(doc).toContain("tts-voiceover-quality-gate");
       expect(doc).toContain("technical-script-reviewer");
     }
+  });
+
+  it("indexes episode retrospectives before starting new episode tasks", () => {
+    const readme = fs.readFileSync(readmePath, "utf8");
+    const spec = fs.readFileSync(specPath, "utf8");
+    const ep03RetrospectivePath = path.join(
+      rootDir,
+      "episodes",
+      "ep03_multi_head_attention",
+      "review",
+      "ep03_retrospective_indextts2_animation_candidates.md"
+    );
+
+    for (const doc of [readme, spec]) {
+      expect(doc).toContain("Task Retrospective Index");
+      expect(doc).toContain("新开 episode");
+      expect(doc).toContain("episodes/{episode_id}/review/*.md");
+      expect(doc).toContain("episodes/{episode_id}/qa/*.json");
+      expect(doc).toContain("episodes/{episode_id}/video_script/FRAME.md");
+      expect(doc).toContain("docs/visual_system/FRAME.md");
+      expect(doc).toContain("ep03_retrospective_indextts2_animation_candidates.md");
+      expect(doc).toContain("IndexTTS2");
+      expect(doc).toContain("F5 fallback");
+      expect(doc).toContain("source-backed");
+    }
+
+    expect(fs.existsSync(ep03RetrospectivePath)).toBe(true);
   });
 
   it("adds reusable skills for TTS gates and technical script review", () => {
@@ -287,5 +319,75 @@ describe("first-video retrospective constraints", () => {
     expect(ep02AudioPrompt).toContain("Q 乘 K 转置");
     expect(ep02AudioPrompt).toContain("根号下 d k");
     expect(ep02AudioPrompt).toContain("ASR transcript diff");
+  });
+
+  it("adds reusable Ogilvy creative direction constraints across script, frame, and workflow docs", () => {
+    const readme = fs.readFileSync(readmePath, "utf8");
+    const spec = fs.readFileSync(specPath, "utf8");
+    const frame = fs.readFileSync(globalFramePath, "utf8");
+    const scriptSkill = fs.readFileSync(scriptStoryboardSkillPath, "utf8");
+    const frameSkill = fs.readFileSync(frameSpecWriterSkillPath, "utf8");
+    const hyperframesSkill = fs.readFileSync(hyperframesComposerSkillPath, "utf8");
+
+    for (const doc of [readme, spec, frame, scriptSkill]) {
+      expect(doc).toContain("ogilvy-creative-director");
+      expect(doc).toContain("Ogilvy Creative Contract");
+      expect(doc).toContain("Big Idea");
+      expect(doc).toContain("headline as mini-ad");
+      expect(doc).toContain("facts before decoration");
+      expect(doc).toContain("visual hero");
+      expect(doc).toContain("proof object");
+      expect(doc).toContain("brand consistency");
+      expect(doc).toContain("research before creative");
+      expect(doc).toContain("caption as micro-headline");
+      expect(doc).toContain("consumer language");
+      expect(doc).toContain("numbered facts");
+      expect(doc).toContain("news-style layout");
+      expect(doc).toContain("image captions");
+      expect(doc).toContain("avoid reverse type");
+      expect(doc).toContain("avoid ornate fonts");
+    }
+
+    for (const doc of [readme, spec, frame, frameSkill, hyperframesSkill]) {
+      expect(doc).toContain("reverse type");
+      expect(doc).toContain("colored");
+      expect(doc).toContain("9pt");
+      expect(doc).toContain("11pt");
+      expect(doc).toContain("serif");
+      expect(doc).toContain("sans");
+      expect(doc).toContain("leading");
+      expect(doc).toContain("all-caps");
+      expect(doc).toContain("five-second");
+    }
+
+    expect(fs.existsSync(ogilvyCreativeDirectorSkillPath)).toBe(true);
+    const skill = fs.readFileSync(ogilvyCreativeDirectorSkillPath, "utf8");
+    expect(skill).toContain("name: ogilvy-creative-director");
+    expect(skill).toContain("Use when shaping hooks, cover headlines, storyboard beats, or visual concepts");
+    expect(skill).toContain("Big Idea");
+    expect(skill).toContain("headline as mini-ad");
+    expect(skill).toContain("facts before decoration");
+    expect(skill).toContain("visual hero");
+    expect(skill).toContain("proof object");
+    expect(skill).toContain("brand consistency");
+    expect(skill).toContain("research before creative");
+    expect(skill).toContain("caption as micro-headline");
+    expect(skill).toContain("consumer language");
+    expect(skill).toContain("numbered facts");
+    expect(skill).toContain("news-style layout");
+    expect(skill).toContain("image captions");
+    expect(skill).toContain("avoid reverse type");
+    expect(skill).toContain("avoid ornate fonts");
+    expect(skill).toContain("no colored body panels");
+    expect(skill).toContain("readable type floor");
+    expect(skill).toContain("serif for reading, sans for posters");
+    expect(skill).toContain("one type system");
+    expect(skill).toContain("leading and scan path");
+    expect(skill).toContain("avoid all caps");
+    expect(skill).toContain("do not print headlines over images");
+    expect(skill).toContain("five-second poster rule");
+    expect(skill).toContain("paper title, mechanism name, or model family");
+    expect(skill).toContain("Do not invent proof");
+    expect(skill).toContain("Do not decorate before the claim is clear");
   });
 });

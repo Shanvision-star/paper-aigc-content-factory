@@ -35,6 +35,8 @@ function protectCaptionText(sourceText: string): string {
     .replace(/根号下 d k/g, "√(d_k)")
     .replace(/根号 d k/g, "√(d_k)")
     .replace(/d k/g, "d_k")
+    .replace(/d v/g, "d_v")
+    .replace(/d model/g, "d_model")
     .replace(/KV\s*Cache/g, "KV Cache（Key-Value Cache）")
     .replace(/K 和 V/g, "Key 和 Value")
     .replace(/K\/V/g, "Key/Value")
@@ -49,6 +51,80 @@ function protectCaptionText(sourceText: string): string {
     .replace(/Claude/g, "Claude")
     .replace(/token/g, "token")
     .replace(/softmax/g, "softmax");
+}
+
+type TermFirstMentionRule = {
+  id: string;
+  pattern: RegExp;
+  replacement: string;
+};
+
+const TERM_FIRST_MENTION_RULES: TermFirstMentionRule[] = [
+  {
+    id: "mha",
+    pattern: /多头注意力/u,
+    replacement: "MHA（多头注意力）"
+  },
+  {
+    id: "wq",
+    pattern: /Q 投影矩阵/u,
+    replacement: "W Q（Q 投影矩阵）"
+  },
+  {
+    id: "wk",
+    pattern: /K 投影矩阵/u,
+    replacement: "W K（K 投影矩阵）"
+  },
+  {
+    id: "wv",
+    pattern: /V 投影矩阵/u,
+    replacement: "W V（V 投影矩阵）"
+  },
+  {
+    id: "concat",
+    pattern: /Concat(?![：:])/u,
+    replacement: "Concat（拼接）"
+  },
+  {
+    id: "wo",
+    pattern: /输出投影矩阵 W O|矩阵 W O/u,
+    replacement: "W O（输出投影矩阵）"
+  },
+  {
+    id: "mqa",
+    pattern: /多查询注意力/u,
+    replacement: "MQA（多查询注意力）"
+  },
+  {
+    id: "gqa",
+    pattern: /分组查询注意力/u,
+    replacement: "GQA（分组查询注意力）"
+  },
+  {
+    id: "moe",
+    pattern: /混合专家机制/u,
+    replacement: "MoE（混合专家机制）"
+  }
+];
+
+function enrichTermFirstMentions(entries: Array<{ start: number; end: number; text: string }>): Array<{ start: number; end: number; text: string }> {
+  const seen = new Set<string>();
+
+  return entries.map((entry) => {
+    let text = entry.text;
+
+    for (const rule of TERM_FIRST_MENTION_RULES) {
+      if (!seen.has(rule.id) && rule.pattern.test(text)) {
+        text = text.replace(rule.pattern, rule.replacement);
+        seen.add(rule.id);
+      }
+    }
+
+    return {
+      ...entry,
+      text
+    };
+  });
 }
 
 function displayWidth(value: string): number {
@@ -173,7 +249,7 @@ function buildShortCaptionEntries(segments: ReturnType<typeof readVoiceSegments>
     });
   }
 
-  return mergeShortCaptionEntries(entries);
+  return enrichTermFirstMentions(mergeShortCaptionEntries(entries));
 }
 
 function mergeShortCaptionEntries(entries: Array<{ start: number; end: number; text: string }>): Array<{ start: number; end: number; text: string }> {

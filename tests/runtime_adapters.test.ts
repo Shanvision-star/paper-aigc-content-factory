@@ -122,7 +122,7 @@ describe("runtime adapters", () => {
     );
 
     expect(spoken).toContain("准确一点说");
-    expect(spoken).toContain("Q 乘 K 转置");
+    expect(spoken).toContain("Q 乘 Kay 转置");
     expect(spoken).toContain("根号下 d k");
     expect(spoken).toContain("softmax");
     expect(spoken).toContain("模型要判断， 它到底指谁");
@@ -132,6 +132,7 @@ describe("runtime adapters", () => {
     expect(spoken).toContain("Attention 不是模型突然就理解了这句话");
     expect(spoken).not.toContain("更准确地说");
     expect(spoken).not.toContain("QK^T");
+    expect(spoken).not.toContain("Q 乘 K 转置");
     expect(spoken).not.toContain("sqrt(d_k)");
     expect(spoken).not.toContain("“它”");
     expect(spoken).not.toContain("按行归一化");

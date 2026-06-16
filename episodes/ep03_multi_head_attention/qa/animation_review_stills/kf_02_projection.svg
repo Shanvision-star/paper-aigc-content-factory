@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+    <defs>
+      <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+        <path d="M36 0H0V36" fill="none" stroke="#E5E7EB" stroke-width="1" opacity="0.52"/>
+      </pattern>
+      <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+        <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#0F172A" flood-opacity="0.11"/>
+      </filter>
+      <marker id="arrow-q" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#4C78FF"/>
+  </marker>
+      <marker id="arrow-k" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#F58518"/>
+  </marker>
+      <marker id="arrow-v" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#54A24B"/>
+  </marker>
+      <marker id="arrow-muted" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#94A3B8"/>
+  </marker>
+      <marker id="arrow-wo" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#E45756"/>
+  </marker>
+    </defs>
+    <rect width="1080" height="1920" fill="#F7F7F5"/>
+    <rect width="1080" height="1920" fill="url(#grid)" opacity="0.76"/>
+    <rect x="0" y="0" width="18" height="1920" fill="#F4ECF7"/>
+    <rect x="18" y="0" width="4" height="1920" fill="#E2E8F0"/>
+    <rect x="42" y="48" width="996" height="1812" rx="34" fill="#FFFFFF" opacity="0.20" stroke="#E2E8F0"/>
+    <g opacity="0.18">
+      <circle cx="1000" cy="210" r="36" fill="#F4ECF7"/>
+      <circle cx="70" cy="1680" r="28" fill="#EFF6FF"/>
+      <path d="M78 1760H1002" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="10 14"/>
+    </g>
+    <rect x="305" y="66" width="470" height="70" rx="16" fill="#F4ECF7" stroke="#B279A2" stroke-opacity="0.5"/>
+    <text x="540" y="112" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="31" font-weight="950" fill="#111827">第3集 · 为什么一个 Head 不够</text>
+    <text x="64" y="222" font-family="Microsoft YaHei, Arial, sans-serif" font-size="58" font-weight="950" fill="#111827">
+    <tspan x="64" dy="0">同一输入，拆进多个投影空间</tspan>
+  </text>
+    <text x="70" y="360" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="850" fill="#475569">
+    <tspan x="70" dy="0">同一份 token 表示，会进入不同的 Query、Key、Value 投影</tspan>
+<tspan x="70" dy="38">空间。</tspan>
+  </text>
+    <g>
+    <rect x="132" y="514" width="840" height="160" rx="24" fill="#E2E8F0" opacity="0.45"/>
+    <rect x="126" y="507" width="840" height="160" rx="24" fill="#F8FAFC" opacity="0.70" stroke="#E2E8F0"/>
+    <rect x="120" y="500" width="840" height="160" rx="24" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+    <path d="M148 522H932" stroke="#F4ECF7" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+  </g>
+    <text x="540" y="596" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="40" font-weight="950" fill="#111827">输入 X：同一份 token 表示</text>
+    <path d="M540 660L540 736" stroke="#94A3B8" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-muted)"/>
+    <g>
+      <rect x="106" y="755" width="868" height="178" rx="24" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+      <rect x="132" y="813" width="142" height="62" rx="18" fill="#FFFFFF" stroke="#CBD5E1"/>
+      <text x="203" y="854" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#111827">head_1</text>
+      <g>
+    <rect x="320" y="813" width="126" height="62" rx="18" fill="#EFF6FF" stroke="#4C78FF" stroke-width="3"/>
+    <text x="383" y="854" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#4C78FF">W Q</text>
+  </g>
+      <g>
+    <rect x="500" y="813" width="126" height="62" rx="18" fill="#FFF7ED" stroke="#F58518" stroke-width="3"/>
+    <text x="563" y="854" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#F58518">W K</text>
+  </g>
+      <g>
+    <rect x="680" y="813" width="126" height="62" rx="18" fill="#F0FDF4" stroke="#54A24B" stroke-width="3"/>
+    <text x="743" y="854" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#54A24B">W V</text>
+  </g>
+      <rect x="838" y="813" width="112" height="62" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+      <text x="894" y="854" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="21" font-weight="850" fill="#475569">子空间 1</text>
+      <path d="M274 844L308 844" stroke="#4C78FF" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-q)"/>
+      <path d="M446 844L488 844" stroke="#F58518" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-k)"/>
+      <path d="M626 844L668 844" stroke="#54A24B" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-v)"/>
+      <path d="M806 844L826 844" stroke="#54A24B" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-v)"/>
+    </g>
+    <g>
+      <rect x="106" y="980" width="868" height="178" rx="24" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+      <rect x="132" y="1038" width="142" height="62" rx="18" fill="#FFFFFF" stroke="#CBD5E1"/>
+      <text x="203" y="1079" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#111827">head_2</text>
+      <g>
+    <rect x="320" y="1038" width="126" height="62" rx="18" fill="#EFF6FF" stroke="#4C78FF" stroke-width="3"/>
+    <text x="383" y="1079" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#4C78FF">W Q</text>
+  </g>
+      <g>
+    <rect x="500" y="1038" width="126" height="62" rx="18" fill="#FFF7ED" stroke="#F58518" stroke-width="3"/>
+    <text x="563" y="1079" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#F58518">W K</text>
+  </g>
+      <g>
+    <rect x="680" y="1038" width="126" height="62" rx="18" fill="#F0FDF4" stroke="#54A24B" stroke-width="3"/>
+    <text x="743" y="1079" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#54A24B">W V</text>
+  </g>
+      <rect x="838" y="1038" width="112" height="62" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+      <text x="894" y="1079" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="21" font-weight="850" fill="#475569">子空间 2</text>
+      <path d="M274 1069L308 1069" stroke="#4C78FF" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-q)"/>
+      <path d="M446 1069L488 1069" stroke="#F58518" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-k)"/>
+      <path d="M626 1069L668 1069" stroke="#54A24B" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-v)"/>
+      <path d="M806 1069L826 1069" stroke="#54A24B" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-v)"/>
+    </g>
+    <g>
+      <rect x="106" y="1205" width="868" height="178" rx="24" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+      <rect x="132" y="1263" width="142" height="62" rx="18" fill="#FFFFFF" stroke="#CBD5E1"/>
+      <text x="203" y="1304" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#111827">head_h</text>
+      <g>
+    <rect x="320" y="1263" width="126" height="62" rx="18" fill="#EFF6FF" stroke="#4C78FF" stroke-width="3"/>
+    <text x="383" y="1304" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#4C78FF">W Q</text>
+  </g>
+      <g>
+    <rect x="500" y="1263" width="126" height="62" rx="18" fill="#FFF7ED" stroke="#F58518" stroke-width="3"/>
+    <text x="563" y="1304" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#F58518">W K</text>
+  </g>
+      <g>
+    <rect x="680" y="1263" width="126" height="62" rx="18" fill="#F0FDF4" stroke="#54A24B" stroke-width="3"/>
+    <text x="743" y="1304" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="27" font-weight="900" fill="#54A24B">W V</text>
+  </g>
+      <rect x="838" y="1263" width="112" height="62" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+      <text x="894" y="1304" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="21" font-weight="850" fill="#475569">子空间 3</text>
+      <path d="M274 1294L308 1294" stroke="#4C78FF" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-q)"/>
+      <path d="M446 1294L488 1294" stroke="#F58518" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-k)"/>
+      <path d="M626 1294L668 1294" stroke="#54A24B" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-v)"/>
+      <path d="M806 1294L826 1294" stroke="#54A24B" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-v)"/>
+    </g>
+    <rect x="120" y="1450" width="840" height="220" rx="24" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="154" y="1504" text-anchor="start" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="950" fill="#111827">三个投影矩阵的中文读法</text>
+    <text x="154" y="1556" font-family="Microsoft YaHei, Arial, sans-serif" font-size="24" font-weight="900" fill="#4C78FF">
+    <tspan x="154" dy="0">W Q：Query Projection Matrix｜Q 投影矩阵</tspan>
+  </text>
+    <text x="154" y="1602" font-family="Microsoft YaHei, Arial, sans-serif" font-size="24" font-weight="900" fill="#F58518">
+    <tspan x="154" dy="0">W K：Key Projection Matrix｜K 投影矩阵</tspan>
+  </text>
+    <text x="154" y="1648" font-family="Microsoft YaHei, Arial, sans-serif" font-size="24" font-weight="900" fill="#54A24B">
+    <tspan x="154" dy="0">W V：Value Projection Matrix｜V 投影矩阵</tspan>
+  </text>
+    <g>
+    <rect x="564" y="1714" width="420" height="50" rx="14" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <text x="774" y="1747" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="21" font-weight="850" fill="#64748B">Source: Harvard Annotated Transformer</text>
+  </g>
+  </svg>

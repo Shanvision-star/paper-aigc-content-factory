@@ -101,6 +101,12 @@ const englishPronunciationStabilityReplacements: Array<[RegExp, string]> = [
   [/每生成一个新\s*token/g, "每生成一个新的 token"]
 ];
 
+const formulaLetterPronunciationReplacements: Array<[RegExp, string]> = [
+  // F5-TTS sometimes reads the standalone formula letter K as "kai".
+  // Use "Kay" only in spoken_text; captions and visual formulas still display K.
+  [/(?<![A-Za-z])K(?![A-Za-z])/g, "Kay"]
+];
+
 const focusTermPatterns: Array<[RegExp, string]> = [
   [/\bAttention Is All You Need\b/i, "paper_title"],
   [/\bTransformer\b/i, "transformer"],
@@ -139,6 +145,10 @@ export function normalizeForTts(sourceText: string, segmentId?: string): string 
   }
 
   for (const [pattern, replacement] of termReplacements) {
+    text = text.replace(pattern, replacement);
+  }
+
+  for (const [pattern, replacement] of formulaLetterPronunciationReplacements) {
     text = text.replace(pattern, replacement);
   }
 

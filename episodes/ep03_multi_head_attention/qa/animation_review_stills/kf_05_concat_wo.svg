@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+    <defs>
+      <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+        <path d="M36 0H0V36" fill="none" stroke="#E5E7EB" stroke-width="1" opacity="0.52"/>
+      </pattern>
+      <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+        <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#0F172A" flood-opacity="0.11"/>
+      </filter>
+      <marker id="arrow-q" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#4C78FF"/>
+  </marker>
+      <marker id="arrow-k" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#F58518"/>
+  </marker>
+      <marker id="arrow-v" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#54A24B"/>
+  </marker>
+      <marker id="arrow-muted" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#94A3B8"/>
+  </marker>
+      <marker id="arrow-wo" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#E45756"/>
+  </marker>
+    </defs>
+    <rect width="1080" height="1920" fill="#F7F7F5"/>
+    <rect width="1080" height="1920" fill="url(#grid)" opacity="0.76"/>
+    <rect x="0" y="0" width="18" height="1920" fill="#F4ECF7"/>
+    <rect x="18" y="0" width="4" height="1920" fill="#E2E8F0"/>
+    <rect x="42" y="48" width="996" height="1812" rx="34" fill="#FFFFFF" opacity="0.20" stroke="#E2E8F0"/>
+    <g opacity="0.18">
+      <circle cx="1000" cy="210" r="36" fill="#F4ECF7"/>
+      <circle cx="70" cy="1680" r="28" fill="#EFF6FF"/>
+      <path d="M78 1760H1002" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="10 14"/>
+    </g>
+    <rect x="305" y="66" width="470" height="70" rx="16" fill="#F4ECF7" stroke="#B279A2" stroke-opacity="0.5"/>
+    <text x="540" y="112" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="31" font-weight="950" fill="#111827">第3集 · 为什么一个 Head 不够</text>
+    <text x="64" y="222" font-family="Microsoft YaHei, Arial, sans-serif" font-size="58" font-weight="950" fill="#111827">
+    <tspan x="64" dy="0">Concat 之后，输出投影重新融合</tspan>
+  </text>
+    <text x="70" y="360" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="850" fill="#475569">
+    <tspan x="70" dy="0">拼接不是终点；输出投影矩阵把多个子空间重新混回模型表示。</tspan>
+  </text>
+    <g>
+    <rect x="82" y="534" width="940" height="1050" rx="24" fill="#E2E8F0" opacity="0.45"/>
+    <rect x="76" y="527" width="940" height="1050" rx="24" fill="#F8FAFC" opacity="0.70" stroke="#E2E8F0"/>
+    <rect x="70" y="520" width="940" height="1050" rx="24" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+    <path d="M98 542H982" stroke="#F4ECF7" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+  </g>
+    <g>
+      <rect x="112" y="620" width="210" height="80" rx="18" fill="#FFFFFF" stroke="#4C78FF" stroke-opacity="0.55"/>
+      <text x="217" y="672" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="26" font-weight="900" fill="#111827">head_1</text>
+      <path d="M322 660L438 900" stroke="#94A3B8" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-muted)"/>
+    </g>
+<g>
+      <rect x="112" y="742" width="210" height="80" rx="18" fill="#FFFFFF" stroke="#F58518" stroke-opacity="0.55"/>
+      <text x="217" y="794" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="26" font-weight="900" fill="#111827">head_2</text>
+      <path d="M322 782L438 900" stroke="#94A3B8" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-muted)"/>
+    </g>
+<g>
+      <rect x="112" y="864" width="210" height="80" rx="18" fill="#FFFFFF" stroke="#54A24B" stroke-opacity="0.55"/>
+      <text x="217" y="916" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="26" font-weight="900" fill="#111827">head_3</text>
+      <path d="M322 904L438 900" stroke="#94A3B8" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-muted)"/>
+    </g>
+<g>
+      <rect x="112" y="986" width="210" height="80" rx="18" fill="#FFFFFF" stroke="#B279A2" stroke-opacity="0.55"/>
+      <text x="217" y="1038" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="26" font-weight="900" fill="#111827">head_4</text>
+      <path d="M322 1026L438 900" stroke="#94A3B8" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-muted)"/>
+    </g>
+    <rect x="450" y="840" width="210" height="120" rx="24" fill="#F5F3FF" stroke="#B279A2" stroke-width="4"/>
+    <text x="555" y="912" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="36" font-weight="950" fill="#B279A2">Concat</text>
+    <path d="M660 900L760 900" stroke="#E45756" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-wo)"/>
+    <rect x="770" y="840" width="170" height="120" rx="24" fill="#FEF2F2" stroke="#E45756" stroke-width="4"/>
+    <text x="855" y="912" text-anchor="middle" font-family="Georgia, serif" font-size="40" font-weight="900" fill="#E45756">W<tspan baseline-shift="super" font-size="24">O</tspan></text>
+    <image x="90" y="1124" width="900" height="211" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NDAiIGhlaWdodD0iMjIwIiB2aWV3Qm94PSIwIDAgOTQwIDIyMCI+CiAgICA8cmVjdCB4PSI0IiB5PSI0IiB3aWR0aD0iOTMyIiBoZWlnaHQ9IjIxMiIgcng9IjI0IiBmaWxsPSIjRkZGRkZGIiBzdHJva2U9IiNFMkU4RjAiLz4KICAgIDx0ZXh0IHg9IjQ3MCIgeT0iNzgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCBzZXJpZiIgZm9udC1zaXplPSIzMSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzExMTgyNyI+CiAgICAgIDx0c3Bhbj5NdWx0aUhlYWQoUSxLLFYpID08L3RzcGFuPgogICAgPC90ZXh0PgogICAgPHRleHQgeD0iNDcwIiB5PSIxNTYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCBzZXJpZiIgZm9udC1zaXplPSIyOSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzExMTgyNyI+CiAgICAgIDx0c3BhbiBmaWxsPSIjQjI3OUEyIj5Db25jYXQoPC90c3Bhbj48dHNwYW4+aGVhZDwvdHNwYW4+PHRzcGFuIGJhc2VsaW5lLXNoaWZ0PSJzdWIiIGZvbnQtc2l6ZT0iMTkiPjE8L3RzcGFuPjx0c3Bhbj4sIC4uLiwgaGVhZDwvdHNwYW4+PHRzcGFuIGJhc2VsaW5lLXNoaWZ0PSJzdWIiIGZvbnQtc2l6ZT0iMTkiPmg8L3RzcGFuPjx0c3BhbiBmaWxsPSIjQjI3OUEyIj4pPC90c3Bhbj4KICAgICAgPHRzcGFuIGZpbGw9IiNFNDU3NTYiPiBXPC90c3Bhbj48dHNwYW4gYmFzZWxpbmUtc2hpZnQ9InN1cGVyIiBmb250LXNpemU9IjE5IiBmaWxsPSIjRTQ1NzU2Ij5PPC90c3Bhbj4KICAgIDwvdGV4dD4KICA8L3N2Zz4="/>
+    <rect x="132" y="1400" width="816" height="88" rx="20" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="540" y="1456" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="30" font-weight="900" fill="#E45756">W<tspan baseline-shift="super" font-size="18">O</tspan>：Output Projection Matrix｜输出投影矩阵</text>
+    <g>
+    <rect x="564" y="1525" width="420" height="50" rx="14" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <text x="774" y="1558" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="21" font-weight="850" fill="#64748B">Source: Harvard Annotated Transformer</text>
+  </g>
+  </svg>

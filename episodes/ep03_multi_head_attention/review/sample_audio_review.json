@@ -1,0 +1,37 @@
+{
+  "status": "pending_review",
+  "generated_at": "1970-01-01T00:00:00.000Z",
+  "engine": "f5_tts",
+  "manifest_file": "audio/f5_tts/segments/segment_manifest.json",
+  "required_action": "Listen to the representative f5_tts sample wav files and set status to approved only if pronunciation, leakage, duplication, and pacing are acceptable.",
+  "approved_segment_ids": [
+    "seg_001",
+    "seg_006",
+    "seg_010",
+    "seg_011"
+  ],
+  "segment_text_hash": "6faf3f18fc40ac7ea6e167c2f6fb7efb225d55e8e7936f76e89f33b484222bf7",
+  "sample_audio": [
+    {
+      "segment_id": "seg_001",
+      "output_audio": "audio/f5_tts/segments/seg_001.wav",
+      "exists": false
+    },
+    {
+      "segment_id": "seg_006",
+      "output_audio": "audio/f5_tts/segments/seg_006.wav",
+      "exists": false
+    },
+    {
+      "segment_id": "seg_010",
+      "output_audio": "audio/f5_tts/segments/seg_010.wav",
+      "exists": false
+    },
+    {
+      "segment_id": "seg_011",
+      "output_audio": "audio/f5_tts/segments/seg_011.wav",
+      "exists": false
+    }
+  ],
+  "notes": ""
+}

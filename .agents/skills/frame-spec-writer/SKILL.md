@@ -41,6 +41,7 @@ Create the visual bridge between research/script/storyboard assets and HyperFram
 - Formula asset contract: canonical formula text or LaTeX, acceptable source type, minimum raster/vector quality, annotation targets, safe-area placement, and keyframe review rule.
 - Beat table with spoken cue, frame treatment, visual engine, required assets, and platform notes.
 - Caption rules derived from `spoken_text`.
+- Ogilvy layout and typography hard rules: no reverse type, no colored body panels behind long text, readable type floor with `9pt` minimum and `11pt` preferred print baseline scaled up for phone video, readable serif/traditional faces for dense copy, large sans-serif only for poster/hook frames, stable font system, sufficient leading, no all-caps sentences, no headline-over-image layout, and five-second poster rule for cover/opening frames.
 - Pronunciation constraints, including Chinese `地` as `de` when TTS normalization is needed.
 - Render QA: no black frame, no subtitle overlap, figure attribution, formula legibility, key-frame review.
 

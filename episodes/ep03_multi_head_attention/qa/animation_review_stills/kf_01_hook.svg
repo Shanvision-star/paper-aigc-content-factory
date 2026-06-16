@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+    <defs>
+      <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+        <path d="M36 0H0V36" fill="none" stroke="#E5E7EB" stroke-width="1" opacity="0.52"/>
+      </pattern>
+      <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+        <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#0F172A" flood-opacity="0.11"/>
+      </filter>
+      <marker id="arrow-q" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#4C78FF"/>
+  </marker>
+      <marker id="arrow-k" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#F58518"/>
+  </marker>
+      <marker id="arrow-v" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#54A24B"/>
+  </marker>
+      <marker id="arrow-muted" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#94A3B8"/>
+  </marker>
+      <marker id="arrow-wo" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#E45756"/>
+  </marker>
+    </defs>
+    <rect width="1080" height="1920" fill="#F7F7F5"/>
+    <rect width="1080" height="1920" fill="url(#grid)" opacity="0.76"/>
+    <rect x="0" y="0" width="18" height="1920" fill="#F4ECF7"/>
+    <rect x="18" y="0" width="4" height="1920" fill="#E2E8F0"/>
+    <rect x="42" y="48" width="996" height="1812" rx="34" fill="#FFFFFF" opacity="0.20" stroke="#E2E8F0"/>
+    <g opacity="0.18">
+      <circle cx="1000" cy="210" r="36" fill="#F4ECF7"/>
+      <circle cx="70" cy="1680" r="28" fill="#EFF6FF"/>
+      <path d="M78 1760H1002" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="10 14"/>
+    </g>
+    <rect x="305" y="66" width="470" height="70" rx="16" fill="#F4ECF7" stroke="#B279A2" stroke-opacity="0.5"/>
+    <text x="540" y="112" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="31" font-weight="950" fill="#111827">第3集 · 为什么一个 Head 不够</text>
+    <text x="64" y="222" font-family="Microsoft YaHei, Arial, sans-serif" font-size="58" font-weight="950" fill="#111827">
+    <tspan x="64" dy="0">一个 Head 为什么不够？</tspan>
+  </text>
+    <text x="70" y="360" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="850" fill="#475569">
+    <tspan x="70" dy="0">上一集讲完 Q、K、V。这一集只回答一个问题：为什么</tspan>
+<tspan x="70" dy="38">Transformer 要开多个注意力头？</tspan>
+  </text>
+    <g>
+    <rect x="70" y="469" width="964" height="1155" rx="24" fill="#E2E8F0" opacity="0.45"/>
+    <rect x="64" y="462" width="964" height="1155" rx="24" fill="#F8FAFC" opacity="0.70" stroke="#E2E8F0"/>
+    <rect x="58" y="455" width="964" height="1155" rx="24" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+    <path d="M86 477H994" stroke="#F4ECF7" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+  </g>
+    <rect x="96" y="500" width="888" height="142" rx="22" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="540" y="556" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="33" font-weight="950" fill="#111827">上一集的闭环</text>
+    <text x="540" y="612" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="33" font-weight="950" fill="#4C78FF">匹配 → 分权 → 读取 V</text>
+    <rect x="96" y="715" width="420" height="360" rx="22" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="306" y="774" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="32" font-weight="950" fill="#111827">单个 Head</text>
+    <g>
+    <g>
+        <rect x="164" y="824" width="72" height="46" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="200" y="853.9" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.20</text>
+      </g>
+<g>
+        <rect x="244" y="824" width="72" height="46" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="280" y="853.9" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.30</text>
+      </g>
+<g>
+        <rect x="324" y="824" width="72" height="46" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="360" y="853.9" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.50</text>
+      </g>
+<g>
+        <rect x="164" y="878" width="72" height="46" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="200" y="907.9" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.10</text>
+      </g>
+<g>
+        <rect x="244" y="878" width="72" height="46" rx="8" fill="#FDE68A" stroke="#F58518"/>
+        <text x="280" y="907.9" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#7C2D12">0.70</text>
+      </g>
+<g>
+        <rect x="324" y="878" width="72" height="46" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="360" y="907.9" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.20</text>
+      </g>
+<g>
+        <rect x="164" y="932" width="72" height="46" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="200" y="961.9" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.35</text>
+      </g>
+<g>
+        <rect x="244" y="932" width="72" height="46" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="280" y="961.9" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.20</text>
+      </g>
+<g>
+        <rect x="324" y="932" width="72" height="46" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="360" y="961.9" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.45</text>
+      </g>
+  </g>
+    <rect x="136" y="1010" width="340" height="44" rx="12" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="306" y="1039" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="23" font-weight="850" fill="#475569">只有一张注意力权重图</text>
+    <rect x="564" y="715" width="420" height="360" rx="22" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="774" y="774" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="32" font-weight="950" fill="#111827">多个 Head</text>
+    <g>
+    <g>
+        <rect x="618" y="824" width="62" height="40" rx="8" fill="#FDE68A" stroke="#F58518"/>
+        <text x="649" y="850" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#7C2D12">0.64</text>
+      </g>
+<g>
+        <rect x="688" y="824" width="62" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="719" y="850" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.18</text>
+      </g>
+<g>
+        <rect x="758" y="824" width="62" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="789" y="850" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.09</text>
+      </g>
+<g>
+        <rect x="618" y="872" width="62" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="649" y="898" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.12</text>
+      </g>
+<g>
+        <rect x="688" y="872" width="62" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="719" y="898" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.51</text>
+      </g>
+<g>
+        <rect x="758" y="872" width="62" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="789" y="898" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.21</text>
+      </g>
+  </g>
+    <g>
+    <g>
+        <rect x="618" y="936" width="62" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="649" y="962" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.22</text>
+      </g>
+<g>
+        <rect x="688" y="936" width="62" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="719" y="962" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.61</text>
+      </g>
+<g>
+        <rect x="758" y="936" width="62" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="789" y="962" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.17</text>
+      </g>
+<g>
+        <rect x="618" y="984" width="62" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="649" y="1010" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.08</text>
+      </g>
+<g>
+        <rect x="688" y="984" width="62" height="40" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="719" y="1010" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.23</text>
+      </g>
+<g>
+        <rect x="758" y="984" width="62" height="40" rx="8" fill="#FDE68A" stroke="#F58518"/>
+        <text x="789" y="1010" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#7C2D12">0.69</text>
+      </g>
+  </g>
+    <rect x="604" y="1010" width="340" height="44" rx="12" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="774" y="1039" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="23" font-weight="850" fill="#475569">多张关系图并行建模</text>
+    <path d="M540 642L540 704" stroke="#B279A2" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-muted)"/>
+    
+    <rect x="174" y="1170" width="210" height="270" rx="24" fill="#FFFFFF" stroke="#4C78FF" stroke-opacity="0.5" filter="url(#shadow)"/>
+    <text x="279" y="1230" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="900" fill="#4C78FF">head 1</text>
+    <rect x="216" y="1280" width="126" height="126" rx="18" fill="#4C78FF" opacity="0.12"/>
+    <path d="M236 1380 C 269 1324, 300 1324, 332 1380" stroke="#4C78FF" stroke-width="6" fill="none"/>
+  
+
+    <rect x="430" y="1170" width="210" height="270" rx="24" fill="#FFFFFF" stroke="#F58518" stroke-opacity="0.5" filter="url(#shadow)"/>
+    <text x="535" y="1230" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="900" fill="#F58518">head 2</text>
+    <rect x="472" y="1280" width="126" height="126" rx="18" fill="#F58518" opacity="0.12"/>
+    <path d="M492 1380 C 525 1324, 556 1324, 588 1380" stroke="#F58518" stroke-width="6" fill="none"/>
+  
+
+    <rect x="686" y="1170" width="210" height="270" rx="24" fill="#FFFFFF" stroke="#54A24B" stroke-opacity="0.5" filter="url(#shadow)"/>
+    <text x="791" y="1230" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="900" fill="#54A24B">head h</text>
+    <rect x="728" y="1280" width="126" height="126" rx="18" fill="#54A24B" opacity="0.12"/>
+    <path d="M748 1380 C 781 1324, 812 1324, 844 1380" stroke="#54A24B" stroke-width="6" fill="none"/>
+  
+    <rect x="116" y="1482" width="848" height="122" rx="18" fill="#FFF7ED" stroke="#F58518" stroke-opacity="0.35"/>
+    <text x="540" y="1514" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="20" font-weight="950" fill="#9A3412">Conclusion</text>
+    <text x="540" y="1544" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="22" font-weight="950" fill="#7C2D12">Multi-Head Attention（多头注意力）</text>
+    <text x="540" y="1574" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="21" font-weight="900" fill="#7C2D12">不是 fixed experts（固定专家），而是 learned projection subspaces</text>
+    <text x="540" y="1600" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="21" font-weight="900" fill="#7C2D12">（学习到的投影子空间）。</text>
+    <g>
+    <rect x="564" y="1646" width="420" height="50" rx="14" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <text x="774" y="1679" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="21" font-weight="850" fill="#64748B">Source: Harvard Annotated Transformer</text>
+  </g>
+  </svg>

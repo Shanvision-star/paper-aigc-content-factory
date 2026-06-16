@@ -86,6 +86,7 @@ topic.yaml
   -> research-to-claims
   -> script-storyboard-writer (includes Hook Lab)
   -> technical-script-reviewer
+  -> ogilvy-creative-director
   -> script-humanizer-zh
   -> short-video-opening-optimizer
   -> visual-orchestrator
@@ -391,6 +392,7 @@ constraints:
 以下是跨平台内容优化的附加 skill，不替代 8+1 主链路，只在对应门禁前后补充约束：
 
 - `script-humanizer-zh`：可选中文自然化层，必须在 `technical-script-reviewer` 之后、`spoken_text` 锁定之前运行；它借鉴 `humanizer-zh` 的 Chinese-native rhythm、翻译腔清理和术语统一，但不能改变 approved claim、公式、数字或锁定口播。
+- `ogilvy-creative-director`：在 `technical-script-reviewer` 之后、`short-video-opening-optimizer` 和 `frame-spec-writer` 之前运行，建立 `Ogilvy Creative Contract`；它把 Big Idea、headline as mini-ad、facts before decoration、visual hero、proof object、brand consistency 写成可复用创意约束，并补充 research before creative、caption as micro-headline、consumer language、numbered facts、news-style layout、image captions、avoid reverse type、avoid ornate fonts；但不改 claims、不造证据、不替代技术审核。
 - `short-video-opening-optimizer`：在 storyboard/frame lock 前运行，按 Douyin、Xiaohongshu、Bilibili、TikTok、YouTube Shorts、YouTube、X 的平台语境评分 `0-3s` opening hook、visual hook、verbal hook、text overlay、技术可信度和 not clickbait 边界。
 - `voiceover-emotion-coach`：在 `spoken_text` 锁定后、TTS sample-first 前运行，生成跨论文复用的 `delivery_style` 和可选 `engine_emotion_prompt`；默认 `preserve_original_ai_voice`，只做 `low_intensity_prosody`，不改 `source_text`、不改 `spoken_text`、不写字幕、保持 no hidden narration cues，并把听审反馈交给 `workflow-optimizer`。
 - `sound-cue-designer`：在 storyboard/frame lock 和 HyperFrames prompt 前运行，把 opening、QK reveal、Q/K/V card taps、softmax normalization、weighted V aggregation、工程层级切换和 CTA 转成克制的 auditory bookmarks；它不生成音频素材，不改 `spoken_text`，不绕过 ASR transcript diff 或人工听审。
@@ -826,6 +828,34 @@ qa_report.json
 - `verification`：修改后如何证明。
 - `retention_signal`：Hook 相关建议需记录人工保留/划走风险、平台适配问题或首屏可读性问题。
 
+### Task Retrospective Index
+
+新开 episode、重做视频、切换 TTS 引擎或修改 HyperFrames 动画前，必须先读取前序复盘索引，再决定当前任务是代码缺口、文档缺口、验证缺口还是产品边界决策。复盘文档提供上下文和候选改进，不自动等同于已完成主线规则。
+
+默认读取顺序：
+
+1. `episodes/{episode_id}/review/*.md`：人工审核、失败复盘、候选改进。
+2. `episodes/{episode_id}/qa/*.json`：质量门禁、pipeline map、freshness 结果。
+3. `episodes/{episode_id}/video_script/FRAME.md`：单集公式、图表、字幕避让和动画合同。
+4. `docs/visual_system/FRAME.md`：账号级视觉和 HyperFrames 通用硬约束。
+5. README 与本 workflow spec 的 Voiceover、Pronunciation、Ogilvy、Review Before Render、HyperFrames 等 contract。
+
+已索引复盘：
+
+- `episodes/ep03_multi_head_attention/review/ep03_retrospective_indextts2_animation_candidates.md`：EP03 的 IndexTTS2 切换候选、F5 fallback 边界、字幕/英文术语风险、HyperFrames 静态 PPT 化、公式对象、Figure 2 source-backed 资产、箭头/布局/文字溢出等候选沉淀。
+
+### Ogilvy Layout And Typography Discipline
+
+奥美版式规则属于设计硬纪律，不是可选美术风格。后续脚本、字幕、FRAME 和 HyperFrames prompt 必须把可读性放在装饰前面：
+
+- `no reverse type / colored body panels`：正文、字幕、公式说明和图注必须是深色文字配浅色或纸面背景；不要把长正文放在黑色、深色或彩色底板上。
+- `readable type floor`：印刷正文底线参考 9pt，正式解释文本优先不低于 11pt；视频里要按手机观看放大，不允许用小字填满画面。
+- `serif / sans`：长段解释优先高可读衬线 serif 或传统阅读字体；海报、封面、首屏大标题可以用大号无衬线 sans 字体，但同一画面不要混用太多字体、字号和粗细。
+- `leading`：段落之间保留足够行距，复杂信息拆成短段、编号、图标或箭头引导。
+- `avoid all-caps`：英文句子不做 all-caps；技术缩写如 `QKV`、`MHA`、`GQA`、`MQA`、`MoE` 可以保留。
+- `headline-over-image ban`：不要把标题或说明覆盖在论文图、公式、代码截图的关键区域；图片、公式和文字各司其职，图片下方必须有说明。
+- `five-second poster rule`：海报式帧遵守 5 秒规则，元素不超过三类，颜色强烈但干净，主体、论文名或机制名一眼可见。
+
 示例：
 
 ```json
@@ -936,6 +966,8 @@ stages:
       - storyboard/storyboard.json
   - skill: technical-script-reviewer
     output: review/technical_script_review.md
+  - skill: ogilvy-creative-director
+    output: review/creative_direction.md
   - skill: script-humanizer-zh
     output: script/voiceover_humanized.md
   - skill: short-video-opening-optimizer

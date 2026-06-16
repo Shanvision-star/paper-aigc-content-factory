@@ -1,0 +1,376 @@
+[
+  {
+    "episode_id": "ep03_multi_head_attention",
+    "platform": "douyin.zh-CN",
+    "selected_hook_id": "hook_douyin_zh_cn_01",
+    "variants": [
+      {
+        "hook_id": "hook_douyin_zh_cn_01",
+        "pattern": "pain_point",
+        "spoken_line": "如果你一看到 QKV 就断片，先看这 20 秒。",
+        "on_screen_text": "QKV 到底是什么？",
+        "visual_cue": "QKV 卡片快速入场，随后拆成三个可解释元素",
+        "claim_ids": [
+          "c_attention_qkv"
+        ],
+        "risk_flags": [
+          "medium_risk_review_needed"
+        ],
+        "score": {
+          "hook_strength": 9,
+          "clarity": 8,
+          "truthfulness": 8,
+          "platform_fit": 9,
+          "visual_potential": 9
+        }
+      },
+      {
+        "hook_id": "hook_douyin_zh_cn_02",
+        "pattern": "contrarian",
+        "spoken_line": "Transformer 最厉害的不是更大，而是不再一个字一个字读。",
+        "on_screen_text": "不是更大，是读法变了",
+        "visual_cue": "左右对比卡片，错误认知被划掉，正确变化放大",
+        "claim_ids": [
+          "c_attention_reading_shift"
+        ],
+        "risk_flags": [
+          "medium_risk_review_needed"
+        ],
+        "score": {
+          "hook_strength": 8,
+          "clarity": 8,
+          "truthfulness": 8,
+          "platform_fit": 8,
+          "visual_potential": 9
+        }
+      },
+      {
+        "hook_id": "hook_douyin_zh_cn_03",
+        "pattern": "conflict_compare",
+        "spoken_line": "RNN 像排队读句子，Transformer 像全局连线看关系。",
+        "on_screen_text": "RNN vs Transformer",
+        "visual_cue": "两列对比动画，从排队处理切到并行连线",
+        "claim_ids": [
+          "c_transformer_parallelism"
+        ],
+        "risk_flags": [],
+        "score": {
+          "hook_strength": 7,
+          "clarity": 8,
+          "truthfulness": 9,
+          "platform_fit": 7,
+          "visual_potential": 9
+        }
+      }
+    ]
+  },
+  {
+    "episode_id": "ep03_multi_head_attention",
+    "platform": "xiaohongshu.zh-CN",
+    "selected_hook_id": "hook_xiaohongshu_zh_cn_01",
+    "variants": [
+      {
+        "hook_id": "hook_xiaohongshu_zh_cn_01",
+        "pattern": "saveable_summary",
+        "spoken_line": "一张图看懂 QKV 的核心。",
+        "on_screen_text": "一张图看懂 Transformer",
+        "visual_cue": "笔记封面式大标题和三点清单",
+        "claim_ids": [
+          "c_attention_core"
+        ],
+        "risk_flags": [],
+        "score": {
+          "hook_strength": 8,
+          "clarity": 8,
+          "truthfulness": 9,
+          "platform_fit": 9,
+          "visual_potential": 9
+        }
+      },
+      {
+        "hook_id": "hook_xiaohongshu_zh_cn_02",
+        "pattern": "learning_pain",
+        "spoken_line": "终于有人把 QKV 讲成人话了。",
+        "on_screen_text": "QKV 讲成人话",
+        "visual_cue": "复杂公式淡出，换成卡片解释",
+        "claim_ids": [
+          "c_attention_qkv"
+        ],
+        "risk_flags": [],
+        "score": {
+          "hook_strength": 7,
+          "clarity": 8,
+          "truthfulness": 9,
+          "platform_fit": 8,
+          "visual_potential": 9
+        }
+      },
+      {
+        "hook_id": "hook_xiaohongshu_zh_cn_03",
+        "pattern": "note_summary",
+        "spoken_line": "读 Attention Is All You Need，我只抓这 5 个点。",
+        "on_screen_text": "5 个关键点",
+        "visual_cue": "论文标题页切到收藏型笔记目录",
+        "claim_ids": [
+          "c_paper_summary"
+        ],
+        "risk_flags": [],
+        "score": {
+          "hook_strength": 7,
+          "clarity": 8,
+          "truthfulness": 9,
+          "platform_fit": 7,
+          "visual_potential": 9
+        }
+      }
+    ]
+  },
+  {
+    "episode_id": "ep03_multi_head_attention",
+    "platform": "bilibili.zh-CN",
+    "selected_hook_id": "hook_bilibili_zh_cn_01",
+    "variants": [
+      {
+        "hook_id": "hook_bilibili_zh_cn_01",
+        "pattern": "authority_anchor",
+        "spoken_line": "2017 年这篇论文，改写了后来的 AI 架构。",
+        "on_screen_text": "2017：Transformer 诞生",
+        "visual_cue": "论文标题和时间线入场",
+        "claim_ids": [
+          "c_transformer_impact"
+        ],
+        "risk_flags": [],
+        "score": {
+          "hook_strength": 8,
+          "clarity": 8,
+          "truthfulness": 9,
+          "platform_fit": 9,
+          "visual_potential": 9
+        }
+      },
+      {
+        "hook_id": "hook_bilibili_zh_cn_02",
+        "pattern": "question_agenda",
+        "spoken_line": "Attention Is All You Need 到底解决了什么问题？",
+        "on_screen_text": "它解决了什么问题？",
+        "visual_cue": "问题卡片进入，随后展开三段式议程",
+        "claim_ids": [
+          "c_paper_problem"
+        ],
+        "risk_flags": [],
+        "score": {
+          "hook_strength": 7,
+          "clarity": 8,
+          "truthfulness": 9,
+          "platform_fit": 8,
+          "visual_potential": 9
+        }
+      },
+      {
+        "hook_id": "hook_bilibili_zh_cn_03",
+        "pattern": "structure_preview",
+        "spoken_line": "这一集只回答三个问题：它解决什么问题、Attention 怎么工作、为什么影响大模型。",
+        "on_screen_text": "3 个问题讲清楚",
+        "visual_cue": "三张章节卡片依次出现",
+        "claim_ids": [
+          "c_paper_problem"
+        ],
+        "risk_flags": [],
+        "score": {
+          "hook_strength": 7,
+          "clarity": 8,
+          "truthfulness": 9,
+          "platform_fit": 7,
+          "visual_potential": 9
+        }
+      }
+    ]
+  },
+  {
+    "episode_id": "ep03_multi_head_attention",
+    "platform": "youtube-shorts.en-US",
+    "selected_hook_id": "hook_youtube_shorts_en_us_01",
+    "variants": [
+      {
+        "hook_id": "hook_youtube_shorts_en_us_01",
+        "pattern": "result_first",
+        "spoken_line": "Every modern LLM owes something to this 2017 paper.",
+        "on_screen_text": "The paper behind modern LLMs",
+        "visual_cue": "Abstract LLM blocks connect back to the 2017 paper card",
+        "claim_ids": [
+          "c_transformer_impact"
+        ],
+        "risk_flags": [],
+        "score": {
+          "hook_strength": 9,
+          "clarity": 8,
+          "truthfulness": 9,
+          "platform_fit": 9,
+          "visual_potential": 9
+        }
+      },
+      {
+        "hook_id": "hook_youtube_shorts_en_us_02",
+        "pattern": "contrarian",
+        "spoken_line": "Transformer did not just make models bigger. It changed how models read.",
+        "on_screen_text": "Not bigger. Different reading.",
+        "visual_cue": "A crossed-out misconception flips into the correct model-reading shift",
+        "claim_ids": [
+          "c_attention_reading_shift"
+        ],
+        "risk_flags": [
+          "medium_risk_review_needed"
+        ],
+        "score": {
+          "hook_strength": 8,
+          "clarity": 8,
+          "truthfulness": 8,
+          "platform_fit": 8,
+          "visual_potential": 9
+        }
+      },
+      {
+        "hook_id": "hook_youtube_shorts_en_us_03",
+        "pattern": "visual_promise",
+        "spoken_line": "I will explain Q, K, and V with one animated diagram.",
+        "on_screen_text": "One animated diagram",
+        "visual_cue": "Blank canvas builds an attention diagram node by node",
+        "claim_ids": [
+          "c_attention_core"
+        ],
+        "risk_flags": [],
+        "score": {
+          "hook_strength": 7,
+          "clarity": 8,
+          "truthfulness": 9,
+          "platform_fit": 7,
+          "visual_potential": 9
+        }
+      }
+    ]
+  },
+  {
+    "episode_id": "ep03_multi_head_attention",
+    "platform": "youtube-long.en-US",
+    "selected_hook_id": "hook_youtube_long_en_us_01",
+    "variants": [
+      {
+        "hook_id": "hook_youtube_long_en_us_01",
+        "pattern": "authority_anchor",
+        "spoken_line": "This 2017 paper changed how modern AI models are built.",
+        "on_screen_text": "The 2017 Transformer paper",
+        "visual_cue": "Paper card enters over a timeline of modern AI models",
+        "claim_ids": [
+          "c_transformer_impact"
+        ],
+        "risk_flags": [],
+        "score": {
+          "hook_strength": 8,
+          "clarity": 8,
+          "truthfulness": 9,
+          "platform_fit": 9,
+          "visual_potential": 9
+        }
+      },
+      {
+        "hook_id": "hook_youtube_long_en_us_02",
+        "pattern": "question_agenda",
+        "spoken_line": "What problem did Attention Is All You Need actually solve?",
+        "on_screen_text": "What did it solve?",
+        "visual_cue": "Question card opens into a three-step agenda",
+        "claim_ids": [
+          "c_paper_problem"
+        ],
+        "risk_flags": [],
+        "score": {
+          "hook_strength": 7,
+          "clarity": 8,
+          "truthfulness": 9,
+          "platform_fit": 8,
+          "visual_potential": 9
+        }
+      },
+      {
+        "hook_id": "hook_youtube_long_en_us_03",
+        "pattern": "structure_preview",
+        "spoken_line": "This episode answers three questions: what problem it solved, how attention works, and why it shaped modern LLMs.",
+        "on_screen_text": "Three questions",
+        "visual_cue": "Three chapter cards appear in sequence",
+        "claim_ids": [
+          "c_paper_problem"
+        ],
+        "risk_flags": [],
+        "score": {
+          "hook_strength": 7,
+          "clarity": 8,
+          "truthfulness": 9,
+          "platform_fit": 7,
+          "visual_potential": 9
+        }
+      }
+    ]
+  },
+  {
+    "episode_id": "ep03_multi_head_attention",
+    "platform": "x.en-US",
+    "selected_hook_id": "hook_x_en_us_01",
+    "variants": [
+      {
+        "hook_id": "hook_x_en_us_01",
+        "pattern": "bold_claim",
+        "spoken_line": "Attention did not just scale AI. It changed how models read.",
+        "on_screen_text": "Attention changed reading",
+        "visual_cue": "Bold claim text appears with a reading-path animation",
+        "claim_ids": [
+          "c_attention_reading_shift"
+        ],
+        "risk_flags": [
+          "medium_risk_review_needed"
+        ],
+        "score": {
+          "hook_strength": 9,
+          "clarity": 8,
+          "truthfulness": 8,
+          "platform_fit": 9,
+          "visual_potential": 9
+        }
+      },
+      {
+        "hook_id": "hook_x_en_us_02",
+        "pattern": "visual_summary",
+        "spoken_line": "The shortest visual explanation of Q, K, and V.",
+        "on_screen_text": "Q, K, V in one diagram",
+        "visual_cue": "Q/K/V cards align into the attention output",
+        "claim_ids": [
+          "c_attention_qkv"
+        ],
+        "risk_flags": [],
+        "score": {
+          "hook_strength": 8,
+          "clarity": 8,
+          "truthfulness": 9,
+          "platform_fit": 8,
+          "visual_potential": 9
+        }
+      },
+      {
+        "hook_id": "hook_x_en_us_03",
+        "pattern": "thread_lead_in",
+        "spoken_line": "One diagram for the paper behind modern transformers.",
+        "on_screen_text": "One diagram for Transformers",
+        "visual_cue": "Center-safe diagram thumbnail expands from the middle",
+        "claim_ids": [
+          "c_transformer_impact"
+        ],
+        "risk_flags": [],
+        "score": {
+          "hook_strength": 7,
+          "clarity": 8,
+          "truthfulness": 9,
+          "platform_fit": 7,
+          "visual_potential": 9
+        }
+      }
+    ]
+  }
+]

@@ -81,6 +81,36 @@ function ep02AssetContractMissingInputs(episodeDir: string): string[] {
   return missing;
 }
 
+function ep03AssetContractMissingInputs(episodeDir: string): string[] {
+  if (path.basename(episodeDir) !== "ep03_multi_head_attention") {
+    return [];
+  }
+
+  const required = [
+    "video_script/FRAME.md",
+    "video_script/hyperframes_prompt.md",
+    "visuals/assets_manifest.json",
+    "qa/animation_review_stills/kf_01_hook.png",
+    "qa/animation_review_stills/kf_01_hook.svg",
+    "qa/animation_review_stills/kf_02_projection.png",
+    "qa/animation_review_stills/kf_02_projection.svg",
+    "qa/animation_review_stills/kf_03_head_formula.png",
+    "qa/animation_review_stills/kf_03_head_formula.svg",
+    "qa/animation_review_stills/kf_04_parallel_heads.png",
+    "qa/animation_review_stills/kf_04_parallel_heads.svg",
+    "qa/animation_review_stills/kf_05_concat_wo.png",
+    "qa/animation_review_stills/kf_05_concat_wo.svg",
+    "qa/animation_review_stills/kf_06_dimension_split.png",
+    "qa/animation_review_stills/kf_06_dimension_split.svg",
+    "qa/animation_review_stills/kf_07_figure2.png",
+    "qa/animation_review_stills/kf_07_figure2.svg",
+    "qa/animation_review_stills/kf_08_engineering.png",
+    "qa/animation_review_stills/kf_08_engineering.svg"
+  ];
+
+  return required.filter((relativePath) => !fs.existsSync(path.join(episodeDir, relativePath)));
+}
+
 function requiredInputs(episodeDir: string): string[] {
   const inputs = [
     "storyboard/storyboard.json",
@@ -94,7 +124,8 @@ function requiredInputs(episodeDir: string): string[] {
 
   return [
     ...inputs.filter((relativePath) => !fs.existsSync(path.join(episodeDir, relativePath))),
-    ...ep02AssetContractMissingInputs(episodeDir)
+    ...ep02AssetContractMissingInputs(episodeDir),
+    ...ep03AssetContractMissingInputs(episodeDir)
   ];
 }
 
@@ -233,6 +264,10 @@ function ep02SqrtDkHtml(extraClass = ""): string {
 
 function cssClassToken(value: string): string {
   return value.replace(/[^A-Za-z0-9_-]+/g, "-");
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function ep02FormulaObject(): string {
@@ -468,6 +503,83 @@ function ep02VisualHtml(scene: StoryboardSceneWithAssets, assetMap: Map<string, 
   </div>`;
 }
 
+function ep03ReviewFramePath(scene: StoryboardSceneWithAssets): string {
+  const type = scene.visual_type;
+
+  if (type.includes("hook_one_to_many")) return "qa/animation_review_stills/kf_01_hook.png";
+  if (type.includes("projection_subspace")) return "qa/animation_review_stills/kf_02_projection.png";
+  if (type.includes("formula_head")) return "qa/animation_review_stills/kf_03_head_formula.png";
+  if (type.includes("misconception") || type.includes("learned_patterns")) return "qa/animation_review_stills/kf_04_parallel_heads.png";
+  if (type.includes("concat_to_wo")) return "qa/animation_review_stills/kf_05_concat_wo.png";
+  if (type.includes("dimension_split")) return "qa/animation_review_stills/kf_06_dimension_split.png";
+  if (type.includes("paper_figure2")) return "qa/animation_review_stills/kf_07_figure2.png";
+  if (type.includes("engineering_boundary")) return "qa/animation_review_stills/kf_08_engineering.png";
+  if (type.includes("feynman_summary")) return "qa/animation_review_stills/kf_05_concat_wo.png";
+
+  return "qa/animation_review_stills/kf_01_hook.png";
+}
+
+function ep03InlineSvg(svg: string, scene: StoryboardSceneWithAssets): string {
+  const prefix = `ep03-${cssClassToken(scene.scene_id)}`;
+  const ids = Array.from(svg.matchAll(/\bid="([^"]+)"/g), (match) => match[1]);
+  let scoped = svg;
+
+  for (const id of ids) {
+    const escapedId = escapeRegExp(id);
+    scoped = scoped
+      .replace(new RegExp(`id="${escapedId}"`, "g"), `id="${prefix}-${id}"`)
+      .replace(new RegExp(`url\\(#${escapedId}\\)`, "g"), `url(#${prefix}-${id})`)
+      .replace(new RegExp(`href="#${escapedId}"`, "g"), `href="#${prefix}-${id}"`);
+  }
+
+  return scoped.replace(
+    "<svg ",
+    `<svg class="ep03-frame-svg" data-frame-id="${escapeHtml(scene.scene_id)}" aria-hidden="true" focusable="false" `
+  );
+}
+
+function ep03MotionLayer(scene: StoryboardSceneWithAssets): string {
+  const motionClass = `ep03-motion-${cssClassToken(scene.visual_type)}`;
+
+  return `<div class="ep03-motion-layer ${motionClass}" aria-hidden="true">
+    <span class="ep03-motion-scan"></span>
+    <span class="ep03-focus-line ep03-focus-line-top"></span>
+    <span class="ep03-focus-line ep03-focus-line-mid"></span>
+    <span class="ep03-pulse ep03-pulse-one"></span>
+    <span class="ep03-pulse ep03-pulse-two"></span>
+  </div>`;
+}
+
+function ep03VisualHtml(scene: StoryboardSceneWithAssets, projectDir: string, episodeDir: string): string {
+  const reviewFrame = ep03ReviewFramePath(scene);
+  const assetPath = path.join(episodeDir, reviewFrame);
+  const svgAssetPath = assetPath.replace(/\.png$/i, ".svg");
+
+  if (!fs.existsSync(assetPath) && !fs.existsSync(svgAssetPath)) {
+    return `<div class="ep03-missing-frame">
+      <strong>Missing EP03 review frame</strong>
+      <span>${escapeHtml(reviewFrame)}</span>
+    </div>`;
+  }
+
+  if (fs.existsSync(svgAssetPath)) {
+    const svg = ep03InlineSvg(fs.readFileSync(svgAssetPath, "utf8"), scene);
+
+    return `<div class="ep03-frame-proof ep03-frame-proof-svg" role="img" aria-label="${escapeHtml(scene.caption)}">
+      ${svg}
+      ${ep03MotionLayer(scene)}
+    </div>`;
+  }
+
+  const mediaFileName = `${scene.scene_id}_${path.basename(reviewFrame)}`;
+  const mediaSrc = projectMediaSrc(projectDir, assetPath, mediaFileName);
+
+  return `<div class="ep03-frame-proof" role="img" aria-label="${escapeHtml(scene.caption)}">
+    <img class="ep03-frame-image" src="${mediaSrc}" alt="${escapeHtml(scene.caption)}"/>
+    ${ep03MotionLayer(scene)}
+  </div>`;
+}
+
 function fallbackVisualHtml(scene: StoryboardSceneWithAssets): string {
   const type = scene.visual_type;
   const formula = formulaBlock();
@@ -583,6 +695,10 @@ function visualHtml(scene: StoryboardSceneWithAssets, assetMap: Map<string, Visu
     return ep02VisualHtml(scene, assetMap);
   }
 
+  if (topicMeta.episodeId === "ep03_multi_head_attention" && fs.existsSync(path.join(episodeDir, "video_script/FRAME.md"))) {
+    return ep03VisualHtml(scene, projectDir, episodeDir);
+  }
+
   const asset = scene.assets
     ?.map((assetId) => assetMap.get(assetId))
     .find((candidate) => candidate && (candidate.kind === "diagram" || candidate.kind === "formula") && fs.existsSync(path.join(episodeDir, candidate.path)));
@@ -599,7 +715,18 @@ function visualHtml(scene: StoryboardSceneWithAssets, assetMap: Map<string, Visu
 
 function sceneHtml(scene: StoryboardSceneWithAssets, index: number, assetMap: Map<string, VisualAsset>, projectDir: string, episodeDir: string, topicMeta: TopicRenderMeta): string {
   const isEp02 = topicMeta.episodeId === "ep02_attention_qkv";
+  const isEp03 = topicMeta.episodeId === "ep03_multi_head_attention";
   const assetFrameClass = isEp02 ? ` ep02-asset-${cssClassToken(scene.visual_type)}` : "";
+
+  if (isEp03) {
+    return `
+      <section id="scene-${escapeHtml(scene.scene_id)}" class="scene scene-${index + 1} ep03-scene">
+        <div class="ep03-scene-content">
+          ${visualHtml(scene, assetMap, projectDir, episodeDir, topicMeta)}
+        </div>
+      </section>`;
+  }
+
   return `
       <section id="scene-${escapeHtml(scene.scene_id)}" class="scene scene-${index + 1}${isEp02 ? " ep02-scene" : ""}">
         <div class="scene-content">
@@ -679,6 +806,103 @@ function compositionHtml(episodeDir: string, projectDir: string, topicMeta: Topi
       inset: 42px;
       border: 1px solid rgba(160, 160, 160, 0.18);
       pointer-events: none;
+    }
+    .ep03-scene {
+      background: #F7F7F5;
+    }
+    .ep03-scene::before,
+    .ep03-scene::after {
+      content: none;
+    }
+    .ep03-scene-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #F7F7F5;
+    }
+    .ep03-frame-proof {
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      background: #F7F7F5;
+    }
+    .ep03-frame-image {
+      display: block;
+      width: 1080px;
+      height: 1920px;
+      object-fit: cover;
+      object-position: center center;
+    }
+    .ep03-frame-proof-svg {
+      position: relative;
+    }
+    .ep03-frame-svg {
+      display: block;
+      width: 1080px;
+      height: 1920px;
+      transform-origin: center center;
+      will-change: transform, opacity;
+    }
+    .ep03-motion-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .ep03-motion-scan {
+      position: absolute;
+      left: 74px;
+      top: 470px;
+      width: 932px;
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(76, 120, 255, 0.34), rgba(178, 121, 162, 0.32), transparent);
+      transform-origin: left center;
+      opacity: 0;
+    }
+    .ep03-focus-line {
+      position: absolute;
+      left: 122px;
+      width: 836px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(76, 120, 255, 0.0), rgba(76, 120, 255, 0.28), rgba(245, 133, 24, 0.24), rgba(84, 162, 75, 0.0));
+      transform-origin: left center;
+      opacity: 0;
+    }
+    .ep03-focus-line-top { top: 520px; }
+    .ep03-focus-line-mid { top: 1160px; }
+    .ep03-pulse {
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      border-radius: 999px;
+      border: 3px solid rgba(178, 121, 162, 0.18);
+      box-shadow: 0 0 0 12px rgba(178, 121, 162, 0.05);
+      opacity: 0;
+    }
+    .ep03-pulse-one {
+      left: 696px;
+      top: 790px;
+    }
+    .ep03-pulse-two {
+      left: 196px;
+      top: 1110px;
+      border-color: rgba(76, 120, 255, 0.18);
+      box-shadow: 0 0 0 12px rgba(76, 120, 255, 0.05);
+    }
+    .ep03-missing-frame {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      gap: 20px;
+      padding: 80px;
+      text-align: center;
+      color: #E45756;
+      font: 900 38px Arial, sans-serif;
     }
     .scene-content {
       position: relative;
@@ -1733,6 +1957,7 @@ ${scenes}
     window.__timelines = window.__timelines || {};
     var sceneMeta = ${sceneMeta};
     var isEp02 = ${topicMeta.episodeId === "ep02_attention_qkv" ? "true" : "false"};
+    var isEp03 = ${topicMeta.episodeId === "ep03_multi_head_attention" ? "true" : "false"};
     var tl = gsap.timeline({ paused: true });
     sceneMeta.forEach(function(scene, index) {
       var selector = "#scene-" + scene.id;
@@ -1748,6 +1973,33 @@ ${scenes}
       tl.from(selector + " .asset-frame", { y: 58, scale: 0.975, opacity: 0, duration: 0.65, ease: "back.out(1.2)", overwrite: "auto" }, start + 0.42);
       tl.from(selector + " .voice", { y: 36, opacity: 0, duration: 0.5, ease: "sine.out", overwrite: "auto" }, start + 0.64);
       tl.from(selector + " .meta", { y: 22, opacity: 0, duration: 0.4, ease: "power1.out", overwrite: "auto" }, start + 0.82);
+      if (isEp03) {
+        var svgSelector = selector + " .ep03-frame-svg";
+        var imageSelector = selector + " .ep03-frame-image";
+        tl.from(selector + " .ep03-frame-proof", { y: 18, scale: 0.992, opacity: 0, duration: 0.62, ease: "power2.out", overwrite: "auto" }, start + 0.08);
+        tl.from(svgSelector + " > text", { y: 16, opacity: 0, duration: 0.42, stagger: 0.035, ease: "power3.out", overwrite: "auto" }, start + 0.22);
+        tl.from(svgSelector + " > g", { y: 24, opacity: 0, duration: 0.5, stagger: 0.055, ease: "power2.out", overwrite: "auto" }, start + 0.42);
+        tl.from(svgSelector + " image", { y: 18, scale: 0.985, opacity: 0, transformOrigin: "center center", duration: 0.52, stagger: 0.08, ease: "power2.out", overwrite: "auto" }, start + 0.56);
+        tl.from(imageSelector, { scale: 1.018, opacity: 0, duration: 0.55, ease: "power2.out", overwrite: "auto" }, start + 0.16);
+        tl.to(svgSelector + ", " + imageSelector, { scale: 1.004, duration: Math.max(0.8, scene.duration - 0.95), ease: "none", overwrite: "auto" }, start + 0.9);
+        var arrows = gsap.utils.toArray(selector + " .ep03-frame-svg path[marker-end]");
+        arrows.forEach(function(pathEl, pathIndex) {
+          var length = 160;
+          try {
+            length = pathEl.getTotalLength ? pathEl.getTotalLength() : 160;
+          } catch (_error) {
+            length = 160;
+          }
+          gsap.set(pathEl, { strokeDasharray: length, strokeDashoffset: length, opacity: 1 });
+          tl.to(pathEl, { strokeDashoffset: 0, duration: 0.58, ease: "power2.out", overwrite: "auto" }, start + 0.78 + pathIndex * 0.045);
+        });
+        tl.fromTo(selector + " .ep03-motion-scan", { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.44, ease: "power2.out", overwrite: "auto" }, start + 0.68);
+        tl.to(selector + " .ep03-motion-scan", { opacity: 0, duration: 0.45, ease: "sine.out", overwrite: "auto" }, start + 1.28);
+        tl.fromTo(selector + " .ep03-focus-line", { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 0.72, duration: 0.5, stagger: 0.08, ease: "power2.out", overwrite: "auto" }, start + 0.92);
+        tl.to(selector + " .ep03-focus-line", { opacity: 0, duration: 0.42, ease: "sine.out", overwrite: "auto" }, start + 2.05);
+        tl.fromTo(selector + " .ep03-pulse", { scale: 0.72, opacity: 0 }, { scale: 1.1, opacity: 0.62, duration: 0.42, stagger: 0.12, ease: "power2.out", overwrite: "auto" }, start + 1.18);
+        tl.to(selector + " .ep03-pulse", { scale: 1.34, opacity: 0, duration: 0.95, stagger: 0.1, ease: "sine.out", overwrite: "auto" }, start + 1.62);
+      }
       if (isEp02) {
         tl.from(selector + " .ep02-graph-svg, " + selector + " .ep02-formula-object, " + selector + " .ep02-projection-layout, " + selector + " .ep02-softmax-layout, " + selector + " .ep02-cache-layout, " + selector + " .ep02-optimization-layout, " + selector + " .ep02-summary-layout, " + selector + " .ep02-cta-layout", { y: 28, opacity: 0, duration: 0.55, ease: "power2.out", overwrite: "auto" }, start + 0.54);
         tl.from(selector + " .edge-path", { opacity: 0, scale: 0.92, transformOrigin: "center center", duration: 0.5, stagger: 0.08, ease: "sine.out", overwrite: "auto" }, start + 0.75);

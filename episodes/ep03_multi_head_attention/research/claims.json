@@ -1,0 +1,45 @@
+{
+  "status": "draft_source_backed",
+  "episode_id": "ep03_multi_head_attention",
+  "claims": [
+    {
+      "claim_id": "ep03_claim_projection_subspaces",
+      "claim": "Multi-Head Attention applies learned projections so each head attends from a different representation subspace.",
+      "sources": [
+        "vaswani_2017_attention",
+        "harvard_annotated_transformer"
+      ]
+    },
+    {
+      "claim_id": "ep03_claim_head_formula",
+      "claim": "Each head can be written as head_i = Attention(QW_i^Q, KW_i^K, VW_i^V).",
+      "sources": [
+        "vaswani_2017_attention",
+        "harvard_annotated_transformer"
+      ]
+    },
+    {
+      "claim_id": "ep03_claim_concat_wo",
+      "claim": "The outputs of multiple heads are concatenated and then projected with W^O.",
+      "sources": [
+        "vaswani_2017_attention",
+        "harvard_annotated_transformer"
+      ]
+    },
+    {
+      "claim_id": "ep03_claim_dimension_split",
+      "claim": "In the original model, d_k and d_v are set to d_model divided by the number of heads.",
+      "sources": [
+        "vaswani_2017_attention"
+      ]
+    },
+    {
+      "claim_id": "ep03_claim_engineering_boundary",
+      "claim": "MQA/GQA, FlashAttention, KV Cache, and MoE belong to different engineering layers and should not be described as the same mechanism.",
+      "sources": [
+        "harvard_annotated_transformer"
+      ],
+      "note": "Modern engineering boundary is an explanatory extension; it should be presented as a system-layer distinction, not as an original 2017 paper claim."
+    }
+  ]
+}

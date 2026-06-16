@@ -39,7 +39,45 @@ This file translates `docs/visual_system/DESIGN.md` into camera-ready frame rule
 - Dense formula notation uses zoom, staged reveal, or callouts instead of shrinking below readability.
 - Eyebrow labels and source captions can be smaller only when they are not required to understand the beat.
 
+## Technical Terminology In Conclusion Cards
+
+- Conclusion cards and recap cards must keep professional terms in English first, with Chinese only as a parenthetical explanation.
+- Preferred format: `English Term（中文注释）`.
+- Do not replace key concepts with Chinese-only wording when the frame is summarizing a technical mechanism.
+- Examples: `Multi-Head Attention（多头注意力）`, `learned projection subspaces（学习到的投影子空间）`, `cost center（成本中心）`, `optimization layer（优化层）`.
+
 ## Frame Treatments
+
+## Ogilvy Creative Contract
+
+Every episode frame should support one memorable advertising idea without weakening research accuracy. Use `ogilvy-creative-director` before locking the episode frame contract when the hook, cover, first screen, or storyboard lacks a clear creative promise.
+
+- Big Idea: the frame system must preserve one dominant learning promise across cover, opening, key diagrams, recap, and CTA.
+- headline as mini-ad: title cards, cover lines, and first-screen text must read like a compact promise, not a generic section label.
+- facts before decoration: motion, glow, texture, sound cue, and layout choices must come after the claim, source, formula, or paper figure is clear.
+- visual hero: every hook and major scene needs one primary inspectable object; supporting badges, lines, captions, and particles remain secondary.
+- proof object: claims should be grounded by a visible paper figure, formula, code snippet, benchmark, source-backed diagram, or explicit citation object.
+- brand consistency: recurring series typography, caption bands, source labels, proof-object treatment, and cover hierarchy should stay recognizable across episodes and platform variants.
+- research before creative: visual direction starts from the paper, competing explanations, platform behavior, and audience vocabulary, not from a style preset.
+- caption as micro-headline: each 5-8 second subtitle or overlay caption should carry a complete mechanism, new information, or viewer benefit.
+- consumer language: first-screen and callout text should name the viewer's problem in plain words before showing formal notation.
+- numbered facts: use numbered proof cards when a scene needs several factual reasons, comparisons, or engineering implications.
+- news-style layout: prefer a clear editorial layout with readable hierarchy, source labels, and proof objects instead of decorative clutter.
+- image captions: paper figures, formula crops, code screenshots, and benchmark images need short captions that explain what the viewer is seeing.
+- avoid reverse type: do not put long load-bearing paragraphs in white text on black backgrounds; use protected readable text surfaces when the scene is dark.
+- avoid ornate fonts: avoid decorative, novelty, or low-legibility fonts for titles, subtitles, formulas, labels, and image captions.
+
+## Ogilvy Layout And Typography Hard Gate
+
+- Load-bearing text uses dark ink on a light paper or white surface. Do not use reverse type for body text, subtitles, formula explanations, or image captions.
+- Do not put long text on black, dark, saturated, or decorative colored panels. Colored accents can identify Q/K/V or steps, but the reading surface stays light.
+- Body and explanatory text must stay above the readability floor: print baseline is `9pt` minimum and `11pt` preferred; phone-video text must be visibly larger than that baseline.
+- Long explanations prefer a high-readability serif or traditional reading face. Poster-like hook frames may use large sans-serif type, but not dense sans-serif paragraphs.
+- Keep one type system per frame. Avoid unnecessary mixing of font families, font sizes, and weights; hierarchy should come from spacing, ordering, and one clear visual hero.
+- Paragraphs need enough leading and separation. Use short paragraphs, numbered facts, icons, arrows, or proof cards instead of dense continuous copy.
+- Avoid all-caps sentences in English. Necessary technical abbreviations such as `QKV`, `MHA`, `GQA`, `MQA`, and `MoE` are allowed.
+- Do not place headlines, captions, or explanatory text over important paper figures, formulas, code, axes, or matrix cells. Put explanations beside or below the proof object with padding.
+- Poster or cover-like frames must pass a five-second readability rule: no more than three element types, clean strong colors on a light field, and the paper name or mechanism name visible at a glance.
 
 ### Hook Title
 
