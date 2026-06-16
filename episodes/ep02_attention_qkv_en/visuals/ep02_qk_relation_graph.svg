@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="860" viewBox="0 0 1400 860" role="img" aria-label="Q to K relation graph">
+  <rect width="1400" height="860" rx="36" fill="#FFFDF8"/>
+  <defs>
+    <marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="30" markerHeight="30" refX="24" refY="15" orient="auto">
+      <path d="M 3 5 L 24 15 L 3 25 z" fill="#4C78FF"/>
+    </marker>
+  </defs>
+  <g stroke="#4C78FF" stroke-width="9" stroke-linecap="round" marker-end="url(#arrow)" fill="none">
+    <path d="M 616 352 C 482 258, 360 202, 286 180"/>
+    <path d="M 784 352 C 930 248, 1068 182, 1154 176"/>
+    <path d="M 614 468 C 474 562, 360 630, 284 674"/>
+    <path d="M 786 468 C 930 572, 1068 658, 1154 704"/>
+  </g>
+  <g font-family="Arial, Microsoft YaHei, sans-serif" font-size="34" font-weight="900" text-anchor="middle">
+    <circle cx="210" cy="170" r="78" fill="#F58518"/><text x="210" y="184" fill="#FFFFFF">K1</text>
+    <circle cx="1230" cy="170" r="78" fill="#B279A2"/><text x="1230" y="184" fill="#FFFFFF">K2</text>
+    <circle cx="210" cy="700" r="78" fill="#54A24B"/><text x="210" y="714" fill="#FFFFFF">K3</text>
+    <circle cx="1230" cy="710" r="78" fill="#F58518"/><text x="1230" y="724" fill="#FFFFFF">Kn</text>
+  </g>
+  <circle cx="700" cy="410" r="104" fill="#1B2A41"/>
+  <text x="700" y="396" font-family="Arial, Microsoft YaHei, sans-serif" font-size="34" font-weight="900" text-anchor="middle" fill="#FFFFFF">当前 token</text>
+  <text x="700" y="440" font-family="Consolas, monospace" font-size="30" font-weight="800" text-anchor="middle" fill="#DBEAFE">Q_i</text>
+  <text x="120" y="798" font-family="Arial, Microsoft YaHei, sans-serif" font-size="32" font-weight="800" fill="#1C1C1C">soft adjacency matrix: 每一层动态生成的加权关系</text>
+</svg>

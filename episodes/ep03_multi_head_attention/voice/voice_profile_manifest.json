@@ -1,0 +1,24 @@
+{
+  "voice_profile_id": "rome_personal_zh_v1",
+  "owner": "user_self",
+  "consent_audio": "voice/enrollment/consent.wav",
+  "reference_audio": [
+    "voice/enrollment/reference_neutral_f5_8s.wav"
+  ],
+  "allowed_use": [
+    "personal_ai_paper_voiceover"
+  ],
+  "default_engine": "f5_tts_local_segmented",
+  "fallback_engine": "indextts2_local_segmented_after_user_approval",
+  "baseline_episode": "ep02_attention_qkv",
+  "baseline_audio": "episodes/ep02_attention_qkv/audio/voiceover.postprocessed.wav",
+  "status": "audio_ready",
+  "generated_at": "1970-01-01T00:00:00.000Z",
+  "provider_calls": false,
+  "tts_calls": false,
+  "notes": [
+    "EP03 should keep the same personal timbre baseline as EP02.",
+    "Use neutral reference audio only; do not use topic-specific reference text.",
+    "Representative samples must pass English-term clarity, duplicate, reference-leakage, and segment-continuity review before full generation."
+  ]
+}

@@ -143,6 +143,8 @@ export function applySegmentAudioTimings(topicPath: string, options: ApplyTiming
   const episodeDir = episodeDirFromTopicPath(topicPath, rootDir);
   const reportRelativePath = options.reportRelativePath ?? "audio/f5_tts/segments/segmented_merge_report.json";
   const reportPath = path.join(episodeDir, reportRelativePath);
+  const reportDir = path.dirname(reportRelativePath).replace(/\\/g, "/");
+  const engineAudioDir = path.dirname(reportDir).replace(/\\/g, "/");
   const formalStoryboardPath = path.join(episodeDir, "video_script/storyboard.json");
   const formalVoiceoverPath = path.join(episodeDir, "video_script/douyin_voiceover.md");
 
@@ -173,7 +175,7 @@ export function applySegmentAudioTimings(topicPath: string, options: ApplyTiming
   writeText(path.join(episodeDir, "script/voiceover.md"), markdown);
   writeJson(path.join(episodeDir, "storyboard/storyboard.json"), runtimeScenes);
   writeText(
-    path.join(episodeDir, "audio/f5_tts/full_voiceover_zh_v1.txt"),
+    path.join(episodeDir, engineAudioDir, "full_voiceover_zh_v1.txt"),
     `${timedScenes.map((scene) => scene.voiceover).join("\n\n")}\n`
   );
   writeJson(path.join(episodeDir, "video_script/timing_report.json"), {

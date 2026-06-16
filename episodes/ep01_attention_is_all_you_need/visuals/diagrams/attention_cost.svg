@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; }
+      .panel { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 3; }
+      .muted { fill: #94a3b8; font-family: Arial, "Microsoft YaHei", sans-serif; }
+      .text { fill: #f8fafc; font-family: Arial, "Microsoft YaHei", sans-serif; font-weight: 700; }
+      .dark { fill: #0f172a; font-family: Arial, "Microsoft YaHei", sans-serif; font-weight: 700; }
+      .small { font-size: 30px; }
+      .medium { font-size: 44px; }
+      .large { font-size: 64px; }
+      .accent { fill: #f59e0b; }
+      .blue { fill: #38bdf8; }
+      .green { fill: #34d399; }
+      .pink { fill: #fb7185; }
+      .line { stroke: #38bdf8; stroke-width: 5; fill: none; stroke-linecap: round; }
+      .softline { stroke: #94a3b8; stroke-width: 3; fill: none; stroke-linecap: round; opacity: .65; }
+      .hotline { stroke: #f59e0b; stroke-width: 8; fill: none; stroke-linecap: round; }
+      .token { fill: #1e293b; stroke: #38bdf8; stroke-width: 3; }
+    </style>
+  </defs>
+  <rect class="bg" width="1080" height="1920"/>
+  <text x="80" y="128" class="text large">Attention Cost</text>
+  
+  <text x="120" y="360" class="text medium">所有 token 互相对话：</text>
+  <text x="120" y="450" class="text large">关系数量快速增长</text>
+  <rect x="160" y="680" width="160" height="220" class="blue"/>
+  <rect x="450" y="560" width="160" height="340" class="accent"/>
+  <rect x="740" y="360" width="160" height="540" class="pink"/>
+  <text x="240" y="960" text-anchor="middle" class="text small">短序列</text>
+  <text x="530" y="960" text-anchor="middle" class="text small">中序列</text>
+  <text x="820" y="960" text-anchor="middle" class="text small">长序列</text>
+  <text x="120" y="1160" class="text large">O(n^2)</text>
+  <text x="120" y="1280" class="text medium">FlashAttention · KV Cache · vLLM</text>
+  <text x="120" y="1360" class="muted small">Engineering response to attention/inference cost.</text>
+  <text x="80" y="1830" class="muted small">EP01 · Attention Is All You Need · Formal Visual Asset</text>
+</svg>

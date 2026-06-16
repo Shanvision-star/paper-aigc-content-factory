@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+    <defs>
+      <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+        <path d="M36 0H0V36" fill="none" stroke="#E5E7EB" stroke-width="1" opacity="0.52"/>
+      </pattern>
+      <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+        <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#0F172A" flood-opacity="0.11"/>
+      </filter>
+      <marker id="arrow-q" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#4C78FF"/>
+  </marker>
+      <marker id="arrow-k" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#F58518"/>
+  </marker>
+      <marker id="arrow-v" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#54A24B"/>
+  </marker>
+      <marker id="arrow-muted" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#94A3B8"/>
+  </marker>
+      <marker id="arrow-wo" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+    <path d="M0 0L12 6L0 12Z" fill="#E45756"/>
+  </marker>
+    </defs>
+    <rect width="1080" height="1920" fill="#F7F7F5"/>
+    <rect width="1080" height="1920" fill="url(#grid)" opacity="0.76"/>
+    <rect x="0" y="0" width="18" height="1920" fill="#F4ECF7"/>
+    <rect x="18" y="0" width="4" height="1920" fill="#E2E8F0"/>
+    <rect x="42" y="48" width="996" height="1812" rx="34" fill="#FFFFFF" opacity="0.20" stroke="#E2E8F0"/>
+    <g opacity="0.18">
+      <circle cx="1000" cy="210" r="36" fill="#F4ECF7"/>
+      <circle cx="70" cy="1680" r="28" fill="#EFF6FF"/>
+      <path d="M78 1760H1002" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="10 14"/>
+    </g>
+    <rect x="305" y="66" width="470" height="70" rx="16" fill="#F4ECF7" stroke="#B279A2" stroke-opacity="0.5"/>
+    <text x="540" y="112" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="31" font-weight="950" fill="#111827">第3集 · 为什么一个 Head 不够</text>
+    <text x="64" y="222" font-family="Microsoft YaHei, Arial, sans-serif" font-size="58" font-weight="950" fill="#111827">
+    <tspan x="64" dy="0">多个 Head 并行，不是手写专家</tspan>
+  </text>
+    <text x="70" y="360" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="850" fill="#475569">
+    <tspan x="70" dy="0">每个 head 生成自己的注意力模式，但这些模式来自训练，不是</tspan>
+<tspan x="70" dy="38">程序员手动分工。</tspan>
+  </text>
+    <g>
+      <rect x="92" y="510" width="896" height="146" rx="24" fill="#EFF6FF" stroke="#4C78FF" stroke-opacity="0.42"/>
+      <rect x="130" y="548" width="150" height="70" rx="18" fill="#FFFFFF" stroke="#4C78FF" stroke-opacity="0.30"/>
+      <text x="205" y="593" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="950" fill="#4C78FF">head 1</text>
+      <rect x="365" y="546" width="162" height="74" rx="18" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="446" y="594" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="26" font-weight="900" fill="#111827">Attention</text>
+      <path d="M280 583L350 583" stroke="#4C78FF" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-q)"/>
+      <path d="M530 583L698 583" stroke="#4C78FF" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-q)"/>
+      <rect x="720" y="534" width="210" height="98" rx="18" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <g>
+    <g>
+        <rect x="742" y="552" width="52" height="32" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="768" y="572.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.6</text>
+      </g>
+<g>
+        <rect x="802" y="552" width="52" height="32" rx="8" fill="#FDE68A" stroke="#F58518"/>
+        <text x="828" y="572.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#7C2D12">0.2</text>
+      </g>
+<g>
+        <rect x="742" y="592" width="52" height="32" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="768" y="612.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.1</text>
+      </g>
+<g>
+        <rect x="802" y="592" width="52" height="32" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="828" y="612.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.7</text>
+      </g>
+  </g>
+    </g>
+<g>
+      <rect x="92" y="700" width="896" height="146" rx="24" fill="#FFF7ED" stroke="#F58518" stroke-opacity="0.42"/>
+      <rect x="130" y="738" width="150" height="70" rx="18" fill="#FFFFFF" stroke="#F58518" stroke-opacity="0.30"/>
+      <text x="205" y="783" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="950" fill="#F58518">head 2</text>
+      <rect x="365" y="736" width="162" height="74" rx="18" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="446" y="784" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="26" font-weight="900" fill="#111827">Attention</text>
+      <path d="M280 773L350 773" stroke="#F58518" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-k)"/>
+      <path d="M530 773L698 773" stroke="#F58518" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-k)"/>
+      <rect x="720" y="724" width="210" height="98" rx="18" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <g>
+    <g>
+        <rect x="742" y="742" width="52" height="32" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="768" y="762.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.6</text>
+      </g>
+<g>
+        <rect x="802" y="742" width="52" height="32" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="828" y="762.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.2</text>
+      </g>
+<g>
+        <rect x="742" y="782" width="52" height="32" rx="8" fill="#FDE68A" stroke="#F58518"/>
+        <text x="768" y="802.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#7C2D12">0.1</text>
+      </g>
+<g>
+        <rect x="802" y="782" width="52" height="32" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="828" y="802.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.7</text>
+      </g>
+  </g>
+    </g>
+<g>
+      <rect x="92" y="890" width="896" height="146" rx="24" fill="#F0FDF4" stroke="#54A24B" stroke-opacity="0.42"/>
+      <rect x="130" y="928" width="150" height="70" rx="18" fill="#FFFFFF" stroke="#54A24B" stroke-opacity="0.30"/>
+      <text x="205" y="973" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="950" fill="#54A24B">head 3</text>
+      <rect x="365" y="926" width="162" height="74" rx="18" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="446" y="974" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="26" font-weight="900" fill="#111827">Attention</text>
+      <path d="M280 963L350 963" stroke="#54A24B" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-v)"/>
+      <path d="M530 963L698 963" stroke="#54A24B" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-v)"/>
+      <rect x="720" y="914" width="210" height="98" rx="18" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <g>
+    <g>
+        <rect x="742" y="932" width="52" height="32" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="768" y="952.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.6</text>
+      </g>
+<g>
+        <rect x="802" y="932" width="52" height="32" rx="8" fill="#FDE68A" stroke="#F58518"/>
+        <text x="828" y="952.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#7C2D12">0.2</text>
+      </g>
+<g>
+        <rect x="742" y="972" width="52" height="32" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="768" y="992.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.1</text>
+      </g>
+<g>
+        <rect x="802" y="972" width="52" height="32" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="828" y="992.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.7</text>
+      </g>
+  </g>
+    </g>
+<g>
+      <rect x="92" y="1080" width="896" height="146" rx="24" fill="#F5F3FF" stroke="#B279A2" stroke-opacity="0.42"/>
+      <rect x="130" y="1118" width="150" height="70" rx="18" fill="#FFFFFF" stroke="#B279A2" stroke-opacity="0.30"/>
+      <text x="205" y="1163" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="28" font-weight="950" fill="#B279A2">head 4</text>
+      <rect x="365" y="1116" width="162" height="74" rx="18" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="446" y="1164" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="26" font-weight="900" fill="#111827">Attention</text>
+      <path d="M280 1153L350 1153" stroke="#B279A2" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-muted)"/>
+      <path d="M530 1153L698 1153" stroke="#B279A2" stroke-width="5" stroke-linecap="round" fill="none" marker-end="url(#arrow-muted)"/>
+      <rect x="720" y="1104" width="210" height="98" rx="18" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <g>
+    <g>
+        <rect x="742" y="1122" width="52" height="32" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="768" y="1142.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.6</text>
+      </g>
+<g>
+        <rect x="802" y="1122" width="52" height="32" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="828" y="1142.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.2</text>
+      </g>
+<g>
+        <rect x="742" y="1162" width="52" height="32" rx="8" fill="#FDE68A" stroke="#F58518"/>
+        <text x="768" y="1182.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#7C2D12">0.1</text>
+      </g>
+<g>
+        <rect x="802" y="1162" width="52" height="32" rx="8" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <text x="828" y="1182.8" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="18" font-weight="850" fill="#1F2937">0.7</text>
+      </g>
+  </g>
+    </g>
+    <rect x="110" y="1320" width="860" height="206" rx="24" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+    <text x="150" y="1371" text-anchor="start" font-family="Microsoft YaHei, Arial, sans-serif" font-size="25" font-weight="950" fill="#111827">Boundary</text>
+    <text x="150" y="1415" text-anchor="start" font-family="Microsoft YaHei, Arial, sans-serif" font-size="22" font-weight="900" fill="#111827">Head patterns（注意力模式）来自 training（训练）涌现，</text>
+    <text x="150" y="1453" text-anchor="start" font-family="Microsoft YaHei, Arial, sans-serif" font-size="22" font-weight="900" fill="#111827">不是手写的 syntax head（语法头）</text>
+    <text x="150" y="1489" text-anchor="start" font-family="Microsoft YaHei, Arial, sans-serif" font-size="22" font-weight="900" fill="#111827">或 reference head（指代头）。</text>
+    <g>
+    <rect x="564" y="1585" width="420" height="50" rx="14" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <text x="774" y="1618" text-anchor="middle" font-family="Microsoft YaHei, Arial, sans-serif" font-size="21" font-weight="850" fill="#64748B">Source: Harvard Annotated Transformer</text>
+  </g>
+  </svg>

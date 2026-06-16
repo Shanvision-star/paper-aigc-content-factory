@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="420" viewBox="0 0 1600 420" role="img" aria-label="Attention formula">
+  <rect width="1600" height="420" rx="36" fill="#FFFDF8"/>
+  <text x="80" y="96" font-family="Arial, Microsoft YaHei, sans-serif" font-size="34" font-weight="800" fill="#64748B">Source-aligned formula</text>
+  <text x="80" y="230" font-family="Georgia, Times New Roman, serif" font-size="78" font-weight="700" fill="#1C1C1C">
+    Attention(
+  </text>
+  <text x="426" y="230" font-family="Georgia, Times New Roman, serif" font-size="78" font-weight="700" fill="#4C78FF">Q</text>
+  <text x="480" y="230" font-family="Georgia, Times New Roman, serif" font-size="78" font-weight="700" fill="#1C1C1C">,</text>
+  <text x="520" y="230" font-family="Georgia, Times New Roman, serif" font-size="78" font-weight="700" fill="#F58518">K</text>
+  <text x="572" y="230" font-family="Georgia, Times New Roman, serif" font-size="78" font-weight="700" fill="#1C1C1C">,</text>
+  <text x="612" y="230" font-family="Georgia, Times New Roman, serif" font-size="78" font-weight="700" fill="#54A24B">V</text>
+  <text x="666" y="230" font-family="Georgia, Times New Roman, serif" font-size="78" font-weight="700" fill="#1C1C1C">) = </text>
+  <text x="820" y="230" font-family="Georgia, Times New Roman, serif" font-size="78" font-weight="700" fill="#B279A2">softmax</text>
+  <text x="1110" y="230" font-family="Georgia, Times New Roman, serif" font-size="78" font-weight="700" fill="#1C1C1C">(</text>
+  <text x="1160" y="182" font-family="Georgia, Times New Roman, serif" font-size="70" font-weight="700" fill="#1C1C1C">QK</text>
+  <text x="1252" y="150" font-family="Georgia, Times New Roman, serif" font-size="38" font-weight="700" fill="#1C1C1C">T</text>
+  <line x1="1148" y1="210" x2="1322" y2="210" stroke="#1C1C1C" stroke-width="5"/>
+  <text x="1156" y="290" font-family="Georgia, Times New Roman, serif" font-size="66" font-weight="700" fill="#1C1C1C">√</text>
+  <line x1="1208" y1="244" x2="1290" y2="244" stroke="#1C1C1C" stroke-width="4"/>
+  <text x="1212" y="290" font-family="Georgia, Times New Roman, serif" font-size="58" font-weight="700" fill="#1C1C1C">d</text>
+  <text x="1252" y="306" font-family="Georgia, Times New Roman, serif" font-size="32" font-weight="700" fill="#1C1C1C">k</text>
+  <text x="1336" y="230" font-family="Georgia, Times New Roman, serif" font-size="78" font-weight="700" fill="#1C1C1C">)</text>
+  <text x="1395" y="230" font-family="Georgia, Times New Roman, serif" font-size="78" font-weight="700" fill="#54A24B">V</text>
+  <g font-family="Arial, Microsoft YaHei, sans-serif" font-size="26" font-weight="800">
+    <rect x="260" y="318" width="150" height="48" rx="16" fill="#EAF0FF"/>
+    <text x="292" y="352" fill="#4C78FF">Query</text>
+    <rect x="520" y="318" width="120" height="48" rx="16" fill="#FFF1E1"/>
+    <text x="558" y="352" fill="#F58518">Key</text>
+    <rect x="1360" y="318" width="130" height="48" rx="16" fill="#EAF7EA"/>
+    <text x="1392" y="352" fill="#54A24B">Value</text>
+  </g>
+</svg>

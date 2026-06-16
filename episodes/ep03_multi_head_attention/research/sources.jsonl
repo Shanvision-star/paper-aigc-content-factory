@@ -1,0 +1,2 @@
+{"source_id":"vaswani_2017_attention","type":"paper","title":"Attention Is All You Need","url":"https://arxiv.org/abs/1706.03762","used_for":["Multi-Head Attention structure","head_i formula","dimension split d_k=d_v=d_model/h"]}
+{"source_id":"harvard_annotated_transformer","type":"teaching_reference","title":"The Annotated Transformer","url":"https://nlp.seas.harvard.edu/annotated-transformer/","used_for":["linears -> split heads -> attention -> concat -> final linear","Figure 2 visual reference"]}

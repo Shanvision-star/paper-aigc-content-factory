@@ -1,0 +1,217 @@
+[
+  {
+    "scene_id": "S01",
+    "start": 0,
+    "duration": 17.597,
+    "voiceover": "重点来了。如果你每天都在用 ChatGPT、Claude，或者 AI Agent，却不知道它为什么能理解上下文，那你其实绕不开一篇 2017 年的论文。",
+    "visual_type": "modern_ai_hook",
+    "engine": "hyperframes",
+    "assets": [
+      "diagram_system_layers"
+    ],
+    "caption": "重点来了：AI 为什么能理解上下文？",
+    "claim_ids": [
+      "c_transformer_impact"
+    ]
+  },
+  {
+    "scene_id": "S02",
+    "start": 17.597,
+    "duration": 24.47,
+    "voiceover": "它叫《Attention Is All You Need》。这篇论文问的不是“怎么把模型做大”，而是一个更底层的问题：机器读一句话，真的必须一个词一个词排队读吗？",
+    "visual_type": "paper_anchor",
+    "engine": "hyperframes",
+    "assets": [
+      "diagram_title_card",
+      "paper_original_readme"
+    ],
+    "caption": "机器必须排队读一句话吗？",
+    "claim_ids": [
+      "c_paper_problem"
+    ]
+  },
+  {
+    "scene_id": "S03",
+    "start": 42.067,
+    "duration": 29.846,
+    "voiceover": "在 Transformer 之前，很多模型像排队传话。第一个词把信息传给第二个词，第二个词再传给第三个词。这样能工作，但问题是：信息传得越远，路径越长；路径越长，学习长期依赖就越难；而且这种递归结构，也很难充分并行。",
+    "visual_type": "rnn_chain",
+    "engine": "svg_hyperframes",
+    "assets": [
+      "diagram_rnn_chain"
+    ],
+    "caption": "旧方法：路径长，难并行",
+    "claim_ids": [
+      "c_paper_problem",
+      "c_transformer_parallelism"
+    ]
+  },
+  {
+    "scene_id": "S04",
+    "start": 71.913,
+    "duration": 42.383,
+    "voiceover": "需要关注这里。Transformer 的反常识点是：它不再让信息只沿着一条队伍传下去。它让每个 token，也就是被切分后的词片段，去计算自己和其他 token 的相关性。不是神奇地“看懂全句”，而是通过 Attention 权重，把相关的信息加权汇聚回来。这就是 Self-Attention，也就是让 token 和 token 之间，动态建立关系。",
+    "visual_type": "self_attention_weighted_aggregation",
+    "engine": "svg_hyperframes",
+    "assets": [
+      "diagram_self_attention"
+    ],
+    "caption": "不是直接看懂，而是加权汇聚",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "scene_id": "S05",
+    "start": 114.296,
+    "duration": 33.547,
+    "voiceover": "用费曼方式理解：假设一句话里有一个“它”。模型要判断，“它”到底指谁。Self-Attention 做的事，不是让“它”等前面的记忆慢慢传过来，而是让“它”去和句子里的其他词片段计算关系：谁和我最相关？谁的信息应该被我多读一点？",
+    "visual_type": "pronoun_relation",
+    "engine": "svg_hyperframes",
+    "assets": [
+      "diagram_self_attention"
+    ],
+    "caption": "费曼理解：“它”在算谁最相关",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "scene_id": "S06",
+    "start": 147.843,
+    "duration": 41.7,
+    "voiceover": "重点来了，Q、K、V 不要死背。Q 可以理解成：我在找什么？K 可以理解成：你有什么特征？V 才是真正要被拿走的信息。但要注意，Q、K、V 不是三个有性格的小人。在工程上，它们是同一个 token 表示，经过三个不同线性投影之后，进入了三个不同的表示空间。所以 Q 和 K 负责算相关性，V 负责提供要汇聚的内容。",
+    "visual_type": "qkv_projection_spaces",
+    "engine": "svg_hyperframes",
+    "assets": [
+      "diagram_qkv_cards"
+    ],
+    "caption": "Q/K/V：三个 learned projection spaces",
+    "claim_ids": [
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "scene_id": "S07",
+    "start": 189.543,
+    "duration": 46.884,
+    "voiceover": "公式不用背，抓住三步。论文里的 Attention 公式，其实就按这个顺序工作：先用 Q 和 K 相乘，得到 token 之间的匹配分数；再经过 softmax，变成注意力权重；最后按照这些权重，去加权读取 V。一句话：先匹配，再分配权重，再汇聚信息。更工程一点说：Attention 学到的是一个动态关系矩阵。你也可以把它理解成：每一层都在重新画一张 token 之间的关系图。",
+    "visual_type": "attention_formula_relation_matrix",
+    "engine": "svg_hyperframes",
+    "assets": [
+      "formula_attention"
+    ],
+    "caption": "Attention = 动态关系矩阵",
+    "claim_ids": [
+      "c_attention_core",
+      "c_attention_qkv"
+    ]
+  },
+  {
+    "scene_id": "S08",
+    "start": 236.427,
+    "duration": 53.447,
+    "voiceover": "但一个关系空间还不够。所以论文用了 Multi-Head Attention。不要把它理解成：程序员提前安排好一个头看语法，一个头看指代，一个头看长距离关系。更准确地说，多个 head 会在不同的表示子空间里并行计算关系。有些 head 可能学到语法，有些可能学到位置偏好，有些可能学到指代关系。但这些分工不是人工写死的，而是训练过程中自己形成的。最后，模型再把这些不同视角合并起来。",
+    "visual_type": "multihead_representation_subspaces",
+    "engine": "svg_hyperframes",
+    "assets": [
+      "diagram_multihead"
+    ],
+    "caption": "Multi-Head：并行表示子空间",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "scene_id": "S09",
+    "start": 289.874,
+    "duration": 47.698,
+    "voiceover": "需要关注另一个问题：Attention 能建关系，但它本身不自带顺序感。如果每个 token 都能和其他 token 计算关系，那模型怎么知道谁在前，谁在后？原始论文的做法是加入位置编码。用正弦和余弦，给每个 token 加上位置坐标。到了现代大模型里，这个部分也继续演化。很多模型会用 RoPE，也就是旋转位置编码；长上下文模型还会用 YaRN、ALiBi，或者其他位置扩展方法。",
+    "visual_type": "positional_encoding_modern",
+    "engine": "svg_hyperframes",
+    "assets": [
+      "formula_positional_encoding",
+      "diagram_position_encoding"
+    ],
+    "caption": "位置编码：从 sin/cos 到 RoPE",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  },
+  {
+    "scene_id": "S10",
+    "start": 337.572,
+    "duration": 63.253,
+    "voiceover": "所以这篇论文真正改变 AI 的地方，不是多了几个复杂符号。而是它把语言理解，从“沿着序列一步步传递”，改成了“在每一层里重建 token 之间的关系”。这就是它影响今天 AI 的原因。从 BERT、GPT，到 Llama、Qwen、DeepSeek，都沿着 Transformer 这条主线继续发展。当然，它们不是完全照搬 2017 年的结构。现代 LLM 会加入很多工程改造：比如 RoPE，比如 GQA，比如 KV Cache，比如 MoE，比如更强的归一化和前馈网络设计。但核心问题仍然在这里：怎么让模型高效地建模上下文里的关系。",
+    "visual_type": "modern_llm_lineage",
+    "engine": "svg_hyperframes",
+    "assets": [
+      "diagram_model_timeline"
+    ],
+    "caption": "现代 LLM：Transformer 主线 + 工程改造",
+    "claim_ids": [
+      "c_attention_reading_shift",
+      "c_transformer_impact"
+    ]
+  },
+  {
+    "scene_id": "S11",
+    "start": 400.825,
+    "duration": 52.957,
+    "voiceover": "到了今天，这条线还在继续扩展。Sora 这类视频模型，会把图像、时间、空间也变成可建模的片段。Agent 系统，则是在大模型之上，加入任务规划、工具调用和记忆管理。MCP 不是 Transformer 本身，它更像是工具和上下文接入协议。所以这里要分清楚：Transformer 是模型底座；Sora 是多模态生成系统；Agent 是任务编排系统；MCP 是工具连接层。它们不是同一个东西，但很多能力都建立在大模型的表示能力之上。",
+    "visual_type": "system_layers",
+    "engine": "svg_hyperframes",
+    "assets": [
+      "diagram_system_layers"
+    ],
+    "caption": "分清层级：模型、系统、编排、工具接口",
+    "claim_ids": [
+      "c_transformer_impact"
+    ]
+  },
+  {
+    "scene_id": "S12",
+    "start": 453.782,
+    "duration": 38.635,
+    "voiceover": "工程上要注意：Attention 很强，但也很贵。因为 token 越多，token 和 token 之间要比较的关系就越多。这就是为什么长上下文推理会很吃显存和计算。所以今天你会看到：FlashAttention、KV Cache、GQA、MLA、vLLM。这些优化，本质上都在解决一个问题：让 Attention 更快，让上下文更长，让推理成本更低。",
+    "visual_type": "attention_cost",
+    "engine": "svg_hyperframes",
+    "assets": [
+      "diagram_attention_cost"
+    ],
+    "caption": "工程上要注意：Attention 很强，也很贵",
+    "claim_ids": [
+      "c_transformer_parallelism"
+    ]
+  },
+  {
+    "scene_id": "S13",
+    "start": 492.417,
+    "duration": 21.203,
+    "voiceover": "最后用一句费曼式总结：Transformer 不是让 AI 一个字一个字读得更快。它是让 AI 在每一层里，重新计算信息之间的关系。而 Attention，就是那张不断变化的关系图。",
+    "visual_type": "summary_relation_graph",
+    "engine": "hyperframes",
+    "assets": [
+      "diagram_self_attention"
+    ],
+    "caption": "Attention：不断变化的关系图",
+    "claim_ids": [
+      "c_attention_reading_shift"
+    ]
+  },
+  {
+    "scene_id": "S14",
+    "start": 513.62,
+    "duration": 13.892,
+    "voiceover": "这，就是今天大模型时代的起点。下一集，我们把 Q 和 K 的相乘过程拆开，看 Attention 机制到底在算什么。",
+    "visual_type": "next_episode",
+    "engine": "hyperframes",
+    "assets": [
+      "formula_attention"
+    ],
+    "caption": "下一集：拆开 Q 和 K 相乘",
+    "claim_ids": [
+      "c_attention_core"
+    ]
+  }
+]

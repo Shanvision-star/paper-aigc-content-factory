@@ -1,0 +1,395 @@
+{
+  "episode_id": "ep02_attention_qkv",
+  "title": "EP02 QKV 到底在算什么",
+  "generated_at": "1970-01-01T00:00:00.000Z",
+  "dagu_workflow": "dagu/ai-paper-content-factory-ep01.yaml",
+  "stages": [
+    {
+      "id": "validate_topic",
+      "title": "Validate Topic Contract",
+      "command": "npm run validate:topic",
+      "purpose": "校验主题、平台 profile 与 Hook 模式库是否满足 P0 合同。",
+      "inputs": [
+        {
+          "path": "episodes/ep02_attention_qkv/topic.yaml",
+          "exists": true
+        },
+        {
+          "path": "pipelines/episode.schema.json",
+          "exists": true
+        },
+        {
+          "path": "data/hook_patterns.yml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/douyin.zh-CN.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/xiaohongshu.zh-CN.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/bilibili.zh-CN.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/youtube-shorts.en-US.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/youtube-long.en-US.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/x.en-US.yaml",
+          "exists": true
+        }
+      ],
+      "outputs": [],
+      "status": "pass",
+      "blocking_items": []
+    },
+    {
+      "id": "hooks_score",
+      "title": "Hook Lab Scoring",
+      "command": "npm run hooks:score",
+      "purpose": "为国内外平台生成 deterministic 开场候选，并记录评分与选择原因。",
+      "inputs": [
+        {
+          "path": "episodes/ep02_attention_qkv/topic.yaml",
+          "exists": true
+        },
+        {
+          "path": "data/hook_patterns.yml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/douyin.zh-CN.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/xiaohongshu.zh-CN.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/bilibili.zh-CN.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/youtube-shorts.en-US.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/youtube-long.en-US.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/x.en-US.yaml",
+          "exists": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "script/hooks.json",
+          "exists": true
+        },
+        {
+          "path": "storyboard/hook_variants.json",
+          "exists": true
+        },
+        {
+          "path": "qa/hook_report.json",
+          "exists": true
+        }
+      ],
+      "status": "pass",
+      "blocking_items": []
+    },
+    {
+      "id": "contract_smoke",
+      "title": "Contract-Smoke Artifacts",
+      "command": "npm run episode:contract-smoke",
+      "purpose": "生成 P0 可审核资产包骨架，不调用真实 LLM、TTS、渲染或发布平台。",
+      "inputs": [
+        {
+          "path": "episodes/ep02_attention_qkv/topic.yaml",
+          "exists": true
+        },
+        {
+          "path": "data/hook_patterns.yml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/douyin.zh-CN.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/xiaohongshu.zh-CN.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/bilibili.zh-CN.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/youtube-shorts.en-US.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/youtube-long.en-US.yaml",
+          "exists": true
+        },
+        {
+          "path": "platform_profiles/x.en-US.yaml",
+          "exists": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "research/sources.jsonl",
+          "exists": true
+        },
+        {
+          "path": "research/claims.json",
+          "exists": true
+        },
+        {
+          "path": "research/timeline.json",
+          "exists": true
+        },
+        {
+          "path": "script/voiceover.md",
+          "exists": true
+        },
+        {
+          "path": "script/voice_segments.json",
+          "exists": true
+        },
+        {
+          "path": "storyboard/storyboard.json",
+          "exists": true
+        },
+        {
+          "path": "voice/voice_profile_manifest.json",
+          "exists": true
+        },
+        {
+          "path": "review/human_review.md",
+          "exists": true
+        },
+        {
+          "path": "blog/blog.md",
+          "exists": true
+        }
+      ],
+      "status": "pass",
+      "blocking_items": []
+    },
+    {
+      "id": "voiceover_audio",
+      "title": "Voiceover Audio",
+      "command": "npm run voiceover:check",
+      "purpose": "检查个人声音授权与参考音频；仅在显式导入或接入本地 TTS 时生成真实口播音频。",
+      "inputs": [
+        {
+          "path": "script/voiceover.md",
+          "exists": true
+        },
+        {
+          "path": "voice/voice_profile_manifest.json",
+          "exists": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "audio/voiceover.wav",
+          "exists": true
+        }
+      ],
+      "status": "pass",
+      "blocking_items": []
+    },
+    {
+      "id": "captions",
+      "title": "Captions",
+      "command": "npm run captions:align",
+      "purpose": "根据真实口播音频和 voice segments 生成字幕，并在缺音频时写入缺口状态。",
+      "inputs": [
+        {
+          "path": "script/voice_segments.json",
+          "exists": true
+        },
+        {
+          "path": "audio/voiceover.wav",
+          "exists": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "captions/subtitles.srt",
+          "exists": true
+        }
+      ],
+      "status": "pass",
+      "blocking_items": []
+    },
+    {
+      "id": "video_draft",
+      "title": "Video Draft",
+      "command": "npm run video:hyperframes-draft",
+      "purpose": "把 storyboard、音频和字幕组合成 HyperFrames HTML 草稿；不生成 MP4，正式渲染仍需显式开启。",
+      "inputs": [
+        {
+          "path": "storyboard/storyboard.json",
+          "exists": true
+        },
+        {
+          "path": "audio/voiceover.wav",
+          "exists": true
+        },
+        {
+          "path": "captions/subtitles.srt",
+          "exists": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "renders/hyperframes/ep01_draft.html",
+          "exists": true
+        }
+      ],
+      "status": "pass",
+      "blocking_items": []
+    },
+    {
+      "id": "publish_pack",
+      "title": "Publish Pack",
+      "command": "npm run publish:pack",
+      "purpose": "生成各平台标题、简介、格式要求和人工审核发布包，不自动发布。",
+      "inputs": [
+        {
+          "path": "renders/douyin_zh_1080x1920_draft.mp4",
+          "exists": true
+        },
+        {
+          "path": "renders/hyperframes_formal_status.json",
+          "exists": true
+        },
+        {
+          "path": "qa/qa_report.json",
+          "exists": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "publish/publish_pack.md",
+          "exists": true
+        }
+      ],
+      "status": "pass",
+      "blocking_items": []
+    },
+    {
+      "id": "quality_gate",
+      "title": "Quality Gate",
+      "command": "npm run quality:gate",
+      "purpose": "汇总合同产物与运行态缺口，阻止把 partial 误报成发布完成。",
+      "inputs": [
+        {
+          "path": "script/hooks.json",
+          "exists": true
+        },
+        {
+          "path": "storyboard/hook_variants.json",
+          "exists": true
+        },
+        {
+          "path": "qa/hook_report.json",
+          "exists": true
+        },
+        {
+          "path": "research/sources.jsonl",
+          "exists": true
+        },
+        {
+          "path": "research/claims.json",
+          "exists": true
+        },
+        {
+          "path": "research/timeline.json",
+          "exists": true
+        },
+        {
+          "path": "script/voiceover.md",
+          "exists": true
+        },
+        {
+          "path": "script/voice_segments.json",
+          "exists": true
+        },
+        {
+          "path": "storyboard/storyboard.json",
+          "exists": true
+        },
+        {
+          "path": "voice/voice_profile_manifest.json",
+          "exists": true
+        },
+        {
+          "path": "review/human_review.md",
+          "exists": true
+        },
+        {
+          "path": "blog/blog.md",
+          "exists": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "qa/qa_report.json",
+          "exists": true
+        }
+      ],
+      "status": "pass",
+      "blocking_items": []
+    },
+    {
+      "id": "pipeline_map",
+      "title": "Pipeline Map",
+      "command": "npm run pipeline:map",
+      "purpose": "把每个流程节点的输入、输出、状态与阻断项写成可视化文档和机器可读 JSON。",
+      "inputs": [
+        {
+          "path": "qa/qa_report.json",
+          "exists": true
+        },
+        {
+          "path": "qa/hook_report.json",
+          "exists": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "qa/pipeline_map.json",
+          "exists": true
+        },
+        {
+          "path": "qa/pipeline_map.md",
+          "exists": true
+        }
+      ],
+      "status": "pass",
+      "blocking_items": []
+    }
+  ],
+  "summary": {
+    "status": "pass",
+    "passed_stages": 9,
+    "partial_stages": 0,
+    "failed_stages": 0,
+    "blocked_stages": 0,
+    "blocking_items": []
+  }
+}

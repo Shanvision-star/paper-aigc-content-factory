@@ -1,0 +1,93 @@
+{
+  "status": "timings_applied",
+  "generated_at": "1970-01-01T00:00:00.000Z",
+  "source_report": "audio/indextts2/segments/segmented_merge_report.json",
+  "output_audio": "audio/voiceover.segmented.wav",
+  "total_duration_sec": 407.046,
+  "scenes": [
+    {
+      "scene_id": "S01",
+      "start": 0,
+      "duration": 29.016,
+      "end": 29.016
+    },
+    {
+      "scene_id": "S02",
+      "start": 29.016,
+      "duration": 25.878,
+      "end": 54.894
+    },
+    {
+      "scene_id": "S03",
+      "start": 54.894,
+      "duration": 26.238,
+      "end": 81.132
+    },
+    {
+      "scene_id": "S04",
+      "start": 81.132,
+      "duration": 36.98,
+      "end": 118.112
+    },
+    {
+      "scene_id": "S05",
+      "start": 118.112,
+      "duration": 24.778,
+      "end": 142.89
+    },
+    {
+      "scene_id": "S06",
+      "start": 142.89,
+      "duration": 25.936,
+      "end": 168.826
+    },
+    {
+      "scene_id": "S07",
+      "start": 168.826,
+      "duration": 26.52,
+      "end": 195.346
+    },
+    {
+      "scene_id": "S08",
+      "start": 195.346,
+      "duration": 28.375,
+      "end": 223.721
+    },
+    {
+      "scene_id": "S09",
+      "start": 223.721,
+      "duration": 19.342,
+      "end": 243.063
+    },
+    {
+      "scene_id": "S10",
+      "start": 243.063,
+      "duration": 34.914,
+      "end": 277.977
+    },
+    {
+      "scene_id": "S11",
+      "start": 277.977,
+      "duration": 30.003,
+      "end": 307.98
+    },
+    {
+      "scene_id": "S12",
+      "start": 307.98,
+      "duration": 43.241,
+      "end": 351.221
+    },
+    {
+      "scene_id": "S13",
+      "start": 351.221,
+      "duration": 45.005,
+      "end": 396.226
+    },
+    {
+      "scene_id": "S14",
+      "start": 396.226,
+      "duration": 10.82,
+      "end": 407.046
+    }
+  ]
+}

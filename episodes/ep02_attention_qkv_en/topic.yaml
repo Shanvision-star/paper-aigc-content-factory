@@ -1,0 +1,23 @@
+episode_id: ep02_attention_qkv_en
+title: "EP02 What Does QKV Compute?"
+paper:
+  title: "Attention Is All You Need"
+  arxiv_id: "1706.03762"
+  local_research_report: "D:/Shanvisorin_platform/Paper_everyday/paper_desgin/attention_is_all_you_nedd_deep-research-report.md"
+audience:
+  primary: "Engineers + AI learners"
+targets:
+  - youtube-shorts.en-US
+  - x.en-US
+outputs:
+  blog: false
+  pdf: false
+  video: true
+  voiceover: true
+  publish_pack: true
+constraints:
+  auto_publish: false
+  require_primary_sources: true
+  require_citation_gate: true
+  require_human_review: true
+  voice_mode: builtin_voice_only

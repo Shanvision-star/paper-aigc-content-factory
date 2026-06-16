@@ -39,7 +39,45 @@ This file translates `docs/visual_system/DESIGN.md` into camera-ready frame rule
 - Dense formula notation uses zoom, staged reveal, or callouts instead of shrinking below readability.
 - Eyebrow labels and source captions can be smaller only when they are not required to understand the beat.
 
+## Technical Terminology In Conclusion Cards
+
+- Conclusion cards and recap cards must keep professional terms in English first, with Chinese only as a parenthetical explanation.
+- Preferred format: `English Term（中文注释）`.
+- Do not replace key concepts with Chinese-only wording when the frame is summarizing a technical mechanism.
+- Examples: `Multi-Head Attention（多头注意力）`, `learned projection subspaces（学习到的投影子空间）`, `cost center（成本中心）`, `optimization layer（优化层）`.
+
 ## Frame Treatments
+
+## Ogilvy Creative Contract
+
+Every episode frame should support one memorable advertising idea without weakening research accuracy. Use `ogilvy-creative-director` before locking the episode frame contract when the hook, cover, first screen, or storyboard lacks a clear creative promise.
+
+- Big Idea: the frame system must preserve one dominant learning promise across cover, opening, key diagrams, recap, and CTA.
+- headline as mini-ad: title cards, cover lines, and first-screen text must read like a compact promise, not a generic section label.
+- facts before decoration: motion, glow, texture, sound cue, and layout choices must come after the claim, source, formula, or paper figure is clear.
+- visual hero: every hook and major scene needs one primary inspectable object; supporting badges, lines, captions, and particles remain secondary.
+- proof object: claims should be grounded by a visible paper figure, formula, code snippet, benchmark, source-backed diagram, or explicit citation object.
+- brand consistency: recurring series typography, caption bands, source labels, proof-object treatment, and cover hierarchy should stay recognizable across episodes and platform variants.
+- research before creative: visual direction starts from the paper, competing explanations, platform behavior, and audience vocabulary, not from a style preset.
+- caption as micro-headline: each 5-8 second subtitle or overlay caption should carry a complete mechanism, new information, or viewer benefit.
+- consumer language: first-screen and callout text should name the viewer's problem in plain words before showing formal notation.
+- numbered facts: use numbered proof cards when a scene needs several factual reasons, comparisons, or engineering implications.
+- news-style layout: prefer a clear editorial layout with readable hierarchy, source labels, and proof objects instead of decorative clutter.
+- image captions: paper figures, formula crops, code screenshots, and benchmark images need short captions that explain what the viewer is seeing.
+- avoid reverse type: do not put long load-bearing paragraphs in white text on black backgrounds; use protected readable text surfaces when the scene is dark.
+- avoid ornate fonts: avoid decorative, novelty, or low-legibility fonts for titles, subtitles, formulas, labels, and image captions.
+
+## Ogilvy Layout And Typography Hard Gate
+
+- Load-bearing text uses dark ink on a light paper or white surface. Do not use reverse type for body text, subtitles, formula explanations, or image captions.
+- Do not put long text on black, dark, saturated, or decorative colored panels. Colored accents can identify Q/K/V or steps, but the reading surface stays light.
+- Body and explanatory text must stay above the readability floor: print baseline is `9pt` minimum and `11pt` preferred; phone-video text must be visibly larger than that baseline.
+- Long explanations prefer a high-readability serif or traditional reading face. Poster-like hook frames may use large sans-serif type, but not dense sans-serif paragraphs.
+- Keep one type system per frame. Avoid unnecessary mixing of font families, font sizes, and weights; hierarchy should come from spacing, ordering, and one clear visual hero.
+- Paragraphs need enough leading and separation. Use short paragraphs, numbered facts, icons, arrows, or proof cards instead of dense continuous copy.
+- Avoid all-caps sentences in English. Necessary technical abbreviations such as `QKV`, `MHA`, `GQA`, `MQA`, and `MoE` are allowed.
+- Do not place headlines, captions, or explanatory text over important paper figures, formulas, code, axes, or matrix cells. Put explanations beside or below the proof object with padding.
+- Poster or cover-like frames must pass a five-second readability rule: no more than three element types, clean strong colors on a light field, and the paper name or mechanism name visible at a glance.
 
 ### Hook Title
 
@@ -66,6 +104,59 @@ Reveal operation order first, then notation. For Attention, show QK matching, so
 - Formula assets must declare canonical formula text or LaTeX, source type, output path, and annotation targets in the episode frame contract or assets manifest.
 - Annotated formulas must highlight the exact operation order used by the narration, such as `QK^T -> scale by sqrt(d_k) -> softmax -> weighted V`.
 - Pre-render keyframes must prove the full formula is sharp, complete, and readable on phone-sized playback.
+
+## Source-Backed HyperFrames Composition Hard Gate
+
+- Paper figures and formulas are not just style references. They must become source-backed assets before HyperFrames composition.
+- Required chain: `source_capture -> crop_formula_or_figure -> visual_asset_manifest -> episode FRAME.md -> component implementation -> review keyframes -> render`.
+- If a scene explains a technical derivation, the animation must preserve the reasoning path instead of falling back to generic explanatory cards.
+- For formula-heavy scenes, the frame contract must specify the source asset, full formula bounding box, annotation targets, operation order, caption exclusion zone, and keyframe review points.
+- The composition must fail review if original paper figures, formula crops, or required operation steps are missing from the rendered keyframes.
+- Reference infographics can inspire layout, but they do not count as implementation unless their structure is translated into explicit components, coordinates, assets, and review gates.
+
+## Formula Derivation Chain Hard Gate
+
+- Formula animation must show the computation sequence that the narration describes, not only the final equation.
+- Use staged reveal for dense equations: source figure or formula first, then operation blocks, then the complete formula.
+- Each formula scene must identify whether it needs an original formula crop, a derivation animation, an explanatory card, or a combination of all three.
+- For Scaled Dot-Product Attention, the minimum derivation chain is `Q -> K matching -> score matrix QK^T -> /sqrt(d_k) -> row-wise softmax -> weighted V -> output O`.
+- Visual, caption, and spoken channels must preserve the same formula meaning. Example: the visual shows `√(d_k)` or a true radical form, while spoken text says the square root of d k.
+- Do not place formula fragments inside normal paragraph text when the scene requires mathematical inspection; use a protected formula object or source-backed image instead.
+
+## Connector And Arrow Geometry Hard Gate
+
+- Diagrams that use arrows, weighted lines, graph edges, or data-flow connectors must use explicit source and target anchors.
+- Connectors must start and end on the visible boundary of the intended object, not inside cards, nodes, formulas, labels, or icons.
+- Arrowheads must point to a clear semantic target such as a card edge midpoint, node boundary point, matrix cell, formula term, or callout anchor.
+- Arrowheads must use fixed marker sizing across the scene. Emphasis should use color, opacity, or reveal timing, not larger arrowheads.
+- Arrowheads and connector strokes must not pass through load-bearing text, formula symbols, node centers, card interiors, subtitles, or source labels unless the overlap is an intentional highlight with enough padding.
+- Fan-out or fan-in diagrams should use symmetrical or consistently spaced target anchors when the concept is parallel, such as one `Q` matching multiple `K` cards.
+- Use SVG paths, Manim vectors, or a layout engine with computed bounding boxes for connectors; do not use rotated CSS rectangles or hard-coded line spans as final arrows.
+- Connector types must be chosen by semantic role:
+  - step-by-step process: straight process arrows;
+  - relation fan-out or fan-in: single-segment flow arcs with consistent curvature;
+  - aggregation into one output: aligned flow arcs converging to the target boundary;
+  - callouts: short leader lines that never cross the main equation or subtitle band.
+- Do not use arbitrary multi-bend curves for technical flow. If a curve is required, use a readable single flow arc with stable curvature and a clean terminal tangent.
+- Connector curves should preserve visual rhythm: consistent stroke width, rounded caps, clear z-index behind foreground objects, and enough spacing between adjacent arrows.
+- Pre-render keyframes must check connector geometry before approval: no穿模, no漂移, no ambiguous target, no inconsistent arrowhead size, no arbitrary bending, and no broken visual hierarchy.
+
+## Visual Centering And Whitespace Hard Gate
+
+- Load-bearing diagrams, icons, formulas, and step labels must sit around the visible center of the phone frame, not drift into the top third.
+- Do not leave large unused gaps between the primary visual object and the supporting step rail, caption, formula, or legend.
+- Asset frames must be content-fit: shrink the frame, scale the visual, or tighten internal rows instead of filling unused canvas with blank paper.
+- Repeated cards, icons, or graph nodes should use balanced horizontal and vertical spacing so the viewer can scan without feeling the content is floating.
+- Visual review must inspect the rendered keyframe, not only the HTML source: the dominant object should pass a squint test at phone size.
+- If a scene intentionally uses negative space, the episode `FRAME.md` must document the reason and identify the single focal object preserved by that space.
+
+## Specific Scene Matcher Priority Hard Gate
+
+- HyperFrames scene selection must match the most specific `visual_type` or component contract before any generic fallback.
+- Composite names such as `kv_cache_cached_projection`, `formula_derivation_complete`, or `softmax_rowwise_matrix` must not be swallowed by generic checks such as `projection`, `formula`, or `matrix`.
+- Scene matchers should be ordered from specific to generic, or use an explicit registry map keyed by full `visual_type`.
+- If a scene falls back to a generic explanatory card while a specific asset/component exists in the episode `FRAME.md`, the render is a visual contract failure.
+- Keyframe review must compare scene title, asset id, and rendered component role. A `KV Cache` scene must show runtime reuse of projected Key/Value, not generic QKV projection cards.
 
 ### Modern LLM Connection
 

@@ -1,0 +1,108 @@
+{
+  "status": "partial",
+  "generated_at": "1970-01-01T00:00:00.000Z",
+  "platform_count": 6,
+  "total_variants": 18,
+  "checks": {
+    "min_three_variants_per_platform": true,
+    "selected_hook_is_first_variant": true,
+    "provider_calls": false,
+    "tts_calls": false,
+    "render_calls": false,
+    "network_calls": false
+  },
+  "platforms": [
+    {
+      "platform": "douyin.zh-CN",
+      "selected_hook_id": "hook_douyin_zh_cn_01",
+      "candidate_count": 3,
+      "rejected_hook_ids": [
+        "hook_douyin_zh_cn_02",
+        "hook_douyin_zh_cn_03"
+      ]
+    },
+    {
+      "platform": "xiaohongshu.zh-CN",
+      "selected_hook_id": "hook_xiaohongshu_zh_cn_01",
+      "candidate_count": 3,
+      "rejected_hook_ids": [
+        "hook_xiaohongshu_zh_cn_02",
+        "hook_xiaohongshu_zh_cn_03"
+      ]
+    },
+    {
+      "platform": "bilibili.zh-CN",
+      "selected_hook_id": "hook_bilibili_zh_cn_01",
+      "candidate_count": 3,
+      "rejected_hook_ids": [
+        "hook_bilibili_zh_cn_02",
+        "hook_bilibili_zh_cn_03"
+      ]
+    },
+    {
+      "platform": "youtube-shorts.en-US",
+      "selected_hook_id": "hook_youtube_shorts_en_us_01",
+      "candidate_count": 3,
+      "rejected_hook_ids": [
+        "hook_youtube_shorts_en_us_02",
+        "hook_youtube_shorts_en_us_03"
+      ]
+    },
+    {
+      "platform": "youtube-long.en-US",
+      "selected_hook_id": "hook_youtube_long_en_us_01",
+      "candidate_count": 3,
+      "rejected_hook_ids": [
+        "hook_youtube_long_en_us_02",
+        "hook_youtube_long_en_us_03"
+      ]
+    },
+    {
+      "platform": "x.en-US",
+      "selected_hook_id": "hook_x_en_us_01",
+      "candidate_count": 3,
+      "rejected_hook_ids": [
+        "hook_x_en_us_02",
+        "hook_x_en_us_03"
+      ]
+    }
+  ],
+  "selected_hooks": [
+    {
+      "platform": "douyin.zh-CN",
+      "selected_hook_id": "hook_douyin_zh_cn_01",
+      "selected_pattern": "pain_point",
+      "selection_reason": "deterministic_first_primary_pattern"
+    },
+    {
+      "platform": "xiaohongshu.zh-CN",
+      "selected_hook_id": "hook_xiaohongshu_zh_cn_01",
+      "selected_pattern": "saveable_summary",
+      "selection_reason": "deterministic_first_primary_pattern"
+    },
+    {
+      "platform": "bilibili.zh-CN",
+      "selected_hook_id": "hook_bilibili_zh_cn_01",
+      "selected_pattern": "authority_anchor",
+      "selection_reason": "deterministic_first_primary_pattern"
+    },
+    {
+      "platform": "youtube-shorts.en-US",
+      "selected_hook_id": "hook_youtube_shorts_en_us_01",
+      "selected_pattern": "result_first",
+      "selection_reason": "deterministic_first_primary_pattern"
+    },
+    {
+      "platform": "youtube-long.en-US",
+      "selected_hook_id": "hook_youtube_long_en_us_01",
+      "selected_pattern": "authority_anchor",
+      "selection_reason": "deterministic_first_primary_pattern"
+    },
+    {
+      "platform": "x.en-US",
+      "selected_hook_id": "hook_x_en_us_01",
+      "selected_pattern": "bold_claim",
+      "selection_reason": "deterministic_first_primary_pattern"
+    }
+  ]
+}

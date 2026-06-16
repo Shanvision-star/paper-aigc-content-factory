@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="190" viewBox="0 0 920 190">
+    <rect x="4" y="4" width="912" height="182" rx="24" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="44" y="112" font-family="Georgia, serif" font-size="31" font-weight="700" fill="#111827">
+      <tspan>head</tspan><tspan baseline-shift="sub" font-size="23">i</tspan><tspan> = Attention(</tspan>
+      <tspan fill="#4C78FF">QW</tspan><tspan baseline-shift="sub" font-size="19" fill="#4C78FF">i</tspan><tspan baseline-shift="super" font-size="19" fill="#4C78FF">Q</tspan><tspan>, </tspan>
+      <tspan fill="#F58518">KW</tspan><tspan baseline-shift="sub" font-size="19" fill="#F58518">i</tspan><tspan baseline-shift="super" font-size="19" fill="#F58518">K</tspan><tspan>, </tspan>
+      <tspan fill="#54A24B">VW</tspan><tspan baseline-shift="sub" font-size="19" fill="#54A24B">i</tspan><tspan baseline-shift="super" font-size="19" fill="#54A24B">V</tspan><tspan>)</tspan>
+    </text>
+  </svg>

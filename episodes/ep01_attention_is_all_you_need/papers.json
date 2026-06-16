@@ -1,0 +1,48 @@
+{
+  "episode_id": "ep01_attention_is_all_you_need",
+  "papers": [
+    {
+      "paper_id": "vaswani_2017_attention_is_all_you_need",
+      "title": "Attention Is All You Need",
+      "authors": [
+        "Ashish Vaswani",
+        "Noam Shazeer",
+        "Niki Parmar",
+        "Jakob Uszkoreit",
+        "Llion Jones",
+        "Aidan N. Gomez",
+        "Lukasz Kaiser",
+        "Illia Polosukhin"
+      ],
+      "venue": "NeurIPS 2017",
+      "arxiv_id": "1706.03762",
+      "arxiv_url": "https://arxiv.org/abs/1706.03762",
+      "pdf_url": "https://arxiv.org/pdf/1706.03762",
+      "doi": "10.48550/arXiv.1706.03762",
+      "local_research_report": "D:/Shanvisorin_platform/Paper_everyday/paper_desgin/attention_is_all_you_nedd_deep-research-report.md",
+      "use_in_episode": [
+        "paper authority card",
+        "Transformer architecture reference",
+        "attention formula reference",
+        "multi-head attention formula reference",
+        "positional encoding formula reference"
+      ],
+      "attribution": "Source: Vaswani et al., Attention Is All You Need, NeurIPS 2017 / arXiv:1706.03762",
+      "notes": "Use original paper visuals as brief source anchors. Use redrawn SVG assets for animation and readability."
+    }
+  ],
+  "modern_context_sources": [
+    {
+      "source_id": "openai_sora_world_simulators",
+      "title": "Video generation models as world simulators",
+      "url": "https://openai.com/index/video-generation-models-as-world-simulators/",
+      "allowed_claim": "OpenAI describes Sora as a diffusion transformer in its technical overview."
+    },
+    {
+      "source_id": "mcp_specification",
+      "title": "Model Context Protocol Specification",
+      "url": "https://modelcontextprotocol.io/specification/2025-06-18",
+      "allowed_claim": "MCP is an open protocol for connecting LLM applications with external data sources and tools."
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "episode_id": "ep02_attention_qkv",
+  "status": "planned_not_mixed",
+  "purpose": "Animation-locked auditory bookmarks for EP02. Cues follow visual actions and must not overpower voiceover.",
+  "mix_policy": {
+    "short_cue_relative_loudness_db": "-12 to -18 dB below spoken voice",
+    "preferred_default_loudness_db": -18,
+    "background_music": "disabled_by_default",
+    "human_review_required": true,
+    "asr_diff_after_mix_if_available": true,
+    "do_not_mask_terms": [
+      "Attention",
+      "token",
+      "softmax",
+      "FlashAttention",
+      "GQA",
+      "MQA",
+      "KV Cache",
+      "vLLM",
+      "Multi-Head Attention"
+    ]
+  },
+  "cues": [
+    {
+      "cue_id": "cue_001_opening",
+      "scene_id": "S01",
+      "scene_start_sec": 0,
+      "offset_sec": 0.54,
+      "absolute_time_sec": 0.54,
+      "visual_action_anchor": "Relation graph and center token appear",
+      "sound_type": "restrained sonic logo",
+      "duration_sec": 0.5,
+      "relative_loudness_db": -18,
+      "clarity_rule": "Keep the voice as the first focus; remove if it feels too branded."
+    },
+    {
+      "cue_id": "cue_002_qk_reveal",
+      "scene_id": "S01",
+      "scene_start_sec": 0,
+      "offset_sec": 1.12,
+      "absolute_time_sec": 1.12,
+      "visual_action_anchor": "Active QK^T step rail enters and edge weight is visible",
+      "sound_type": "short clean QK reveal hit",
+      "duration_sec": 0.28,
+      "relative_loudness_db": -16,
+      "clarity_rule": "Must not sound like an alarm; shift later if it masks Q or K."
+    },
+    {
+      "cue_id": "cue_003_qkv_cards",
+      "scene_id": "S03",
+      "scene_start_sec": 54.894,
+      "offset_sec": 0.9,
+      "absolute_time_sec": 55.794,
+      "visual_action_anchor": "Q/K/V projection cards enter in semantic colors",
+      "sound_type": "three subdued card taps",
+      "duration_sec": 0.48,
+      "relative_loudness_db": -18,
+      "clarity_rule": "Taps support memory only; remove if playful or distracting."
+    },
+    {
+      "cue_id": "cue_004_scale",
+      "scene_id": "S06",
+      "scene_start_sec": 142.89,
+      "offset_sec": 1.12,
+      "absolute_time_sec": 144.01,
+      "visual_action_anchor": "sqrt(d_k) step becomes active after formula appears",
+      "sound_type": "soft squeeze or compression cue",
+      "duration_sec": 0.35,
+      "relative_loudness_db": -18,
+      "clarity_rule": "Do not cover the phrase 根号下 d k."
+    },
+    {
+      "cue_id": "cue_005_softmax",
+      "scene_id": "S07",
+      "scene_start_sec": 168.826,
+      "offset_sec": 1.12,
+      "absolute_time_sec": 169.946,
+      "visual_action_anchor": "Row-wise softmax weights animate after score matrix appears",
+      "sound_type": "soft normalization rise",
+      "duration_sec": 0.55,
+      "relative_loudness_db": -18,
+      "clarity_rule": "Start after softmax is spoken; no high-frequency attack."
+    },
+    {
+      "cue_id": "cue_006_weighted_v",
+      "scene_id": "S08",
+      "scene_start_sec": 195.346,
+      "offset_sec": 0.9,
+      "absolute_time_sec": 196.246,
+      "visual_action_anchor": "V stack and weighted aggregation output enter",
+      "sound_type": "restrained merge cue",
+      "duration_sec": 0.65,
+      "relative_loudness_db": -18,
+      "clarity_rule": "Keep precise and dry; avoid emotional swell."
+    },
+    {
+      "cue_id": "cue_007_engineering_layers",
+      "scene_id": "S12",
+      "scene_start_sec": 307.98,
+      "offset_sec": 0.9,
+      "absolute_time_sec": 308.88,
+      "visual_action_anchor": "FlashAttention / GQA / KV Cache cards enter as three layers",
+      "sound_type": "three low card hits",
+      "duration_sec": 0.75,
+      "relative_loudness_db": -18,
+      "clarity_rule": "Use layer distinction without masking English terms."
+    },
+    {
+      "cue_id": "cue_008_cta",
+      "scene_id": "S14",
+      "scene_start_sec": 396.226,
+      "offset_sec": 0.54,
+      "absolute_time_sec": 396.766,
+      "visual_action_anchor": "Multi-Head Attention CTA layout appears",
+      "sound_type": "gentle upward tail",
+      "duration_sec": 0.65,
+      "relative_loudness_db": -20,
+      "clarity_rule": "Academic and quiet; remove if it feels promotional."
+    }
+  ]
+}

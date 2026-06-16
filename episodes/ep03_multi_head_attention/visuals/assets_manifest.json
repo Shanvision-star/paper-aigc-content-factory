@@ -1,0 +1,100 @@
+{
+  "status": "review_assets_ready",
+  "generated_at": "1970-01-01T00:00:00.000Z",
+  "style": "Soft Lab Chinese Xiaohongshu style, no dark background",
+  "source_url": "https://nlp.seas.harvard.edu/annotated-transformer/",
+  "assets": [
+    {
+      "asset_id": "ep03_formula_multi_head_svg",
+      "path": "visuals/ep03_formula_multi_head.svg",
+      "source_type": "svg_formula",
+      "scenes": [
+        "S03",
+        "S04"
+      ],
+      "required_review": "formula must be complete, centered, and readable"
+    },
+    {
+      "asset_id": "ep03_formula_concat_wo_svg",
+      "path": "visuals/ep03_formula_concat_wo.svg",
+      "source_type": "svg_formula",
+      "scenes": [
+        "S05",
+        "S08"
+      ],
+      "required_review": "Concat and W^O must be visible as one formula"
+    },
+    {
+      "asset_id": "ep03_dimension_split_svg",
+      "path": "visuals/ep03_dimension_split.svg",
+      "source_type": "svg_formula_diagram",
+      "scenes": [
+        "S06"
+      ],
+      "required_review": "d_k=d_v=d_model/h must be legible"
+    },
+    {
+      "asset_id": "ep03_paper_figure2_crop",
+      "path": "video_script/source_assets/harvard_figure_multi_head_attention.png",
+      "source_type": "paper_crop",
+      "source_url": "https://nlp.seas.harvard.edu/annotated-transformer/",
+      "scenes": [
+        "S07"
+      ],
+      "required_review": "source label and phone-readable redraw must both appear"
+    },
+    {
+      "asset_id": "ep03_harvard_architecture_crop",
+      "path": "video_script/source_assets/harvard_figure_transformer_architecture.png",
+      "source_type": "paper_crop",
+      "source_url": "https://nlp.seas.harvard.edu/annotated-transformer/",
+      "scenes": [
+        "S07"
+      ],
+      "required_review": "use only as source-backed context, not decoration"
+    },
+    {
+      "asset_id": "ep03_mha_mqa_gqa_moe_cards_svg",
+      "path": "qa/animation_review_stills/kf_08_engineering.png",
+      "source_type": "svg_review_frame",
+      "scenes": [
+        "S09"
+      ],
+      "required_review": "MoE must be separated from MHA"
+    }
+  ],
+  "review_frames": [
+    {
+      "file": "qa/animation_review_stills/kf_01_hook.png",
+      "renderer": "sharp_png"
+    },
+    {
+      "file": "qa/animation_review_stills/kf_02_projection.png",
+      "renderer": "sharp_png"
+    },
+    {
+      "file": "qa/animation_review_stills/kf_03_head_formula.png",
+      "renderer": "sharp_png"
+    },
+    {
+      "file": "qa/animation_review_stills/kf_04_parallel_heads.png",
+      "renderer": "sharp_png"
+    },
+    {
+      "file": "qa/animation_review_stills/kf_05_concat_wo.png",
+      "renderer": "sharp_png"
+    },
+    {
+      "file": "qa/animation_review_stills/kf_06_dimension_split.png",
+      "renderer": "sharp_png"
+    },
+    {
+      "file": "qa/animation_review_stills/kf_07_figure2.png",
+      "renderer": "sharp_png"
+    },
+    {
+      "file": "qa/animation_review_stills/kf_08_engineering.png",
+      "renderer": "sharp_png"
+    }
+  ]
+}

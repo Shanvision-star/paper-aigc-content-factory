@@ -1,0 +1,30 @@
+{
+  "status": "rendered_needs_human_review",
+  "generated_at": "2026-06-15T10:52:21.694Z",
+  "audio_input": "audio/voiceover.postprocessed.wav",
+  "outputs": [
+    {
+      "platform": "youtube-shorts.en-US",
+      "output": "renders/youtube_shorts_en_1080x1920_source_backed_review.mp4",
+      "concat": "renders/source_backed_review/youtube-shorts_en-US/concat.txt"
+    },
+    {
+      "platform": "x.en-US",
+      "output": "renders/x_en_1080x1080_source_backed_review.mp4",
+      "concat": "renders/source_backed_review/x_en-US/concat.txt"
+    }
+  ],
+  "hard_gates_applied": [
+    "source-backed formula and paper Figure 2 presence",
+    "complete formula visual object",
+    "edge-anchored connectors",
+    "single-segment flow arcs",
+    "fixed arrowhead size",
+    "hard subtitles from English ASS files"
+  ],
+  "review_required": [
+    "human visual review for no穿模/no漂移/no subtitle overlap",
+    "human listening review for English term stability",
+    "X duration review if strict short-video limit is required"
+  ]
+}

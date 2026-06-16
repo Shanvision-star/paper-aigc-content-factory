@@ -86,6 +86,7 @@ topic.yaml
   -> research-to-claims
   -> script-storyboard-writer (includes Hook Lab)
   -> technical-script-reviewer
+  -> ogilvy-creative-director
   -> script-humanizer-zh
   -> short-video-opening-optimizer
   -> visual-orchestrator
@@ -370,12 +371,31 @@ constraints:
 
 新增 `frame-spec-writer` skill，位于 `script-storyboard-writer` / `visual-orchestrator` 之后、`hyperframes-composer` 之前。它只写视觉规范，不改写 `spoken_text`，不运行真实 HyperFrames、Manim、TTS 或 provider。
 
+### HyperFrames Animation Hard Gates
+
+后续论文视频只要进入 HyperFrames 动画设计，就必须先满足下面的强约束：
+
+- 论文公式和原论文图不能只当“风格参考图”。必须走 `source_capture -> crop_formula_or_figure -> visual_asset_manifest -> episode FRAME.md -> component implementation -> review keyframes -> render`。
+- 含技术推导的场景必须展示 reasoning path，不能退化成概念说明卡片。Scaled Dot-Product Attention 的最低链路是 `Q -> K matching -> score matrix QK^T -> /√(d_k) -> row-wise softmax -> weighted V -> output O`。
+- 公式必须是完整、清晰、可标注的独立对象；字幕不得覆盖公式 bounding box；视觉、字幕和口播必须锁定同一含义，例如视觉显示 `√(d_k)`，英文口播读作 `the square root of d k`，中文口播读作 `根号下 d k`。
+- 箭头和连线必须连接到节点、卡片、矩阵、公式项或输出圆的外边界，不能插入图框内部，不能穿过文字、公式、字幕或 source label。
+- 箭头头部和连线粗细必须保持一致；重点用颜色、透明度、逐步 reveal 或音效 cue 表达，不用放大箭头表达。
+- 流程推导默认使用直线 process arrows；关系发散、信息汇聚和加权读取使用统一曲率的单段 flow arcs；禁止随意多段弯折曲线。
+- HyperFrames 场景匹配必须“具体规则优先”：例如 `kv_cache_cached_projection` 先匹配 KV Cache 组件，不能被泛化的 `projection` 规则吞掉。
+- 每个正式 render 前必须先生成并人工查看关键帧：QK 匹配、公式完整显示、softmax 按行归一化、weighted V 汇聚、KV Cache 或工程层级场景。
+- 关键帧审核必须检查：无穿模、无漂移、无箭头大小不一致、无公式溢出、无字幕遮挡、视觉主体居中且没有大面积无意义留白。
+
+这些规则来自 EP02 英文版动画问题复盘：当参考图只作为 style prompt、没有变成 frame contract 和组件实现时，HyperFrames 容易输出“文字卡片正确，但推导链、公式和指向关系不正确”的视频。
+
 ### Platform Content Workflow Skills
 
 以下是跨平台内容优化的附加 skill，不替代 8+1 主链路，只在对应门禁前后补充约束：
 
 - `script-humanizer-zh`：可选中文自然化层，必须在 `technical-script-reviewer` 之后、`spoken_text` 锁定之前运行；它借鉴 `humanizer-zh` 的 Chinese-native rhythm、翻译腔清理和术语统一，但不能改变 approved claim、公式、数字或锁定口播。
+- `ogilvy-creative-director`：在 `technical-script-reviewer` 之后、`short-video-opening-optimizer` 和 `frame-spec-writer` 之前运行，建立 `Ogilvy Creative Contract`；它把 Big Idea、headline as mini-ad、facts before decoration、visual hero、proof object、brand consistency 写成可复用创意约束，并补充 research before creative、caption as micro-headline、consumer language、numbered facts、news-style layout、image captions、avoid reverse type、avoid ornate fonts；但不改 claims、不造证据、不替代技术审核。
 - `short-video-opening-optimizer`：在 storyboard/frame lock 前运行，按 Douyin、Xiaohongshu、Bilibili、TikTok、YouTube Shorts、YouTube、X 的平台语境评分 `0-3s` opening hook、visual hook、verbal hook、text overlay、技术可信度和 not clickbait 边界。
+- `voiceover-emotion-coach`：在 `spoken_text` 锁定后、TTS sample-first 前运行，生成跨论文复用的 `delivery_style` 和可选 `engine_emotion_prompt`；默认 `preserve_original_ai_voice`，只做 `low_intensity_prosody`，不改 `source_text`、不改 `spoken_text`、不写字幕、保持 no hidden narration cues，并把听审反馈交给 `workflow-optimizer`。
+- `sound-cue-designer`：在 storyboard/frame lock 和 HyperFrames prompt 前运行，把 opening、QK reveal、Q/K/V card taps、softmax normalization、weighted V aggregation、工程层级切换和 CTA 转成克制的 auditory bookmarks；它不生成音频素材，不改 `spoken_text`，不绕过 ASR transcript diff 或人工听审。
 - `platform-format-adapter`：读取 `platform_profiles/*.yaml`、cover、video、captions 和 metadata，整理本地 `publish/platform_manifest.json`。默认竖版封面沿用 `safe90`，平台尺寸只能来自 profile，当前至少覆盖 `1080x1920`、小红书 `1080x1440`、`1920x1080` 和 `1080x1080`。
 
 这些 skill 只做本地审核、文本优化和平台包准备，不 auto-publish、不上传媒体、不运行真实 TTS/HyperFrames/Manim/provider。
@@ -435,23 +455,37 @@ constraints:
 - `gpt_sovits_local`：长期个人声音主引擎，通过本地 service 或 adapter 调用。
 - `f5_tts_local` / `cosyvoice_local`：第二阶段 bakeoff，不阻塞第一篇。
 
-### 口播发音与提示词规范
+### Pronunciation Normalization Contract
 
-- 文档生成、口播稿生成和 TTS 提示词必须记录中文多音字、结构助词和技术词的读法。
-- `动态地` 中的 `地` 是状语助词，必须读轻声 `de`，不能读 `di`。
-- 如果 TTS 引擎容易误读，`source_text` 可以保留 `动态地`，但 `spoken_text` 应改写为无歧义表达，例如 `以动态方式建立关系`。
-- 英文产品名和技术专名保持整体读法，例如 `ChatGPT`、`AI Agent`、`Attention`、`KV Cache`、`vLLM`；只在公式符号如 `Q`、`K`、`V`、`QK` 中保留字母间停顿。
-- 后续 prompt 模板必须包含“发音规范”段落，列出本集容易误读的中文词、英文词和公式符号。
+- 文档生成、口播稿生成和 TTS 提示词必须记录中文多音字、结构助词、英文整体词和公式符号读法。
+- `source_text` 是已审核文本；`spoken_text` 是 TTS 友好文本，只能为发音、停顿、英文、数字和公式做无歧义改写。
+- `动态地` 或 `更准确地说` 里的 `地` 是状语助词，必须读轻声 `de`，不能读 `di`；若引擎不稳，`spoken_text` 应改写为 `以动态方式...` 或 `准确一点说`。
+- `按行归一化` 可以保留在字幕或公式解释中，但口播优先改写为 `对每个当前 token 的那一组分数，分别做归一化`，避免 `行` 的读法和矩阵方向被误解。
+- `QK^T` 的口播固定为 `Q 乘 K 转置`；`sqrt(d_k)` 固定为 `根号下 d k`；`d_k` 固定为 `d k`。
+- 英文产品名和技术专名保持整体读法，例如 `ChatGPT`、`Claude`、`AI Agent`、`Attention`、`softmax`、`token`、`FlashAttention`、`GQA`、`MQA`、`KV Cache`、`vLLM`、`Multi-Head Attention`；只在公式符号如 `Q`、`K`、`V`、`QK` 中保留字母间停顿。
+- 后续 prompt 模板必须包含“发音规范”段落，列出本集容易误读的中文词、英文词和公式符号，并把这些词纳入 ASR transcript diff 或人工听审。
 
 ### Voiceover Hard Gates
 
 - 个人音色、克隆声音和本地 TTS 口播必须遵循 `sample -> asr_diff -> human_approval -> full_tts -> merge -> captions -> render`。
-- F5-TTS、GPT-SoVITS、CosyVoice 等引擎不能跳过 sample-first 直接跑全量音频。
+- TTS 主线优先使用 IndexTTS2，目标是内容一致性、术语稳定、清晰度和音视频同步；IndexTTS 1.5 / CosyVoice 是备选；个人音色相似度暂时降级为实验分支。
+- IndexTTS2 小样必须先覆盖 `seg_001`、`seg_010`、`seg_014`；三段通过后才允许全量分段生成。
+- IndexTTS2、IndexTTS 1.5、CosyVoice、F5-TTS、GPT-SoVITS 等引擎不能跳过 sample-first 直接跑全量音频。
 - F5-TTS 参考音频必须使用 neutral 8-10s 内容，避免与本集主题、`为什么重要` 或正式口播句重叠。
 - 有 ASR 输出时必须执行 ASR transcript diff；没有 ASR 时必须记录缺失，并保留人工听审。
 - `source_text` 和 `spoken_text` 必须分离：前者是审核稿，后者只服务发音、数字、英文和公式口播规范。
 - 小样审核、重复检测、reference-text leakage 检测和 postprocess 结果必须能进入 review 或 QA 记录。
 - 该流程由 `.agents/skills/tts-voiceover-quality-gate/SKILL.md` 维护，`voiceover-adapter` 只负责生成或导入音频产物。
+
+### Voiceover Emotion Contract
+
+- 口播表达力必须作为可审核元数据存在，不能作为隐藏台词混入 `source_text`、`spoken_text`、字幕或 HyperFrames narration cue。
+- `voiceover-emotion-coach` 在 `spoken_text` 锁定后、TTS 小样前运行，输出通用 `delivery_style` 和可选引擎级 `engine_emotion_prompt`，适用于后续不同论文和不同 episode。
+- 默认风格是 `preserve_original_ai_voice`：保留原版 AI 声线特有的清晰、稳定和轻微机器感；只允许 `low_intensity_prosody`，不能改成老师训话感、主持腔、播音腔或广告腔。
+- IndexTTS2 默认使用 `use_emo_text=false`、`use_random=false`；`emo_text` / `emo_alpha` 只作为实验项，必须人工确认后再使用。IndexTTS 1.5、CosyVoice 等备选引擎用各自 instruction/prompt 字段承接同一 `delivery_style`。
+- 情绪增强不能破坏 `ChatGPT`、`Claude`、`token`、`Attention`、`softmax`、`KV Cache`、`Multi-Head Attention` 等整体英文读法，不能制造重复、漏词、长停顿或术语漂移。
+- 该流程仍受 sample-first、ASR transcript diff 和人工听审约束；如果表达力影响文本一致性，优先降低情绪强度而不是放宽 TTS 质量门禁。
+- 每次小样反馈只生成 `workflow-optimizer` 改进候选；未经人工确认，不自动更新共享 skill、锁定脚本或全局模板。
 
 ### Script Quality Contract
 
@@ -471,6 +505,18 @@ constraints:
 - 真实 TTS、真实 HyperFrames render 和真实 provider smoke 必须显式运行并与默认 `npm test` 分离。
 - Dagu 工作流必须暴露关键门禁节点：`sample`、`asr_diff`、`human_approval`、`full_tts`、`merge`、`captions`、`render`。
 - 每次脚本、音频参考、spoken_text 或字幕时长变化后，必须重新评估相关门禁或明确记录未重跑原因。
+
+### Sound Cue Design Contract
+
+- 音效只服务理解，不服务热闹；每个 cue 必须是公式、视觉动作或段落转折的 auditory bookmarks。
+- 每集若使用音效，必须维护 episode-level sound cue plan，列出 cue id、对应 spoken cue、视觉同步点、声音类型、相对响度、风险和验证方式。
+- EP02 默认 cue 集合是 opening sonic logo、QK reveal、Q/K/V card taps、softmax normalization、weighted V aggregation、工程层级切换和 CTA tail。
+- 音效必须 do not overpower voiceover；短音效建议比人声低 `12-18 dB`，背景音乐如存在建议比人声低 `18-24 dB`。
+- 不使用手机通知音、警报音、游戏音效、综艺模板音或高频尖锐 beep。
+- 英文术语附近避免叠高频音效，例如 `Attention`、`softmax`、`FlashAttention`、`GQA`、`MQA`、`KV Cache`、`vLLM`。
+- cue 说明只能写在 storyboard、FRAME、sound cue plan 或 HyperFrames prompt；不能写进 `spoken_text`。
+- 含音效的最终混音必须进入人工听审；如果影响 ASR transcript diff、英文清晰度、字幕对齐或个人声音质感，降低或移除音效。
+- 该流程由 `.agents/skills/sound-cue-designer/SKILL.md` 维护，并与 `tts-voiceover-quality-gate`、`caption-aligner`、`hyperframes-composer` 协同。
 
 ### 竖版封面导出硬约束
 
@@ -782,6 +828,34 @@ qa_report.json
 - `verification`：修改后如何证明。
 - `retention_signal`：Hook 相关建议需记录人工保留/划走风险、平台适配问题或首屏可读性问题。
 
+### Task Retrospective Index
+
+新开 episode、重做视频、切换 TTS 引擎或修改 HyperFrames 动画前，必须先读取前序复盘索引，再决定当前任务是代码缺口、文档缺口、验证缺口还是产品边界决策。复盘文档提供上下文和候选改进，不自动等同于已完成主线规则。
+
+默认读取顺序：
+
+1. `episodes/{episode_id}/review/*.md`：人工审核、失败复盘、候选改进。
+2. `episodes/{episode_id}/qa/*.json`：质量门禁、pipeline map、freshness 结果。
+3. `episodes/{episode_id}/video_script/FRAME.md`：单集公式、图表、字幕避让和动画合同。
+4. `docs/visual_system/FRAME.md`：账号级视觉和 HyperFrames 通用硬约束。
+5. README 与本 workflow spec 的 Voiceover、Pronunciation、Ogilvy、Review Before Render、HyperFrames 等 contract。
+
+已索引复盘：
+
+- `episodes/ep03_multi_head_attention/review/ep03_retrospective_indextts2_animation_candidates.md`：EP03 的 IndexTTS2 切换候选、F5 fallback 边界、字幕/英文术语风险、HyperFrames 静态 PPT 化、公式对象、Figure 2 source-backed 资产、箭头/布局/文字溢出等候选沉淀。
+
+### Ogilvy Layout And Typography Discipline
+
+奥美版式规则属于设计硬纪律，不是可选美术风格。后续脚本、字幕、FRAME 和 HyperFrames prompt 必须把可读性放在装饰前面：
+
+- `no reverse type / colored body panels`：正文、字幕、公式说明和图注必须是深色文字配浅色或纸面背景；不要把长正文放在黑色、深色或彩色底板上。
+- `readable type floor`：印刷正文底线参考 9pt，正式解释文本优先不低于 11pt；视频里要按手机观看放大，不允许用小字填满画面。
+- `serif / sans`：长段解释优先高可读衬线 serif 或传统阅读字体；海报、封面、首屏大标题可以用大号无衬线 sans 字体，但同一画面不要混用太多字体、字号和粗细。
+- `leading`：段落之间保留足够行距，复杂信息拆成短段、编号、图标或箭头引导。
+- `avoid all-caps`：英文句子不做 all-caps；技术缩写如 `QKV`、`MHA`、`GQA`、`MQA`、`MoE` 可以保留。
+- `headline-over-image ban`：不要把标题或说明覆盖在论文图、公式、代码截图的关键区域；图片、公式和文字各司其职，图片下方必须有说明。
+- `five-second poster rule`：海报式帧遵守 5 秒规则，元素不超过三类，颜色强烈但干净，主体、论文名或机制名一眼可见。
+
 示例：
 
 ```json
@@ -892,6 +966,8 @@ stages:
       - storyboard/storyboard.json
   - skill: technical-script-reviewer
     output: review/technical_script_review.md
+  - skill: ogilvy-creative-director
+    output: review/creative_direction.md
   - skill: script-humanizer-zh
     output: script/voiceover_humanized.md
   - skill: short-video-opening-optimizer

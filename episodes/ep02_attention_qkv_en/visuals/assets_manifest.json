@@ -1,0 +1,117 @@
+{
+  "episode_id": "ep02_attention_qkv_en",
+  "source_notes": [
+    {
+      "source_id": "harvard_annotated_transformer",
+      "title": "The Annotated Transformer",
+      "url": "https://nlp.seas.harvard.edu/annotated-transformer/",
+      "usage": "formula and code-aligned educational reference"
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "ep02_formula_scaled_dot_product_attention_svg",
+      "kind": "formula",
+      "path": "visuals/ep02_formula_scaled_dot_product_attention.svg",
+      "concept": "complete Scaled Dot-Product Attention formula",
+      "feynman_analogy": "match, scale, normalize, read values",
+      "source": "https://nlp.seas.harvard.edu/annotated-transformer/",
+      "source_type": "katex_mathjax_svg",
+      "formula_latex": "\\\\mathrm{Attention}(Q,K,V)=\\\\mathrm{softmax}(\\\\frac{QK^T}{\\\\sqrt{d_k}})V",
+      "annotation_targets": [
+        "QK^T",
+        "sqrt(d_k) as 根号下 d_k",
+        "softmax",
+        "V"
+      ],
+      "safe_area": "center formula band, no caption overlap",
+      "status": "generated",
+      "source_locale": "en-US"
+    },
+    {
+      "asset_id": "ep02_harvard_attention_code_svg",
+      "kind": "diagram",
+      "path": "visuals/ep02_harvard_attention_code.svg",
+      "concept": "Harvard Annotated Transformer attention code steps",
+      "feynman_analogy": "the code version of match, normalize, read",
+      "source": "https://nlp.seas.harvard.edu/annotated-transformer/",
+      "source_type": "paper_source_code_svg",
+      "annotation_targets": [
+        "scores",
+        "softmax",
+        "torch.matmul(p_attn, value)"
+      ],
+      "safe_area": "lower code strip or side panel",
+      "status": "generated",
+      "source_locale": "en-US"
+    },
+    {
+      "asset_id": "ep02_qk_relation_graph_svg",
+      "kind": "diagram",
+      "path": "visuals/ep02_qk_relation_graph.svg",
+      "concept": "anchored Q-to-K weighted relation graph",
+      "feynman_analogy": "a current token asks all context tokens for relevance",
+      "source": "derived from EP02 script and Harvard attention explanation",
+      "source_type": "svg",
+      "annotation_targets": [
+        "current token",
+        "K tokens",
+        "soft adjacency matrix"
+      ],
+      "safe_area": "center hero visual",
+      "status": "generated",
+      "source_locale": "en-US"
+    },
+    {
+      "asset_id": "ep02_qkv_projection_pipeline_svg",
+      "kind": "diagram",
+      "path": "visuals/ep02_qkv_projection_pipeline.svg",
+      "concept": "same input X projected into Q, K, V spaces",
+      "feynman_analogy": "question, index, content",
+      "source": "derived from EP02 reviewed script",
+      "source_type": "svg",
+      "annotation_targets": [
+        "Q = XW_Q",
+        "K = XW_K",
+        "V = XW_V"
+      ],
+      "safe_area": "center teaching card",
+      "status": "generated",
+      "source_locale": "en-US"
+    },
+    {
+      "asset_id": "ep02_kv_cache_engineering_svg",
+      "kind": "diagram",
+      "path": "visuals/ep02_kv_cache_engineering.svg",
+      "concept": "new Q reads cached K/V projections during autoregressive decoding",
+      "feynman_analogy": "new question checks saved index and content cards",
+      "source": "derived from EP02 technical-script review",
+      "source_type": "svg",
+      "annotation_targets": [
+        "new Q",
+        "cached K",
+        "cached V",
+        "runtime state"
+      ],
+      "safe_area": "engineering section",
+      "status": "generated",
+      "source_locale": "en-US"
+    }
+  ],
+  "copied_source_assets": [
+    {
+      "asset_id": "paper_figure2_scaled_dot_product_attention_png",
+      "path": "video_script/source_assets/harvard_embedded_03.png",
+      "source": "https://nlp.seas.harvard.edu/annotated-transformer/",
+      "source_type": "paper_original_crop",
+      "usage": "Hero Figure 2 source-backed visual"
+    },
+    {
+      "asset_id": "paper_transformer_architecture_png",
+      "path": "video_script/source_assets/harvard_embedded_02.png",
+      "source": "https://nlp.seas.harvard.edu/annotated-transformer/",
+      "source_type": "paper_original_crop",
+      "usage": "Series continuity visual"
+    }
+  ]
+}

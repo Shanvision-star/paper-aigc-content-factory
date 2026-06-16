@@ -14,6 +14,7 @@ const frameSkillPath = ".agents/skills/frame-spec-writer/SKILL.md";
 const hyperframesComposerSkillPath = ".agents/skills/hyperframes-composer/SKILL.md";
 const visualOrchestratorSkillPath = ".agents/skills/visual-orchestrator/SKILL.md";
 const ep01FramePath = "episodes/ep01_attention_is_all_you_need/video_script/FRAME.md";
+const ep02EnglishFramePath = "episodes/ep02_attention_qkv_en/video_script/FRAME.md";
 
 describe("frame-spec workflow constraints", () => {
   it("records the global-to-episode frame authority chain in README and main spec", () => {
@@ -31,6 +32,12 @@ describe("frame-spec workflow constraints", () => {
       expect(doc).toContain("Formula Asset Contract");
       expect(doc).toContain("platform variants");
       expect(doc).toContain("safe area");
+      expect(doc).toContain("HyperFrames Animation Hard Gates");
+      expect(doc).toContain("source_capture -> crop_formula_or_figure -> visual_asset_manifest -> episode FRAME.md -> component implementation -> review keyframes -> render");
+      expect(doc).toContain("Q -> K matching -> score matrix QK^T -> /√(d_k) -> row-wise softmax -> weighted V -> output O");
+      expect(doc).toContain("flow arcs");
+      expect(doc).toContain("kv_cache_cached_projection");
+      expect(doc).toContain("不能被泛化的 `projection` 规则吞掉");
     }
   });
 
@@ -59,9 +66,47 @@ describe("frame-spec workflow constraints", () => {
     expect(frame).toContain("Formula Asset Contract");
     expect(frame).toContain("complete visual objects");
     expect(frame).toContain("KaTeX/MathJax/SVG");
+    expect(frame).toContain("Source-Backed HyperFrames Composition Hard Gate");
+    expect(frame).toContain("source_capture -> crop_formula_or_figure -> visual_asset_manifest -> episode FRAME.md -> component implementation -> review keyframes -> render");
+    expect(frame).toContain("Formula Derivation Chain Hard Gate");
+    expect(frame).toContain("Q -> K matching -> score matrix QK^T -> /sqrt(d_k) -> row-wise softmax -> weighted V -> output O");
+    expect(frame).toContain("Connector And Arrow Geometry Hard Gate");
+    expect(frame).toContain("explicit source and target anchors");
+    expect(frame).toContain("fixed marker sizing");
+    expect(frame).toContain("single-segment flow arcs");
+    expect(frame).toContain("Do not use arbitrary multi-bend curves");
+    expect(frame).toContain("must not pass through load-bearing text");
+    expect(frame).toContain("do not use rotated CSS rectangles");
+    expect(frame).toContain("no穿模");
+    expect(frame).toContain("Visual Centering And Whitespace Hard Gate");
+    expect(frame).toContain("visible center of the phone frame");
+    expect(frame).toContain("Do not leave large unused gaps");
+    expect(frame).toContain("Asset frames must be content-fit");
+    expect(frame).toContain("squint test at phone size");
+    expect(frame).toContain("Specific Scene Matcher Priority Hard Gate");
+    expect(frame).toContain("most specific `visual_type`");
+    expect(frame).toContain("kv_cache_cached_projection");
+    expect(frame).toContain("A `KV Cache` scene must show runtime reuse of projected Key/Value");
     expect(frame).toContain("Formula completeness test");
     expect(frame).toContain("Paper Genre Treatment Registry");
     expect(frame).toContain("Pre-Render Frame Audit");
+  });
+
+  it("records EP02 English HyperFrames review gates for connector geometry and formula derivation", () => {
+    expect(exists(ep02EnglishFramePath)).toBe(true);
+    const frame = read(ep02EnglishFramePath);
+
+    expect(frame).toContain("Source-Backed Asset Contract");
+    expect(frame).toContain("Q -> Key matching -> score matrix -> /√(d_k) -> row-wise softmax -> weighted Value -> output representation");
+    expect(frame).toContain("Connector Geometry Rules");
+    expect(frame).toContain("outer edge of nodes, cards, matrices, or output circles");
+    expect(frame).toContain("fixed marker size");
+    expect(frame).toContain("single, readable flow arc");
+    expect(frame).toContain("HyperFrames Animation Review Gates");
+    expect(frame).toContain("qa/animation_review_stills/01_qk_anchored_relation_graph.png");
+    expect(frame).toContain("QK^T -> /√(d_k) -> row-wise softmax -> weighted V -> output");
+    expect(frame).toContain("no穿模");
+    expect(frame).toContain("no漂移");
   });
 
   it("adds a frame-spec-writer skill with strict inputs, outputs, and boundaries", () => {
@@ -116,6 +161,9 @@ describe("frame-spec workflow constraints", () => {
     expect(skill).toContain("Do not use raw, unrendered LaTeX");
     expect(skill).toContain("Do not run P0 video render during default tests");
     expect(skill).toContain("Do not add Remotion as a P0 render path");
+    expect(skill).toContain("most specific `visual_type`");
+    expect(skill).toContain("kv_cache_cached_projection");
+    expect(skill).toContain("Do not let generic substring matchers");
     expect(skill).toContain("Do not publish rendered media to any platform");
   });
 

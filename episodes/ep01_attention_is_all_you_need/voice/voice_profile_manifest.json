@@ -2,14 +2,32 @@
   "voice_profile_id": "rome_personal_zh_v1",
   "owner": "user_self",
   "consent_audio": "voice/enrollment/consent.wav",
-  "reference_audio": [],
+  "reference_audio": [
+    "voice/enrollment/reference_neutral_f5_8s.wav"
+  ],
   "allowed_use": [
     "personal_ai_paper_voiceover"
   ],
-  "default_engine": "gpt_sovits_local",
-  "fallback_engine": "openai_tts",
-  "status": "recording_needed",
+  "default_engine": "f5_tts_local",
+  "fallback_engine": "gpt_sovits_local_pending",
+  "status": "audio_ready",
   "generated_at": "1970-01-01T00:00:00.000Z",
   "provider_calls": false,
-  "tts_calls": false
+  "tts_calls": false,
+  "generated_audio": [
+    {
+      "engine": "f5_tts_local",
+      "path": "audio/f5_tts/attention_full_voiceover_f5_v1.wav",
+      "duration_sec": 74.96,
+      "sample_rate_hz": 24000,
+      "channels": 1,
+      "status": "rejected_reference_leak_suspected"
+    }
+  ],
+  "rejected_reference_audio": [
+    {
+      "path": "voice/enrollment/_archive_reference_20260614/rejected_topic_reference/reference_01_f5_18s.wav",
+      "reason": "Topic-specific reference text leaked into generated voiceover."
+    }
+  ]
 }

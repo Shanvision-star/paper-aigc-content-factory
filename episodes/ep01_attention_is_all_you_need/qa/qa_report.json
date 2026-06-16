@@ -17,15 +17,9 @@
   ],
   "failed": [],
   "not_verified": [
-    "audio/voiceover.wav",
-    "captions/subtitles.srt",
-    "renders/douyin_zh_1080x1920_draft.mp4",
-    "publish/publish_pack.md"
+    "renders/hyperframes_formal_status.json#status"
   ],
   "blocking_items": [
-    "Not verified runtime artifact: audio/voiceover.wav",
-    "Not verified runtime artifact: captions/subtitles.srt",
-    "Not verified runtime artifact: renders/douyin_zh_1080x1920_draft.mp4",
-    "Not verified runtime artifact: publish/publish_pack.md"
+    "Formal HyperFrames render is not ready: renders/hyperframes_formal_status.json#input_fingerprint=missing"
   ]
 }

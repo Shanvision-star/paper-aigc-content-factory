@@ -1,0 +1,4 @@
+interface:
+  display_name: "Voiceover Emotion Coach"
+  short_description: "Preserve original AI voice character while applying low-intensity delivery controls"
+  default_prompt: "Create a preserve_original_ai_voice delivery_style sidecar for this paper explainer voiceover without changing source_text, spoken_text, captions, or the original voice character."

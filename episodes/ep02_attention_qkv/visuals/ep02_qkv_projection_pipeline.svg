@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="900" viewBox="0 0 1500 900" role="img" aria-label="QKV projection pipeline">
+  <rect width="1500" height="900" rx="36" fill="#FFFDF8"/>
+  <text x="750" y="90" font-family="Arial, Microsoft YaHei, sans-serif" font-size="50" font-weight="900" text-anchor="middle" fill="#1C1C1C">同一份输入 X，投影到三个空间</text>
+  <rect x="110" y="340" width="220" height="150" rx="26" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="4"/>
+  <text x="220" y="405" font-family="Consolas, monospace" font-size="58" font-weight="900" text-anchor="middle" fill="#1C1C1C">X</text>
+  <text x="220" y="456" font-family="Arial, Microsoft YaHei, sans-serif" font-size="26" font-weight="800" text-anchor="middle" fill="#64748B">token 表示</text>
+  <g stroke="#94A3B8" stroke-width="7" stroke-linecap="round" fill="none">
+    <path d="M 330 410 C 450 260, 560 220, 690 230"/>
+    <path d="M 330 415 C 475 415, 565 415, 690 415"/>
+    <path d="M 330 420 C 450 585, 560 630, 690 620"/>
+  </g>
+  <g font-family="Arial, Microsoft YaHei, sans-serif" font-weight="900">
+    <rect x="690" y="160" width="630" height="140" rx="24" fill="#EAF0FF" stroke="#4C78FF" stroke-width="4"/>
+    <text x="740" y="244" font-size="46" fill="#4C78FF">Q = XW_Q</text>
+    <text x="1030" y="244" font-size="30" fill="#1C1C1C">检索空间：我在找什么</text>
+    <rect x="690" y="345" width="630" height="140" rx="24" fill="#FFF1E1" stroke="#F58518" stroke-width="4"/>
+    <text x="740" y="429" font-size="46" fill="#F58518">K = XW_K</text>
+    <text x="1030" y="429" font-size="30" fill="#1C1C1C">索引空间：我如何被匹配</text>
+    <rect x="690" y="530" width="630" height="140" rx="24" fill="#EAF7EA" stroke="#54A24B" stroke-width="4"/>
+    <text x="740" y="614" font-size="46" fill="#54A24B">V = XW_V</text>
+    <text x="1030" y="614" font-size="30" fill="#1C1C1C">内容空间：真正读取的信息</text>
+  </g>
+</svg>

@@ -27,6 +27,7 @@ type TranscriptFile = {
 };
 
 type AsrDiffStatus = "pass" | "failed" | "asr_missing";
+type TtsGateEngine = "f5_tts" | "indextts2";
 
 export type AsrTranscriptIssue = {
   segment_id: string;
@@ -36,6 +37,8 @@ export type AsrTranscriptIssue = {
 
 export type AsrTranscriptDiffResult = {
   status: AsrDiffStatus;
+  engine: TtsGateEngine;
+  manifest_file: string;
   transcript_file: string;
   checked_segment_ids: string[];
   issues: AsrTranscriptIssue[];
@@ -47,10 +50,14 @@ type AsrDiffOptions = {
   sampleSegmentIds?: string[];
   allowMissingAsr?: boolean;
   maxDistanceRatio?: number;
+  engine?: TtsGateEngine;
 };
 
 const defaultTranscriptPath = "audio/asr/sample_transcripts.json";
-const manifestPath = "audio/f5_tts/segments/segment_manifest.json";
+const engineManifests: Record<TtsGateEngine, string> = {
+  f5_tts: "audio/f5_tts/segments/segment_manifest.json",
+  indextts2: "audio/indextts2/segments/segment_manifest.json"
+};
 const leakPronePhrases = [
   "为什么重要",
   "最后看它为什么重要",
@@ -105,12 +112,22 @@ function selectedSegmentIds(manifest: SegmentManifest, options: AsrDiffOptions):
   return manifest.segments.map((segment) => segment.segment_id);
 }
 
+function detectEngine(episodeDir: string, requestedEngine?: TtsGateEngine): TtsGateEngine {
+  if (requestedEngine) {
+    return requestedEngine;
+  }
+
+  return fs.existsSync(path.join(episodeDir, engineManifests.indextts2)) ? "indextts2" : "f5_tts";
+}
+
 export function runAsrTranscriptDiffGate(
   topicPath: string,
   rootDir = ".",
   options: AsrDiffOptions = {}
 ): AsrTranscriptDiffResult {
   const episodeDir = episodeDirFromTopicPath(topicPath, rootDir);
+  const engine = detectEngine(episodeDir, options.engine);
+  const manifestFile = engineManifests[engine];
   const transcriptFile = options.transcriptPath ?? defaultTranscriptPath;
   const transcriptFullPath = path.join(episodeDir, transcriptFile);
   const warnings: string[] = [];
@@ -119,6 +136,8 @@ export function runAsrTranscriptDiffGate(
     warnings.push(`Missing ASR transcript file: ${transcriptFile}`);
     const result: AsrTranscriptDiffResult = {
       status: "asr_missing",
+      engine,
+      manifest_file: manifestFile,
       transcript_file: transcriptFile,
       checked_segment_ids: options.sampleSegmentIds ?? [],
       issues: [],
@@ -133,7 +152,7 @@ export function runAsrTranscriptDiffGate(
     return result;
   }
 
-  const manifest = readJsonFile<SegmentManifest>(path.join(episodeDir, manifestPath));
+  const manifest = readJsonFile<SegmentManifest>(path.join(episodeDir, manifestFile));
   const transcripts = readJsonFile<TranscriptFile>(transcriptFullPath);
   const segmentsById = new Map(manifest.segments.map((segment) => [segment.segment_id, segment]));
   const transcriptsById = new Map(transcripts.segments.map((segment) => [segment.segment_id, segment.transcript]));
@@ -179,6 +198,8 @@ export function runAsrTranscriptDiffGate(
 
   const result: AsrTranscriptDiffResult = {
     status: issues.length > 0 ? "failed" : "pass",
+    engine,
+    manifest_file: manifestFile,
     transcript_file: transcriptFile,
     checked_segment_ids: checkedSegmentIds,
     issues,
@@ -203,16 +224,24 @@ function main(argv: string[]): number {
   const [topicPath, ...rest] = argv;
 
   if (!topicPath) {
-    console.error("Usage: tsx scripts/asr_transcript_diff_gate.ts <topic.yaml> [--transcript audio/asr/sample_transcripts.json] [--sample-ids seg_001,seg_010,seg_014] [--allow-missing-asr]");
+    console.error("Usage: tsx scripts/asr_transcript_diff_gate.ts <topic.yaml> [--engine indextts2|f5_tts] [--transcript audio/asr/sample_transcripts.json] [--sample-ids seg_001,seg_010,seg_014] [--allow-missing-asr]");
     return 1;
   }
 
   const sampleIds = argValue(rest, "--sample-ids")?.split(",").map((value) => value.trim()).filter(Boolean);
   const allowMissingAsr = rest.includes("--allow-missing-asr");
+  const engineArg = argValue(rest, "--engine");
+  if (engineArg && engineArg !== "f5_tts" && engineArg !== "indextts2") {
+    console.error("Invalid --engine. Expected indextts2 or f5_tts.");
+    return 1;
+  }
+  const engine = engineArg as TtsGateEngine | undefined;
+
   const result = runAsrTranscriptDiffGate(topicPath, ".", {
     transcriptPath: argValue(rest, "--transcript"),
     sampleSegmentIds: sampleIds,
-    allowMissingAsr
+    allowMissingAsr,
+    engine
   });
 
   console.log(JSON.stringify(result));

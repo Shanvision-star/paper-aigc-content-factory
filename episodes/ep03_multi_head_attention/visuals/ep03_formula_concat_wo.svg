@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="220" viewBox="0 0 940 220">
+    <rect x="4" y="4" width="932" height="212" rx="24" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="470" y="78" text-anchor="middle" font-family="Georgia, serif" font-size="31" font-weight="700" fill="#111827">
+      <tspan>MultiHead(Q,K,V) =</tspan>
+    </text>
+    <text x="470" y="156" text-anchor="middle" font-family="Georgia, serif" font-size="29" font-weight="700" fill="#111827">
+      <tspan fill="#B279A2">Concat(</tspan><tspan>head</tspan><tspan baseline-shift="sub" font-size="19">1</tspan><tspan>, ..., head</tspan><tspan baseline-shift="sub" font-size="19">h</tspan><tspan fill="#B279A2">)</tspan>
+      <tspan fill="#E45756"> W</tspan><tspan baseline-shift="super" font-size="19" fill="#E45756">O</tspan>
+    </text>
+  </svg>

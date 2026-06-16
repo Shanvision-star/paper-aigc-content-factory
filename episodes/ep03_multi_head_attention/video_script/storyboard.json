@@ -1,0 +1,111 @@
+[
+  {
+    "scene_id": "S01_hook_one_head_not_enough",
+    "start": 0,
+    "duration": 42.585,
+    "voiceover": "上一集，我们拆开了一个注意力头。Q 和 K 先匹配，softmax 再分权，最后从 V 里读取信息。那问题来了：如果一个头已经能建立关系，Transformer 为什么还要一次开很多个头？这一集，我们不重复 Q、K、V 入门。我们只回答一个问题：为什么一个注意力头不够？先给结论。多头注意力，不是简单把同一个计算重复很多遍。",
+    "visual_type": "hook_one_to_many_heads",
+    "engine": "hyperframes",
+    "caption": "第3集｜为什么一个注意力头不够？",
+    "claim_ids": [
+      "ep03_claim_multi_head_question"
+    ],
+    "hook_id": "ep03_hook_continuity_question"
+  },
+  {
+    "scene_id": "S02_projection_subspaces",
+    "start": 42.585,
+    "duration": 45.988,
+    "voiceover": "它真正做的是：把同一份输入，投影到多个不同的表示子空间里。每个子空间并行计算一张注意力模式。最后，再把这些结果拼接，并重新融合成统一表示。用一个生活例子理解：你看同一张照片。只用一副镜片，可能能看清轮廓。但如果同时换几个不同焦段：一个看整体结构，一个看局部细节，一个看远近层次。照片没有变。变的是观察方式。",
+    "visual_type": "projection_subspace_split",
+    "engine": "hyperframes",
+    "caption": "同一输入，进入多个表示子空间",
+    "claim_ids": [
+      "ep03_claim_projection_subspaces"
+    ]
+  },
+  {
+    "scene_id": "S03_head_formula",
+    "start": 88.573,
+    "duration": 43.257,
+    "voiceover": "注意，这只是类比。在模型里，不是真的戴镜片。而是同一个输入 X，会经过不同的投影矩阵。第 i 个注意力头，有自己的 Q 投影矩阵、K 投影矩阵和 V 投影矩阵。所以每个头，都会在自己的表示子空间里，重新计算一次注意力。这就是论文里的核心公式：第 i 个注意力头，等于用自己的 Q、K、V 投影结果，去计算 Attention。",
+    "visual_type": "formula_head_i_complete",
+    "engine": "svg",
+    "caption": "head_i = Attention(QW_i^Q, KW_i^K, VW_i^V)",
+    "claim_ids": [
+      "ep03_claim_head_formula"
+    ]
+  },
+  {
+    "scene_id": "S04_no_manual_experts",
+    "start": 131.83,
+    "duration": 47.652,
+    "voiceover": "但这里一定不要误解。多头不是程序员手动安排的专家。不是一号头看语法，二号头看指代，三号头看长距离关系。论文定义的是结构。具体每个注意力头学到什么模式，是训练中自己形成的。有些注意力头可能关注局部关系。有些可能关注位置偏好。也有些注意力头，可能并不重要。所以，多头注意力的核心，不是多人开会。而是同一表示的多组投影分解。",
+    "visual_type": "misconception_to_learned_patterns",
+    "engine": "hyperframes",
+    "caption": "head 不是手写专家，模式来自训练",
+    "claim_ids": [
+      "ep03_claim_not_manual_experts"
+    ]
+  },
+  {
+    "scene_id": "S05_concat_wo",
+    "start": 179.482,
+    "duration": 54.834,
+    "voiceover": "那多个注意力头算完以后怎么办？不能把它们散着放在那里。论文里的做法是：先把多个注意力头的输出拼接起来，也就是 Concat。然后，再经过输出投影矩阵 W O。这里的 W O 很重要。它不是装饰。它负责把多个子空间里的结果，重新混合回模型主干能继续处理的表示。换句话说，多头注意力的完整动作是四步：第一步，多组投影。第二步，并行计算注意力。第三步，Concat 拼接。第四步，经过矩阵 W O 重新融合。",
+    "visual_type": "concat_to_wo_complete",
+    "engine": "svg",
+    "caption": "Concat + W O：把多个子空间重新融合",
+    "claim_ids": [
+      "ep03_claim_concat_wo"
+    ]
+  },
+  {
+    "scene_id": "S06_dimension_split",
+    "start": 234.316,
+    "duration": 49.711,
+    "voiceover": "还有一个工程问题：头变多，计算会不会暴涨？原论文的设计，不是无脑堆头。它把每个注意力头的维度降下来。论文的基础配置里，h 等于 8。d k 和 d v，等于 d model 除以 h。也就是说，如果总表示维度是 d model，就把它拆给多个注意力头。每个注意力头只处理其中一部分维度。所以，多头带来的不是简单加倍计算。它更像是在相近计算规模下，换来更丰富的表示分解能力。",
+    "visual_type": "dimension_split_dmodel_h",
+    "engine": "svg",
+    "caption": "d_k=d_v=d_model/h：每个 head 处理一部分维度",
+    "claim_ids": [
+      "ep03_claim_dimension_split"
+    ]
+  },
+  {
+    "scene_id": "S07_source_figure_spotlight",
+    "start": 284.027,
+    "duration": 33.75,
+    "voiceover": "这也解释了，为什么一个注意力头不够。单个注意力头只能生成一张注意力权重图。它容易把不同关系压在同一个分布里。多个注意力头，则可以并行生成多张不同的关系图。最后再融合起来。到了今天，大模型并没有抛弃多头注意力。反而一直在改造它。",
+    "visual_type": "paper_figure2_spotlight",
+    "engine": "paper_image",
+    "caption": "原论文 Figure 2：Multi-Head Attention 结构",
+    "claim_ids": [
+      "ep03_claim_source_figure"
+    ]
+  },
+  {
+    "scene_id": "S08_engineering_boundary",
+    "start": 317.777,
+    "duration": 76.695,
+    "voiceover": "多查询注意力，会让多个查询头共享同一组 K 和 V，降低生成时的推理成本。分组查询注意力，是在多头注意力和多查询注意力之间折中。它用分组共享 K 和 V，兼顾速度和质量。FlashAttention，则主要优化注意力计算和显存访问。它不是改变多头的数学定义，而是让这条计算路径更快、更省显存。\n混合专家机制要分开看。它不是多头注意力的升级版。它更像是在前馈层或模块级，让 token 被路由到不同专家。所以这里要分清：多头注意力，是多个表示子空间里的并行 attention。多查询注意力和分组查询注意力，是对 K 和 V 侧的效率改造。混合专家机制，是另一层稀疏路由设计。",
+    "visual_type": "engineering_boundary_cards",
+    "engine": "svg",
+    "caption": "MHA / MQA / GQA / MoE：不同层的工程改造",
+    "claim_ids": [
+      "ep03_claim_engineering_boundary"
+    ]
+  },
+  {
+    "scene_id": "S09_feynman_summary_and_next",
+    "start": 394.472,
+    "duration": 66.642,
+    "voiceover": "最后用费曼方式总结：一个注意力头，像一副镜片。多个注意力头，不是多个固定专家。而是把同一段文本，投影到多个不同的表示子空间里。每个子空间，都计算一张自己的注意力模式。最后，先 Concat 拼接，再经过矩阵 W O，融合成统一表示。所以这一集真正要记住的，不是注意力头越多越高级。而是：Multi-Head Attention，是对注意力表示空间的分解与重组。\n下一集，我们继续拆另一个问题：Attention 可以建立关系，但它本身并不知道顺序。那 Transformer 怎么知道，谁在前，谁在后？这就是位置编码。",
+    "visual_type": "feynman_summary_position_teaser",
+    "engine": "hyperframes",
+    "caption": "第4集：Position Encoding，位置编码",
+    "claim_ids": [
+      "ep03_claim_feynman_summary"
+    ]
+  }
+]

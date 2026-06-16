@@ -31,8 +31,12 @@ type SampleReviewFile = {
   notes?: string;
 };
 
+type TtsGateEngine = "f5_tts" | "indextts2";
+
 export type TtsSampleReviewResult = {
   status: SampleReviewStatus;
+  engine: TtsGateEngine;
+  manifest_file: string;
   sample_segment_ids: string[];
   segment_text_hash: string;
   review_file: string;
@@ -47,13 +51,29 @@ export type TtsSampleReviewResult = {
 type ReviewGateOptions = {
   sampleSegmentIds?: string[];
   reviewFile?: string;
+  engine?: TtsGateEngine;
 };
 
 const defaultSampleSegmentIds = ["seg_001", "seg_010", "seg_014"];
-const defaultReviewFile = "review/sample_audio_review.json";
-const manifestPath = "audio/f5_tts/segments/segment_manifest.json";
+const engineManifests: Record<TtsGateEngine, string> = {
+  f5_tts: "audio/f5_tts/segments/segment_manifest.json",
+  indextts2: "audio/indextts2/segments/segment_manifest.json"
+};
+const engineReviewFiles: Record<TtsGateEngine, string> = {
+  f5_tts: "review/sample_audio_review.json",
+  indextts2: "review/sample_audio_review.indextts2.json"
+};
 
-function selectedSegments(episodeDir: string, sampleSegmentIds: string[]): PreparedTtsSegment[] {
+function detectEngine(episodeDir: string, requestedEngine?: TtsGateEngine): TtsGateEngine {
+  if (requestedEngine) {
+    return requestedEngine;
+  }
+
+  return fs.existsSync(path.join(episodeDir, engineManifests.indextts2)) ? "indextts2" : "f5_tts";
+}
+
+function selectedSegments(episodeDir: string, sampleSegmentIds: string[], engine: TtsGateEngine): PreparedTtsSegment[] {
+  const manifestPath = engineManifests[engine];
   const manifest = readJsonFile<SegmentManifest>(path.join(episodeDir, manifestPath));
   const byId = new Map(manifest.segments.map((segment) => [segment.segment_id, segment]));
 
@@ -86,9 +106,11 @@ export function runTtsSampleReviewGate(
 ): TtsSampleReviewResult {
   const episodeDir = episodeDirFromTopicPath(topicPath, rootDir);
   const sampleSegmentIds = options.sampleSegmentIds ?? defaultSampleSegmentIds;
-  const reviewFile = options.reviewFile ?? defaultReviewFile;
+  const engine = detectEngine(episodeDir, options.engine);
+  const manifestFile = engineManifests[engine];
+  const reviewFile = options.reviewFile ?? engineReviewFiles[engine];
   const reviewPath = path.join(episodeDir, reviewFile);
-  const segments = selectedSegments(episodeDir, sampleSegmentIds);
+  const segments = selectedSegments(episodeDir, sampleSegmentIds, engine);
   const segmentTextHash = sampleTextHash(segments);
   const sampleAudio = segments.map((segment) => {
     const outputPath = path.join(episodeDir, segment.output_audio);
@@ -111,7 +133,9 @@ export function runTtsSampleReviewGate(
     writeJson(reviewPath, {
       status: "pending_review",
       generated_at: runtimeTimestamp,
-      required_action: "Listen to the representative F5-TTS sample wav files and set status to approved only if pronunciation, leakage, duplication, and pacing are acceptable.",
+      engine,
+      manifest_file: manifestFile,
+      required_action: `Listen to the representative ${engine} sample wav files and set status to approved only if pronunciation, leakage, duplication, and pacing are acceptable.`,
       approved_segment_ids: sampleSegmentIds,
       segment_text_hash: segmentTextHash,
       sample_audio: sampleAudio,
@@ -141,6 +165,8 @@ export function runTtsSampleReviewGate(
 
   const result: TtsSampleReviewResult = {
     status,
+    engine,
+    manifest_file: manifestFile,
     sample_segment_ids: sampleSegmentIds,
     segment_text_hash: segmentTextHash,
     review_file: reviewFile,
@@ -166,14 +192,22 @@ function main(argv: string[]): number {
   const [topicPath, ...rest] = argv;
 
   if (!topicPath) {
-    console.error("Usage: tsx scripts/tts_sample_review_gate.ts <topic.yaml> [--sample-ids seg_001,seg_010,seg_014] [--review-file review/sample_audio_review.json]");
+    console.error("Usage: tsx scripts/tts_sample_review_gate.ts <topic.yaml> [--engine indextts2|f5_tts] [--sample-ids seg_001,seg_010,seg_014] [--review-file review/sample_audio_review.json]");
     return 1;
   }
 
   const sampleIds = argValue(rest, "--sample-ids")?.split(",").map((value) => value.trim()).filter(Boolean);
+  const engineArg = argValue(rest, "--engine");
+  if (engineArg && engineArg !== "f5_tts" && engineArg !== "indextts2") {
+    console.error("Invalid --engine. Expected indextts2 or f5_tts.");
+    return 1;
+  }
+  const engine = engineArg as TtsGateEngine | undefined;
+
   const result = runTtsSampleReviewGate(topicPath, ".", {
     sampleSegmentIds: sampleIds,
-    reviewFile: argValue(rest, "--review-file")
+    reviewFile: argValue(rest, "--review-file"),
+    engine
   });
 
   console.log(JSON.stringify(result));

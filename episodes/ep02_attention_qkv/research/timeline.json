@@ -1,0 +1,18 @@
+[
+  {
+    "event_id": "t001",
+    "date": "2017-06",
+    "title": "Attention Is All You Need appears on arXiv",
+    "source_ids": [
+      "src_001"
+    ]
+  },
+  {
+    "event_id": "t002",
+    "date": "contract-smoke",
+    "title": "P0 deterministic content package skeleton generated",
+    "source_ids": [
+      "src_002"
+    ]
+  }
+]

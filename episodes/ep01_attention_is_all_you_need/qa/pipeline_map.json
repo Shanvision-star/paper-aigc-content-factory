@@ -236,10 +236,10 @@
       "blocking_items": []
     },
     {
-      "id": "video_render",
-      "title": "Video Render",
+      "id": "video_draft",
+      "title": "Video Draft",
       "command": "npm run video:hyperframes-draft",
-      "purpose": "把 storyboard、音频和字幕组合成 HyperFrames HTML 草稿；MP4 渲染仍需显式开启。",
+      "purpose": "把 storyboard、音频和字幕组合成 HyperFrames HTML 草稿；不生成 MP4，正式渲染仍需显式开启。",
       "inputs": [
         {
           "path": "storyboard/storyboard.json",
@@ -258,10 +258,6 @@
         {
           "path": "renders/hyperframes/ep01_draft.html",
           "exists": true
-        },
-        {
-          "path": "renders/douyin_zh_1080x1920_draft.mp4",
-          "exists": true
         }
       ],
       "status": "pass",
@@ -278,6 +274,10 @@
           "exists": true
         },
         {
+          "path": "renders/hyperframes_formal_status.json",
+          "exists": true
+        },
+        {
           "path": "qa/qa_report.json",
           "exists": true
         }
@@ -288,8 +288,10 @@
           "exists": true
         }
       ],
-      "status": "pass",
-      "blocking_items": []
+      "status": "partial",
+      "blocking_items": [
+        "Formal HyperFrames render is not ready: renders/hyperframes_formal_status.json#input_fingerprint=missing"
+      ]
     },
     {
       "id": "quality_gate",
@@ -352,8 +354,10 @@
           "exists": true
         }
       ],
-      "status": "pass",
-      "blocking_items": []
+      "status": "partial",
+      "blocking_items": [
+        "Formal HyperFrames render is not ready: renders/hyperframes_formal_status.json#input_fingerprint=missing"
+      ]
     },
     {
       "id": "pipeline_map",
@@ -385,11 +389,14 @@
     }
   ],
   "summary": {
-    "status": "pass",
-    "passed_stages": 9,
-    "partial_stages": 0,
+    "status": "partial",
+    "passed_stages": 7,
+    "partial_stages": 2,
     "failed_stages": 0,
     "blocked_stages": 0,
-    "blocking_items": []
+    "blocking_items": [
+      "Formal HyperFrames render is not ready: renders/hyperframes_formal_status.json#input_fingerprint=missing",
+      "Formal HyperFrames render is not ready: renders/hyperframes_formal_status.json#input_fingerprint=missing"
+    ]
   }
 }
