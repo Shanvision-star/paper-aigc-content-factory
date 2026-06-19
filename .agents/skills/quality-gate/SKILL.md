@@ -27,6 +27,7 @@ description: Use when evaluating episode artifacts and reporting pass, partial, 
 - Report `pass`, `partial`, or `failed` with explicit reasons.
 - Preserve deterministic default checks and keep real provider smoke separate.
 - Surface missing voice, video, captions, cover, blog, or publish artifacts.
+- Surface MATLAB visual risks when present: missing render environment, missing `rendererinfo`, Windows text size above `100%` without reviewed keyframes, missing overlap check, or missing HyperFrames import review.
 
 ## Forbidden Actions
 

@@ -55,6 +55,7 @@ Required fields:
 - `canvas_px`: one of the approved platform canvas sizes unless the episode explains why.
 - `safe_area`: title, formula, figure, source label, and caption exclusion zones.
 - `font_map`: MATLAB font roles mapped to the HyperFrames type system.
+- `render_environment`: MATLAB release or executable, OS display text size, display scaling, graphics renderer, renderer device, and GPU name captured from the render machine.
 - `fps`, `duration_s`, `expected_frame_count`: required for animation or MP4 preview.
 - `output_formats`: for example `png_keyframes`, `svg`, `mp4_preview`, `html_preview`.
 - `script_path`: MATLAB entrypoint.
@@ -113,6 +114,20 @@ Rules:
 - Formula glyphs must remain crisp after HyperFrames import and video encoding. Prefer SVG/PDF or high-resolution PNG for formulas.
 - If MATLAB cannot render a formula with acceptable glyph quality, export the formula through a reviewed formula renderer and let MATLAB compose it as an image object.
 - Manifest must record font family, fallback, font size, and any formula renderer used.
+
+## Render Environment Contract
+
+R2026a uses the modern WebGL/ANGLE graphics path. MATLAB command success is not enough for visual approval; the render environment must be recorded because OS text scaling and renderer-device selection can change figure layout, font metrics, and exported frame geometry.
+
+Rules:
+
+- Before final MATLAB exports, Windows accessibility `Text size` should be `100%`. Use Windows display scaling for screen comfort instead of accessibility text enlargement.
+- If `Text size` is greater than `100%`, the asset may only be marked `needs_human_review` until full-resolution keyframes and phone-size previews prove that labels, formulas, axes, legends, and source captions did not shift or become scrollable.
+- Run a tiny R2026a figure smoke after MATLAB install, update, preference reset, graphics-driver change, or ServiceHost/mwhome reset.
+- Record `rendererinfo` in the manifest. For this Windows workstation, expected final graphics output is `GraphicsRenderer: WebGL` and a `RendererDevice` that names `NVIDIA GeForce RTX 3050` through ANGLE/D3D11; any different device is allowed only with a PR note and visual evidence.
+- Do not diagnose a MATLAB visual failure as a formula/script issue until compute smoke and minimum figure/export smoke have been separated.
+- If a minimum `figure` or `exportgraphics` smoke crashes while pure compute succeeds, first back up and reset user-level MATLAB Home/recent-artifacts state such as `%APPDATA%\MathWorks\mwhome`; do not remove hardware devices, uninstall MATLAB, or change project scripts as the first fix.
+- PR review must include the render environment summary when MATLAB assets are added or regenerated.
 
 ## Professional Terminology Contract
 
@@ -215,6 +230,15 @@ Handoff rules:
     "mono": "approved mono font or fallback",
     "math": "reviewed formula renderer"
   },
+  "render_environment": {
+    "os": "Windows 11",
+    "windows_text_size_percent": 100,
+    "display_scaling_percent": "TODO: capture from render machine",
+    "graphics_renderer": "WebGL",
+    "renderer_device": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3050 ... D3D11)",
+    "renderer_smoke_status": "TODO: passed/failed/not_run",
+    "renderer_smoke_notes": "TODO: command, output, or PR evidence"
+  },
   "fps": 30,
   "duration_s": 6,
   "expected_frame_count": 180,
@@ -244,6 +268,13 @@ Rules:
 
 - Use the explicit R2026a executable path instead of relying on `PATH`.
 - Run a tiny version or script-entry smoke before a long render when the MATLAB runtime was recently installed or updated.
+- Run and record a tiny hidden-figure/export smoke before final MATLAB assets are approved:
+
+```powershell
+& 'D:\Program Files\MATLAB\R2026a\bin\matlab.exe' -batch "f=figure('Visible','off'); ax=axes(f); plot(ax,1:10); drawnow; disp(rendererinfo(ax)); out=[tempname '.png']; exportgraphics(f,out); close(f)"
+```
+
+- If MATLAB warns that Windows accessibility text size is greater than `100%`, reset it to `100%` before final export or record the exception in the manifest and PR review.
 - If `-batch` crashes, record the exact command, exit code, and crash symptom. Do not mark the render as failed or approved until a fallback attempt or human review decides the boundary.
 - R2021b can remain a fallback only when the episode contract records why R2026a was not used.
 - MATLAB invocation is never part of default `npm test`. It is an explicit render or smoke task.
@@ -256,10 +287,12 @@ Before MATLAB rendering:
 - claim and formula approved;
 - canvas, fps, duration, and output formats declared;
 - font roles mapped to HyperFrames;
+- Windows text size, display scaling, MATLAB release, and expected renderer/device declared when a real MATLAB export will run;
 - caption and formula exclusion zones declared.
 
 After MATLAB rendering:
 
+- actual `rendererinfo` and render machine notes recorded in the manifest or PR;
 - keyframes exist and match `expected_frame_count` plan;
 - formulas are sharp, complete, and readable;
 - terminology matches voiceover and captions;
@@ -283,6 +316,7 @@ The following risks are easy to miss when a MATLAB asset looks technically corre
 - Analogy drift: a classroom or seat-number analogy must map back to the exact mechanism; it cannot imply a stronger claim than the paper formula supports.
 - Formula/caption/voice mismatch: visual `sqrt(d_k)`, caption wording, and spoken text must preserve the same mathematical meaning.
 - Preview mismatch: a clean HTML or MATLAB figure preview can still fail after MP4 export or HyperFrames import.
+- OS text-scaling drift: Windows accessibility text size can change MATLAB layout and make previously clean formulas scroll, crop, or collide with captions.
 - Aspect-ratio drift: a 16:9 figure can become unreadable in 9:16 unless the episode defines a separate vertical layout.
 - Licensing drift: third-party MATLAB code, helper functions, icon packs, or fonts need license review before vendoring.
 - Freshness drift: stale generated assets must be regenerated when source refs, script, formula, font map, or canvas changes.
@@ -296,6 +330,7 @@ A MATLAB visual asset is ready for downstream composition only when:
 
 - its manifest is complete;
 - its source evidence and claim are approved;
+- its render environment, renderer device, and Windows text-size status are recorded when generated by MATLAB;
 - its formula and terminology match the script;
 - its keyframes pass layout, font, safe-area, overlap, and readability checks;
 - its MP4 preview or static export is inspected when used;

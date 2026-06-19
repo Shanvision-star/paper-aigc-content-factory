@@ -40,12 +40,12 @@ Create the visual bridge between research/script/storyboard assets and HyperFram
 - Required original paper figures.
 - Required formulas or Manim scenes.
 - Formula asset contract: canonical formula text or LaTeX, acceptable source type, minimum raster/vector quality, annotation targets, safe-area placement, and keyframe review rule.
-- MATLAB adapter contract when an episode uses MATLAB: reference `docs/visual_system/MATLAB.md`, then declare script path, MATLAB release or executable, canvas size, safe areas, fps or static format, font map, terminology contract, source evidence, output paths, deterministic settings, overlap review, and review keyframes.
+- MATLAB adapter contract when an episode uses MATLAB: reference `docs/visual_system/MATLAB.md`, then declare script path, MATLAB release or executable, render environment, Windows text-size expectation, rendererinfo/GPU evidence requirement, canvas size, safe areas, fps or static format, font map, terminology contract, source evidence, output paths, deterministic settings, overlap review, and review keyframes.
 - Beat table with spoken cue, frame treatment, visual engine, required assets, and platform notes.
 - Caption rules derived from `spoken_text`.
 - Ogilvy layout and typography hard rules: no reverse type, no colored body panels behind long text, readable type floor with `9pt` minimum and `11pt` preferred print baseline scaled up for phone video, readable serif/traditional faces for dense copy, large sans-serif only for poster/hook frames, stable font system, sufficient leading, no all-caps sentences, no headline-over-image layout, and five-second poster rule for cover/opening frames.
 - Pronunciation constraints, including Chinese `地` as `de` when TTS normalization is needed.
-- Render QA: no black frame, no subtitle overlap, figure attribution, formula legibility, key-frame review.
+- Render QA: no black frame, no subtitle overlap, figure attribution, formula legibility, key-frame review, and MATLAB render-environment evidence when MATLAB generated or regenerated assets.
 
 ## Hard Boundaries
 

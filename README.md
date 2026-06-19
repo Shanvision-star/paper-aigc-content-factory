@@ -419,7 +419,7 @@ sample -> asr_diff -> human_approval -> full_tts -> merge -> captions -> render
 
 - `docs/visual_system/DESIGN.md` 定义账号级视觉身份：颜色、字体、中英文模式、封面 `safe90`、论文图和公式处理原则。
 - `docs/visual_system/FRAME.md` 把视觉身份转成视频镜头规则：`1080x1920`、`1080x1440`、`1920x1080`、`1080x1080`、safe area、Caption Safe Area、Typography Floor、Frame Treatments、Paper Genre Treatment Registry、MATLAB adapter contract、Pre-Render Frame Audit。
-- `docs/visual_system/MATLAB.md` 约束 MATLAB 绘制、动画、字体映射、专业术语、公式清晰度、图像重叠检查、manifest、R2026a 调用和导入 HyperFrames 的交接要求。
+- `docs/visual_system/MATLAB.md` 约束 MATLAB 绘制、动画、字体映射、专业术语、公式清晰度、图像重叠检查、manifest、R2026a 调用、render environment 记录和导入 HyperFrames 的交接要求。
 - `episodes/{paper_id}/video_script/FRAME.md` 定义单篇论文的执行规则：paper figure spotlight、formula explanation、platform variants、需要出现的原论文图片、公式图片、Manim 场景或 MATLAB 生成帧、字幕避让和渲染 QA。
 - 公式必须按 Formula Asset Contract 进入 HyperFrames：完整公式对象、canonical LaTeX/文本、清晰截图或 SVG/MathJax/KaTeX/Manim/MATLAB 来源、标注目标、safe-area bounding box 和关键帧审核。
 
@@ -449,6 +449,7 @@ MATLAB 只作为确定性视觉适配器进入项目，不替代 HyperFrames 最
 - 每个 MATLAB 视觉任务必须声明 `canvas_px`、`fps`、时长、预期帧数、输出格式、脚本路径、MATLAB release、source URL/source capture、canonical formula/LaTeX 和 annotation targets。
 - 默认采用 canvas-first：固定 `1080x1920`、`1080x1440`、`1920x1080` 或 `1080x1080` 后，再把公式、矩阵、箭头、字幕避让区和 source label 放入画布。
 - 生成 review frames 优先用 R2026a `exportgraphics` 的固定像素导出；最终帧不要依赖屏幕窗口状态或裸 `getframe`，除非 episode FRAME 记录原因和人工审核证据。
+- 使用 R2026a 生成或重生成 MATLAB 资产时，PR 必须记录 Windows 文本大小、显示缩放、`rendererinfo`、实际 renderer device、GPU 和最小 figure/export smoke；正式导出前 Windows 辅助功能 `Text size` 默认应为 `100%`。
 - MP4 预览用 `VideoWriter` 固定 `MPEG-4`、`FrameRate`、`Quality` 和偶数像素尺寸；HTML Web Canvas 只用于交互检查，不替代 PNG/SVG keyframes 或 final MP4 抽帧审核。
 - MATLAB 生成的公式、曲线、热力图和 RoPE/位置编码动画，必须和口播、字幕、source-backed 公式含义一致；不能把类比画成与论文机制不一致的结论。
 - 第三方 MATLAB 项目只能先吸收工程约束；不要直接复制 GPL 或许可证不清的代码。需要引入依赖时，先做 license review 和最小替代方案评估。
@@ -456,7 +457,7 @@ MATLAB 只作为确定性视觉适配器进入项目，不替代 HyperFrames 最
 
 ### MATLAB Animation Adapter Hard Gates (English)
 
-MATLAB is an optional deterministic visual adapter, not the final composition layer. A MATLAB-generated scene must declare its canvas, frame rate, duration, expected frame count, source evidence, formula text or LaTeX, annotation targets, script path, MATLAB release, output formats, and review keyframes before it is used in a render. Prefer fixed-pixel `exportgraphics` frames and `VideoWriter` MP4 previews; do not treat HTML previews or command success as visual approval.
+MATLAB is an optional deterministic visual adapter, not the final composition layer. A MATLAB-generated scene must declare its canvas, frame rate, duration, expected frame count, source evidence, formula text or LaTeX, annotation targets, script path, MATLAB release, render environment, output formats, and review keyframes before it is used in a render. Prefer fixed-pixel `exportgraphics` frames and `VideoWriter` MP4 previews; record Windows text size, display scaling, `rendererinfo`, renderer device, GPU, and a tiny figure/export smoke in PR review; do not treat HTML previews or command success as visual approval.
 
 ### HyperFrames Animation Hard Gates (English)
 

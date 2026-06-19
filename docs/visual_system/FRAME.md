@@ -131,6 +131,8 @@ Reveal operation order first, then notation. For Attention, show QK matching, so
 - Full MATLAB layout, animation, typography, terminology, overlap-check, manifest, invocation, and HyperFrames handoff rules live in `docs/visual_system/MATLAB.md`; episode contracts must reference it when `visual_engine=matlab`.
 - Every MATLAB visual task must be canvas-first: declare `canvas_px`, `fps`, scene duration, expected frame count, safe-area policy, output formats, and target platform before drawing.
 - Prefer R2026a `exportgraphics` with explicit `Units="pixels"`, `Width`, `Height`, and `Padding=0` for review frames. Avoid relying on screen state or raw `getframe` for final frames unless the episode contract documents the reason and review evidence.
+- Before approving final MATLAB exports, record R2026a `rendererinfo`, actual renderer device, Windows accessibility text size, and display scaling. On the current Windows workstation, final R2026a graphics should resolve through ANGLE/D3D11 on `NVIDIA GeForce RTX 3050`; any deviation needs a PR note and reviewed keyframes.
+- Windows accessibility `Text size` should be `100%` for final MATLAB exports. If it is greater than `100%`, the asset must stay `needs_human_review` until full-size and phone-size keyframes prove no font, formula, axis, or caption layout drift.
 - MATLAB MP4 previews use `VideoWriter` with a fixed profile such as `MPEG-4`, fixed `FrameRate`, fixed `Quality`, and even pixel dimensions. Do not let the first frame implicitly set an accidental odd or cropped video size.
 - Each MATLAB output must write or update a manifest with the MATLAB executable or release, script path, source URLs or local source captures, canonical formula text or LaTeX, annotation targets, frame count, output paths, and generation timestamp.
 - Generate static keyframes before full MP4 review. HTML Web Canvas output may be useful for interactive inspection, but it does not replace PNG/SVG keyframes or final MP4 frame checks.
@@ -211,6 +213,7 @@ Summarize the paper's core mental model and preview the next technical decomposi
 - Formula legibility test: formulas are readable without shrinking below the typography floor.
 - Formula completeness test: each required formula is fully visible, has a canonical text/LaTeX record, and includes any required annotation targets.
 - MATLAB adapter test: MATLAB-generated assets declare their script, MATLAB release, canvas, fps or static format, source evidence, and review keyframes in the manifest before they are used in an episode render.
+- MATLAB render-environment test: PR review records Windows text size, display scaling, `rendererinfo`, renderer device, and a tiny R2026a figure/export smoke when MATLAB assets were generated or regenerated.
 - Platform crop test: vertical, note-video vertical, landscape, and square variants declare what is preserved or adapted.
 - Render boundary test: real HyperFrames render remains outside default `npm test`.
 - Render boundary test: real MATLAB rendering also remains outside default `npm test` unless a future deterministic unit test uses a tiny synthetic fixture with no external files or network calls.

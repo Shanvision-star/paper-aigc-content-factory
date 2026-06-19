@@ -26,7 +26,7 @@ description: Use when assigning visual engines and preparing an assets manifest 
 - Assign an engine and expected output path for each storyboard scene.
 - Map formulas, diagrams, social-motion cards, charts, captions, and transitions to P0-compatible engines.
 - Assign `matlab` only for deterministic source-backed formula conversion, matrix/heatmap views, curve plots, RoPE or positional-encoding geometry, attention score illustrations, and frame/video preview specs that will be rendered by a separately routed task.
-- When assigning `matlab`, require manifest fields from `docs/visual_system/MATLAB.md`: canvas, safe areas, fps or static format, font map, terminology contract, source evidence, review keyframes, overlap check, and HyperFrames handoff status.
+- When assigning `matlab`, require manifest fields from `docs/visual_system/MATLAB.md`: canvas, safe areas, fps or static format, font map, terminology contract, render environment, Windows text-size status, rendererinfo/GPU evidence, source evidence, review keyframes, overlap check, and HyperFrames handoff status.
 - For formula assets, write manifest metadata for canonical formula text or LaTeX, source type, render quality, annotation targets, and review status before HyperFrames composition.
 - Convert Hook Lab visual cues into concrete first-scene visual actions.
 - Preserve safe-zone and platform framing requirements in the manifest.
