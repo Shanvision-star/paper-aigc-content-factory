@@ -49,7 +49,8 @@ This file defines the reusable visual identity for AI paper explainer content. I
 
 - Original paper figures must remain inspectable and attributed in the episode asset manifest.
 - Formula frames must explain the operation before showing dense notation.
-- Manim is preferred for mathematical objects such as attention matrices, QK multiplication, softmax, and positional encoding waves.
+- Manim is preferred for hand-authored mathematical motion such as attention matrices, QK multiplication, softmax, and positional encoding waves.
+- MATLAB may be used as a deterministic visual adapter for source-backed formulas, matrix or heatmap views, curve plots, RoPE/positional-encoding geometry, and frame-to-video previews when the episode contract follows `docs/visual_system/MATLAB.md` and records the script, MATLAB release, canvas size, frame rate, font map, terminology contract, output paths, review keyframes, overlap checks, and source evidence.
 - HyperFrames is preferred for final composition, captions, platform safe areas, transitions, paper figure spotlight frames, and recap cards.
 
 ## What Not To Do
@@ -60,3 +61,4 @@ This file defines the reusable visual identity for AI paper explainer content. I
 - Do not let subtitles overlap formulas, paper figures, or face/voiceover panels.
 - Do not crop load-bearing text outside vertical platform safe areas.
 - Do not treat rendered command success as final quality approval.
+- Do not treat MATLAB-generated videos, HTML previews, or exported plots as approved until their keyframes pass the same source, formula, caption, and safe-area review as other visual assets.

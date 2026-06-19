@@ -21,6 +21,7 @@ Create the visual bridge between research/script/storyboard assets and HyperFram
 
 - `docs/visual_system/DESIGN.md`
 - `docs/visual_system/FRAME.md`
+- `docs/visual_system/MATLAB.md` when assigning MATLAB-generated formulas, plots, animations, keyframes, HTML previews, or MP4 previews
 - `episodes/{paper_id}/research_report.md`
 - `episodes/{paper_id}/script/voice_segments.json`
 - `episodes/{paper_id}/storyboard/storyboard.json`
@@ -39,6 +40,7 @@ Create the visual bridge between research/script/storyboard assets and HyperFram
 - Required original paper figures.
 - Required formulas or Manim scenes.
 - Formula asset contract: canonical formula text or LaTeX, acceptable source type, minimum raster/vector quality, annotation targets, safe-area placement, and keyframe review rule.
+- MATLAB adapter contract when an episode uses MATLAB: reference `docs/visual_system/MATLAB.md`, then declare script path, MATLAB release or executable, canvas size, safe areas, fps or static format, font map, terminology contract, source evidence, output paths, deterministic settings, overlap review, and review keyframes.
 - Beat table with spoken cue, frame treatment, visual engine, required assets, and platform notes.
 - Caption rules derived from `spoken_text`.
 - Ogilvy layout and typography hard rules: no reverse type, no colored body panels behind long text, readable type floor with `9pt` minimum and `11pt` preferred print baseline scaled up for phone video, readable serif/traditional faces for dense copy, large sans-serif only for poster/hook frames, stable font system, sufficient leading, no all-caps sentences, no headline-over-image layout, and five-second poster rule for cover/opening frames.
@@ -51,6 +53,7 @@ Create the visual bridge between research/script/storyboard assets and HyperFram
 - Do not rewrite spoken narration.
 - Do not run real HyperFrames render.
 - Do not run real Manim render.
+- Do not run real MATLAB render.
 - Do not run provider, LLM, or network calls.
 - Do not run TTS or voice cloning.
 - Do not replace technical script review.
@@ -60,18 +63,18 @@ Create the visual bridge between research/script/storyboard assets and HyperFram
 
 ## Workflow
 
-1. Read global `DESIGN.md` and `FRAME.md`.
+1. Read global `DESIGN.md` and `FRAME.md`; read `docs/visual_system/MATLAB.md` before assigning any `matlab` visual engine.
 2. Read the paper research report, storyboard, voice segments, and assets manifest.
 3. Identify required original paper figures and formulas.
 4. Map each beat to one frame treatment.
-5. Assign visual engines: `hyperframes`, `manim`, `svg`, `paper_image`, or `python_chart`.
+5. Assign visual engines: `hyperframes`, `manim`, `matlab`, `svg`, `paper_image`, or `python_chart`.
 6. Check caption safe area, formula completeness, formula legibility, annotation targets, and platform variants.
 7. Write or update episode `video_script/FRAME.md`.
 8. Report missing assets or unresolved review risks instead of fabricating content.
 
 ## Quality Bar
 
-- A future agent can build HyperFrames compositions from the episode `FRAME.md` without guessing visual scale, safe area, or required assets.
+- A future agent can build HyperFrames compositions from the episode `FRAME.md` without guessing visual scale, safe area, required assets, or MATLAB handoff rules.
 - A human reviewer can see which paper figures and formulas must appear.
 - Platform variants are explicit.
 - Default tests remain deterministic.

@@ -10,6 +10,7 @@ This file translates `docs/visual_system/DESIGN.md` into camera-ready frame rule
 
 - `DESIGN.md`: account-level identity.
 - `FRAME.md`: global video-frame grammar.
+- `MATLAB.md`: dedicated MATLAB visual adapter contract when an episode uses MATLAB-generated formulas, plots, animations, or MP4 previews.
 - `episodes/{paper_id}/video_script/FRAME.md`: paper-specific execution contract.
 
 ## Frame Sizes
@@ -98,7 +99,7 @@ Reveal operation order first, then notation. For Attention, show QK matching, so
 ## Formula Asset Contract
 
 - Required formulas must appear as complete visual objects, not cropped fragments.
-- Acceptable formula sources are clear paper crops, high-resolution formula-editor screenshots, KaTeX/MathJax/SVG output, Manim stills, or Manim scenes.
+- Acceptable formula sources are clear paper crops, high-resolution formula-editor screenshots, KaTeX/MathJax/SVG output, Manim stills, Manim scenes, or MATLAB-generated SVG/PDF/PNG/HTML assets from source-backed scripts.
 - Raster formula screenshots must be rendered at least `2x` the target display size; vector SVG or HTML math is preferred when possible.
 - Each formula scene must preserve a full bounding box inside the safe area and keep captions outside that box.
 - Formula assets must declare canonical formula text or LaTeX, source type, output path, and annotation targets in the episode frame contract or assets manifest.
@@ -122,6 +123,20 @@ Reveal operation order first, then notation. For Attention, show QK matching, so
 - For Scaled Dot-Product Attention, the minimum derivation chain is `Q -> K matching -> score matrix QK^T -> /sqrt(d_k) -> row-wise softmax -> weighted V -> output O`.
 - Visual, caption, and spoken channels must preserve the same formula meaning. Example: the visual shows `√(d_k)` or a true radical form, while spoken text says the square root of d k.
 - Do not place formula fragments inside normal paragraph text when the scene requires mathematical inspection; use a protected formula object or source-backed image instead.
+
+## MATLAB Figure And Animation Adapter Contract
+
+- MATLAB is an optional deterministic visual engine for source-backed formula conversion, matrix and heatmap views, positional-encoding curves, RoPE rotation geometry, attention score illustrations, and frame-to-video previews.
+- MATLAB does not replace HyperFrames as the final composition layer. A MATLAB scene should produce inspectable assets that HyperFrames or a later explicit render task can consume.
+- Full MATLAB layout, animation, typography, terminology, overlap-check, manifest, invocation, and HyperFrames handoff rules live in `docs/visual_system/MATLAB.md`; episode contracts must reference it when `visual_engine=matlab`.
+- Every MATLAB visual task must be canvas-first: declare `canvas_px`, `fps`, scene duration, expected frame count, safe-area policy, output formats, and target platform before drawing.
+- Prefer R2026a `exportgraphics` with explicit `Units="pixels"`, `Width`, `Height`, and `Padding=0` for review frames. Avoid relying on screen state or raw `getframe` for final frames unless the episode contract documents the reason and review evidence.
+- MATLAB MP4 previews use `VideoWriter` with a fixed profile such as `MPEG-4`, fixed `FrameRate`, fixed `Quality`, and even pixel dimensions. Do not let the first frame implicitly set an accidental odd or cropped video size.
+- Each MATLAB output must write or update a manifest with the MATLAB executable or release, script path, source URLs or local source captures, canonical formula text or LaTeX, annotation targets, frame count, output paths, and generation timestamp.
+- Generate static keyframes before full MP4 review. HTML Web Canvas output may be useful for interactive inspection, but it does not replace PNG/SVG keyframes or final MP4 frame checks.
+- MATLAB scripts must be deterministic by default: no unseeded random data, no wall-clock motion decisions, no live provider calls, and no network-dependent source fetching inside default tests.
+- Third-party MATLAB animation/export libraries may inform constraints, but do not vendor or copy GPL or unclear-license code into this project without an explicit license review. Prefer project-local wrappers around built-in `exportgraphics` and `VideoWriter`.
+- Audience-visible MATLAB frames must follow audience-frame hygiene: no internal asset names, QA notes, placeholder labels, style prompts, or reviewer instructions on screen.
 
 ## Connector And Arrow Geometry Hard Gate
 
@@ -195,5 +210,7 @@ Summarize the paper's core mental model and preview the next technical decomposi
 - Figure attribution test: original paper figures stay identifiable and referenced in `assets_manifest.json`.
 - Formula legibility test: formulas are readable without shrinking below the typography floor.
 - Formula completeness test: each required formula is fully visible, has a canonical text/LaTeX record, and includes any required annotation targets.
+- MATLAB adapter test: MATLAB-generated assets declare their script, MATLAB release, canvas, fps or static format, source evidence, and review keyframes in the manifest before they are used in an episode render.
 - Platform crop test: vertical, note-video vertical, landscape, and square variants declare what is preserved or adapted.
 - Render boundary test: real HyperFrames render remains outside default `npm test`.
+- Render boundary test: real MATLAB rendering also remains outside default `npm test` unless a future deterministic unit test uses a tiny synthetic fixture with no external files or network calls.

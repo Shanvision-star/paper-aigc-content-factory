@@ -12,11 +12,12 @@ description: Use when assigning visual engines and preparing an assets manifest 
 - `storyboard/hook_variants.json`
 - Platform profile visual constraints
 - Available local visual templates
+- `docs/visual_system/MATLAB.md` before assigning any `matlab` visual engine
 
 ## Outputs
 
 - `assets/assets_manifest.json`
-- Visual specs for Mermaid, D2, Manim, HyperFrames, or Python chart adapters
+- Visual specs for Mermaid, D2, Manim, MATLAB, HyperFrames, or Python chart adapters
 - First-scene visual cue mapping
 - Missing-asset and engine-selection warnings
 
@@ -24,6 +25,8 @@ description: Use when assigning visual engines and preparing an assets manifest 
 
 - Assign an engine and expected output path for each storyboard scene.
 - Map formulas, diagrams, social-motion cards, charts, captions, and transitions to P0-compatible engines.
+- Assign `matlab` only for deterministic source-backed formula conversion, matrix/heatmap views, curve plots, RoPE or positional-encoding geometry, attention score illustrations, and frame/video preview specs that will be rendered by a separately routed task.
+- When assigning `matlab`, require manifest fields from `docs/visual_system/MATLAB.md`: canvas, safe areas, fps or static format, font map, terminology contract, source evidence, review keyframes, overlap check, and HyperFrames handoff status.
 - For formula assets, write manifest metadata for canonical formula text or LaTeX, source type, render quality, annotation targets, and review status before HyperFrames composition.
 - Convert Hook Lab visual cues into concrete first-scene visual actions.
 - Preserve safe-zone and platform framing requirements in the manifest.
@@ -31,6 +34,7 @@ description: Use when assigning visual engines and preparing an assets manifest 
 ## Forbidden Actions
 
 - Do not render image, animation, video, or audio assets directly.
+- Do not run MATLAB or mark MATLAB-rendered assets complete from inside this skill.
 - Do not add Remotion or Motion Canvas to the P0 path.
 - Do not install heavy rendering dependencies from inside the Skill.
 - Do not mark an asset complete before a renderer or adapter produces it.

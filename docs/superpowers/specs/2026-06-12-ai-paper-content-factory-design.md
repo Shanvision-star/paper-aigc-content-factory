@@ -307,12 +307,13 @@ constraints:
 
 - 判断每个 scene 使用哪个视觉引擎。
 - 生成 `assets_manifest.json`。
-- 生成 Mermaid/D2/Manim/HyperFrames 的 visual specs。
+- 生成 Mermaid/D2/Manim/MATLAB/HyperFrames 的 visual specs。
 - 将 Hook Lab 的 `visual_cue` 转成第一幕可渲染视觉动作。
 
 决策规则：
 
-- 公式、矩阵、attention score、softmax、位置编码：Manim
+- 手工数学动画、推导型公式 reveal、精细控制的 attention score/softmax/位置编码：Manim
+- 确定性曲线、矩阵/热力图、公式转换、RoPE/位置编码几何、source-backed 技术图和 MP4/HTML/SVG 预览：MATLAB
 - 架构图、流程图、时间线：D2 或 Mermaid
 - 社媒动效、字幕、转场、图文卡片：HyperFrames
 - 热力图、柱状图、对比图：Python / matplotlib
@@ -365,11 +366,12 @@ constraints:
 视频视觉规范采用 `DESIGN.md -> FRAME.md -> episode FRAME.md` 链路。
 
 - `docs/visual_system/DESIGN.md` 是账号级视觉身份。
-- `docs/visual_system/FRAME.md` 是视频镜头级规范，约束 safe area、Caption Safe Area、Typography Floor、Frame Treatments、Paper Genre Treatment Registry 和 Pre-Render Frame Audit。
-- `episodes/{paper_id}/video_script/FRAME.md` 是单篇论文的 frame contract，必须覆盖 paper figure spotlight、formula explanation、platform variants、原论文图、公式图或 Manim 场景、字幕避让和 render QA。
-- 公式资产必须执行 Formula Asset Contract：完整公式对象、canonical formula text 或 LaTeX、来源类型、清晰截图/SVG/MathJax/KaTeX/Manim 输出、标注目标、safe-area bounding box 和关键帧审核。
+- `docs/visual_system/FRAME.md` 是视频镜头级规范，约束 safe area、Caption Safe Area、Typography Floor、Frame Treatments、Paper Genre Treatment Registry、MATLAB adapter contract 和 Pre-Render Frame Audit。
+- `docs/visual_system/MATLAB.md` 是 MATLAB 视觉适配器规范，约束布局、动画、字体映射、专业术语、公式清晰度、图像重叠检查、manifest、R2026a 调用和 HyperFrames 交接。
+- `episodes/{paper_id}/video_script/FRAME.md` 是单篇论文的 frame contract，必须覆盖 paper figure spotlight、formula explanation、platform variants、原论文图、公式图、Manim 场景或 MATLAB 生成帧、字幕避让和 render QA。
+- 公式资产必须执行 Formula Asset Contract：完整公式对象、canonical formula text 或 LaTeX、来源类型、清晰截图/SVG/MathJax/KaTeX/Manim/MATLAB 输出、标注目标、safe-area bounding box 和关键帧审核。
 
-新增 `frame-spec-writer` skill，位于 `script-storyboard-writer` / `visual-orchestrator` 之后、`hyperframes-composer` 之前。它只写视觉规范，不改写 `spoken_text`，不运行真实 HyperFrames、Manim、TTS 或 provider。
+新增 `frame-spec-writer` skill，位于 `script-storyboard-writer` / `visual-orchestrator` 之后、`hyperframes-composer` 之前。它只写视觉规范，不改写 `spoken_text`，不运行真实 HyperFrames、Manim、MATLAB、TTS 或 provider。
 
 ### HyperFrames Animation Hard Gates
 
@@ -387,6 +389,18 @@ constraints:
 
 这些规则来自 EP02 英文版动画问题复盘：当参考图只作为 style prompt、没有变成 frame contract 和组件实现时，HyperFrames 容易输出“文字卡片正确，但推导链、公式和指向关系不正确”的视频。
 
+### MATLAB Animation Adapter Hard Gates
+
+MATLAB 是可选的 deterministic visual adapter，适用于 source-backed 公式转换、矩阵/热力图、曲线、RoPE/位置编码几何、attention score 示例和 frame-to-video 预览。完整执行规范见 `docs/visual_system/MATLAB.md`；它不替代 HyperFrames 最终 composition，也不替代 Manim 的手工数学动画。
+
+- MATLAB 生成任务必须先由 episode FRAME 或 assets manifest 声明：`canvas_px`、`fps`、时长、预期帧数、输出格式、脚本路径、MATLAB release、source URL/source capture、canonical formula/LaTeX、annotation targets 和 review keyframes。
+- 默认使用 canvas-first 工作流：先锁定 `1080x1920`、`1080x1440`、`1920x1080` 或 `1080x1080`，再放入公式、矩阵、箭头、字幕避让区和 source label。
+- Review frames 优先使用 R2026a `exportgraphics` 固定像素导出；除非 episode FRAME 写明理由，不把屏幕窗口状态或裸 `getframe` 当最终帧来源。
+- MP4 预览使用 `VideoWriter` 固定 `MPEG-4`、`FrameRate`、`Quality` 和偶数像素尺寸；HTML Web Canvas 只作为交互检查，不替代 PNG/SVG keyframes 或 final MP4 抽帧审核。
+- MATLAB 脚本默认确定性：不使用未设种子的随机数，不用 wall-clock 决定动效，不在默认测试里联网抓源，不调用真实 provider。
+- 第三方 MATLAB 项目只能先吸收工程约束；不得直接复制 GPL 或许可证不清的代码。确需引入时先做 license review。
+- 真实 MATLAB 渲染不进入默认 `npm test`；默认测试只检查合同、manifest、脚本入口或 tiny synthetic fixture。
+
 ### Platform Content Workflow Skills
 
 以下是跨平台内容优化的附加 skill，不替代 8+1 主链路，只在对应门禁前后补充约束：
@@ -398,7 +412,7 @@ constraints:
 - `sound-cue-designer`：在 storyboard/frame lock 和 HyperFrames prompt 前运行，把 opening、QK reveal、Q/K/V card taps、softmax normalization、weighted V aggregation、工程层级切换和 CTA 转成克制的 auditory bookmarks；它不生成音频素材，不改 `spoken_text`，不绕过 ASR transcript diff 或人工听审。
 - `platform-format-adapter`：读取 `platform_profiles/*.yaml`、cover、video、captions 和 metadata，整理本地 `publish/platform_manifest.json`。默认竖版封面沿用 `safe90`，平台尺寸只能来自 profile，当前至少覆盖 `1080x1920`、小红书 `1080x1440`、`1920x1080` 和 `1080x1080`。
 
-这些 skill 只做本地审核、文本优化和平台包准备，不 auto-publish、不上传媒体、不运行真实 TTS/HyperFrames/Manim/provider。
+这些 skill 只做本地审核、文本优化和平台包准备，不 auto-publish、不上传媒体、不运行真实 TTS/HyperFrames/Manim/MATLAB/provider。
 
 ### 9. `workflow-optimizer`
 
@@ -774,6 +788,7 @@ X 英文：
 - 竖屏版本检查顶部、底部和中心安全区。
 - 字幕不得遮挡公式关键部分。
 - 公式不得被裁切、拆碎、低清化或以 raw LaTeX 暴露；必须有完整公式关键帧和必要标注。
+- MATLAB 生成资产必须遵守 `docs/visual_system/MATLAB.md`，并在 manifest 记录脚本、MATLAB release、source evidence、canvas、fps 或静态格式、字体映射、术语合同、输出路径、review keyframes 和 HyperFrames 导入后的重叠检查结果。
 
 ### Gate 6：声音门禁
 
@@ -888,6 +903,11 @@ paper-aigc-content-factory/
 │   ├── youtube-shorts.en-US.yaml
 │   ├── youtube-long.en-US.yaml
 │   └── x.en-US.yaml
+├── docs/
+│   └── visual_system/
+│       ├── DESIGN.md
+│       ├── FRAME.md
+│       └── MATLAB.md
 ├── .agents/
 │   └── skills/
 │       ├── episode-orchestrator/
@@ -1145,6 +1165,15 @@ stages:
 - HyperFrames: https://github.com/heygen-com/hyperframes
 - Remotion Agent Skills: https://www.remotion.dev/docs/ai/skills
 - Manim Community: https://docs.manim.community/en/stable/
+- MATLAB Agentic Toolkit: https://github.com/matlab/matlab-agentic-toolkit
+- MATLAB MCP Server: https://github.com/matlab/matlab-mcp-server
+- MATLAB exportgraphics: https://www.mathworks.com/help/matlab/ref/exportgraphics.html
+- MATLAB VideoWriter: https://www.mathworks.com/help/matlab/ref/videowriter.html
+- MATLAB Web Canvas: https://www.mathworks.com/help/matlab/creating_plots/display-interactive-graphics-in-web-pages.html
+- export_fig: https://github.com/altmany/export_fig
+- img2vid: https://github.com/WeisongZhao/img2vid
+- mp4_video: https://github.com/xiangruili/mp4_video
+- fig2frame: https://github.com/cmacminn/fig2frame
 - Motion Canvas: https://github.com/motion-canvas/motion-canvas
 - D2: https://d2lang.com/
 - GPT-SoVITS: https://github.com/RVC-Boss/GPT-SoVITS
