@@ -1,0 +1,191 @@
+[
+  {
+    "segment_id": "seg_001",
+    "start": 0,
+    "duration": 8,
+    "text": "上一集我们讲到，RoPE 把位置写进 Query 向量和 Key 向量的旋转关系里。问题来了：位置进了 Attention，为什么大模型就更吃显存了？",
+    "spoken_text": "上一集我们讲到，R O P E，也就是旋转位置编码，把位置写进 Query 向量和 Key 向量的旋转关系里。问题来了：位置进了 Attention，为什么大模型就更吃显存了？",
+    "caption_text": "RoPE（旋转位置编码）：位置进入 Query/Key 旋转；问题：为什么更吃显存？",
+    "claim_ids": ["ep06_claim_rope_cache_boundary"]
+  },
+  {
+    "segment_id": "seg_002",
+    "start": 8,
+    "duration": 14,
+    "text": "先回到 Harvard Annotated Transformer 里的核心公式：Attention 等于 softmax，括号里是 Query 乘 Key 转置，除以根号下 d k，再乘 Value。",
+    "spoken_text": "先回到 Harvard Annotated Transformer 里的核心公式：Attention 等于 softmax，括号里是 Query 乘 Key 转置，除以根号下 d k，再乘 Value。",
+    "caption_text": "Attention(Q,K,V)=softmax(QK^T/√d_k)V；QK^T=Query 乘 Key 转置，√d_k=按 Key 维度缩放",
+    "claim_ids": ["ep06_claim_attention_formula"]
+  },
+  {
+    "segment_id": "seg_003",
+    "start": 22,
+    "duration": 13,
+    "text": "这句公式翻成人话就是三步：第一，当前 token 拿 Query 去匹配所有历史 Key；第二，softmax 分配权重；第三，从 Value 里加权读取信息。",
+    "spoken_text": "这句公式翻成人话就是三步：第一，当前 token 拿 Query 去匹配所有历史 Key；第二，softmax 分配权重；第三，从 Value 里加权读取信息。",
+    "caption_text": "公式三步：Query 匹配历史 Key；softmax 分配权重，再从 Value 加权读取",
+    "claim_ids": ["ep06_claim_attention_formula"]
+  },
+  {
+    "segment_id": "seg_004",
+    "start": 35,
+    "duration": 14,
+    "text": "生成式大模型最麻烦的地方在这里：它不是一次把整段答案算完，而是逐个 token 往后生成。每生成一个新 token，都要重新面对全部历史。",
+    "spoken_text": "生成式大模型最麻烦的地方在这里：它不是一次把整段答案算完，而是逐个 token 往后生成。每生成一个新的 token，都要重新面对全部历史。",
+    "caption_text": "token=模型处理的文本切片；生成式模型逐个 token 往后生成",
+    "claim_ids": ["ep06_claim_autoregressive_generation"]
+  },
+  {
+    "segment_id": "seg_005",
+    "start": 49,
+    "duration": 16,
+    "text": "如果没有 KV Cache，模型每一步都要把历史 token 的 Key 和 Value 从头再算一遍。KV Cache 做的事很朴素：把已经算好的 Key 和 Value 存起来。",
+    "spoken_text": "如果没有 Key Value Cache，模型每一步都要把历史 token 的 Key 和 Value 从头再算一遍。Key Value Cache 做的事很朴素：把已经算好的 Key 和 Value 存起来。",
+    "caption_text": "KV Cache（Key-Value 缓存）存已算好的 K/V，避免反复重算历史 Key/Value",
+    "claim_ids": ["ep06_claim_kv_cache_definition"]
+  },
+  {
+    "segment_id": "seg_006",
+    "start": 65,
+    "duration": 15,
+    "text": "注意，KV Cache 存的不是原始 token，也不是 Query。它存的是每一层里、每个历史位置对应的 Key 状态和 Value 状态。",
+    "spoken_text": "注意，Key Value Cache 存的不是原始 token，也不是 Query。它存的是每一层里、每个历史位置对应的 Key 状态和 Value 状态。",
+    "caption_text": "KV Cache 存的是每层历史 K/V 状态，不是原始 token，也不是 Query",
+    "claim_ids": ["ep06_claim_kv_cache_definition"]
+  },
+  {
+    "segment_id": "seg_007",
+    "start": 80,
+    "duration": 16,
+    "text": "为什么这会吃显存？因为每多一个 token，每一层就多一份 Key 和一份 Value。上下文长度越大，这个“记忆书架”就越长。",
+    "spoken_text": "为什么这会吃显存？因为每多一个 token，每一层就多一份 Key 和一份 Value。上下文长度越大，这个记忆书架就越长。",
+    "caption_text": "每新增 1 个 token，每层多 1 份 Key 和 Value；上下文越长，显存书架越长",
+    "claim_ids": ["ep06_claim_kv_memory_growth"]
+  },
+  {
+    "segment_id": "seg_008",
+    "start": 96,
+    "duration": 16,
+    "text": "一个简化公式可以这样看：KV 显存大约正比于 token 数、层数、Key Value 头数、每个头的维度和数据字节数。所以长输入不是免费午餐。",
+    "spoken_text": "一个简化公式可以这样看：Key Value 显存大约正比于 token 数、层数、Key Value 头数、每个头的维度和数据字节数。所以更大输入范围不是免费午餐。",
+    "caption_text": "KV 显存≈token数×层数×KV头数×head维度×bytes；长输入会线性增加缓存成本",
+    "claim_ids": ["ep06_claim_kv_memory_growth"]
+  },
+  {
+    "segment_id": "seg_009",
+    "start": 112,
+    "duration": 16,
+    "text": "用费曼方式说：不加缓存，就像你每写一个字都从头翻完整本书。加了 KV Cache，就像把查过的书签留在书架上，下次直接翻到那里。",
+    "spoken_text": "用费曼方式说：不加缓存，就像你每写一个字都从头翻完整本书。加了 Key Value Cache，就像把查过的书签留在书架上，下次直接翻到那里。",
+    "caption_text": "费曼类比：KV Cache 像给历史信息留书签；用显存换速度",
+    "claim_ids": ["ep06_claim_kv_cache_definition"]
+  },
+  {
+    "segment_id": "seg_010",
+    "start": 128,
+    "duration": 16,
+    "text": "那 RoPE 到底改变了什么？它不是把 KV Cache 弄坏了。它改变的是 Query 和 Key 被拿来比较之前，位置如何进入它们的表示。",
+    "spoken_text": "那 R O P E 到底改变了什么？它不是把 Key Value Cache 弄坏了。它改变的是 Query 和 Key 被拿来比较之前，位置如何进入它们的表示。",
+    "caption_text": "RoPE 没有让 KV Cache 失效；它改变 Q/K 比较前的位置表示",
+    "claim_ids": ["ep06_claim_rope_cache_boundary"]
+  },
+  {
+    "segment_id": "seg_011",
+    "start": 144,
+    "duration": 16,
+    "text": "公式上，位置 m 的 Query 会旋转成 R m 乘 Query；位置 n 的 Key 会旋转成 R n 乘 Key。两者做点积时，不是直接得到距离，而是让结果隐式依赖 n 减 m。",
+    "spoken_text": "公式上，位置 m 的 Query 会旋转成 R m 乘 Query；位置 n 的 Key 会旋转成 R n 乘 Key。两者做点积时，不是直接得到距离，而是让结果隐式依赖 n 减 m，也就是相对位移。",
+    "caption_text": "q'_m/k'_n：位置旋转后的 Query/Key；n-m 进入点积，不是距离标签",
+    "claim_ids": ["ep06_claim_rope_cache_boundary"]
+  },
+  {
+    "segment_id": "seg_012",
+    "start": 160,
+    "duration": 17,
+    "text": "所以缓存仍然可以复用，但不能忘记位置坐标。每个缓存里的 Key，都必须和它原来的位置编号、RoPE 缩放规则、以及当前解码步保持一致。",
+    "spoken_text": "所以缓存仍然可以复用，但不能忘记位置坐标。每个缓存里的 Key，都必须和它原来的位置编号，R O P E 缩放规则，以及当前解码步保持一致。",
+    "caption_text": "缓存 Key 可复用，但必须保留原位置编号、RoPE 缩放规则和当前解码步",
+    "claim_ids": ["ep06_claim_rope_cache_boundary"]
+  },
+  {
+    "segment_id": "seg_013",
+    "start": 177,
+    "duration": 17,
+    "text": "上下文长度变大时，难点有两层：第一，历史 Key 和 Value 越存越多；第二，当前 Query 要和越来越长的历史 Key 做匹配，读缓存也会变贵。",
+    "spoken_text": "上下文长度变大时，难点有两层：第一，历史 Key 和 Value 越存越多；第二，当前 Query 要和越来越长的历史 Key 做匹配，读缓存也会变贵。",
+    "caption_text": "长输入两层难点：K/V 越存越多，当前 Query 还要读越来越长的历史 Key",
+    "claim_ids": ["ep06_claim_long_context_difficulty", "ep06_claim_kv_memory_growth"]
+  },
+  {
+    "segment_id": "seg_014",
+    "start": 194,
+    "duration": 17,
+    "text": "这就是为什么很多人以为瓶颈只是算力，其实推理时常常还卡在显存和显存带宽上。GPU 不是只在算，也在不停搬运这些 Key 和 Value。",
+    "spoken_text": "这就是为什么很多人以为瓶颈只是算力，其实推理时常常还卡在显存和显存带宽上。GPU 不是只在算，也在不停搬运这些 Key 和 Value。",
+    "caption_text": "推理瓶颈不只是算力；显存容量和带宽也会限制 K/V 搬运",
+    "claim_ids": ["ep06_claim_kv_memory_growth"]
+  },
+  {
+    "segment_id": "seg_015",
+    "start": 211,
+    "duration": 16,
+    "text": "第一类解法是 Sliding Window Attention，滑动窗口注意力。它只让当前 token 看最近 W 个 token。好处是成本可控，代价是远处信息可能直接看不到。",
+    "spoken_text": "第一类解法是 Sliding Window Attention，滑动窗口注意力。它只让当前 token 看最近 W 个 token。好处是成本可控，代价是远处信息可能直接看不到。",
+    "caption_text": "Sliding Window（滑动窗口）：只看最近 W 个 token；成本可控，但远处可能看不到",
+    "claim_ids": ["ep06_claim_sliding_window"]
+  },
+  {
+    "segment_id": "seg_016",
+    "start": 227,
+    "duration": 17,
+    "text": "第二类是 Sparse Attention，稀疏注意力。它不让所有 token 两两相连，而是只保留局部块、全局 token，或者少量稀疏连接。",
+    "spoken_text": "第二类是 Sparse Attention，稀疏注意力。它不让所有 token 两两相连，而是只保留局部块、全局 token，或者少量稀疏连接。",
+    "caption_text": "Sparse Attention（稀疏注意力）：只保留局部块、全局 token 或稀疏连接",
+    "claim_ids": ["ep06_claim_sparse_attention"]
+  },
+  {
+    "segment_id": "seg_017",
+    "start": 244,
+    "duration": 17,
+    "text": "第三类是 MQA 和 GQA。Multi Query Attention 让多个 Query 头共享一组 Key 和 Value；Grouped Query Attention 则按组共享。目的都是减少 KV Cache。",
+    "spoken_text": "第三类是 M Q A 和 G Q A。Multi Query Attention 让多个 Query 头共享一组 Key 和 Value；Grouped Query Attention 则按组共享。目的都是减少 Key Value Cache。",
+    "caption_text": "MQA=Multi-Query；GQA=Grouped-Query；让 Query 头共享 K/V，减少 KV Cache",
+    "claim_ids": ["ep06_claim_mqa_gqa"]
+  },
+  {
+    "segment_id": "seg_018",
+    "start": 261,
+    "duration": 18,
+    "text": "第四类是 PagedAttention 这样的缓存管理。它像操作系统分页一样，把 KV Cache 切成块，减少显存碎片，也方便不同请求复用相同前缀。",
+    "spoken_text": "第四类是 Paged Attention 这样的缓存管理。它像操作系统分页一样，把 Key Value Cache 切成块，减少显存碎片，也方便不同请求复用相同前缀。",
+    "caption_text": "PagedAttention（分页缓存管理）：把 KV Cache 切成块，减少显存碎片",
+    "claim_ids": ["ep06_claim_paged_attention"]
+  },
+  {
+    "segment_id": "seg_019",
+    "start": 279,
+    "duration": 16,
+    "text": "还有 FlashAttention。它主要不是压缩 KV Cache，而是优化 Attention 本身的显存读写，让 Query、Key、Value 的计算路径更少搬数据。",
+    "spoken_text": "还有 Flash Attention。它主要不是压缩 Key Value Cache，而是优化 Attention 本身的显存读写，让 Query，Key，Value 的计算路径更少搬数据。",
+    "caption_text": "FlashAttention：优化 Attention 的显存读写；不是压缩 KV Cache，而是少搬数据",
+    "claim_ids": ["ep06_claim_flashattention_boundary"]
+  },
+  {
+    "segment_id": "seg_020",
+    "start": 295,
+    "duration": 12,
+    "text": "总结一下：参数像模型的大脑，KV Cache 像当前工作记忆。PE 告诉模型你在哪；RoPE 让比较时看到相对位置；长输入优化，就是少存、少看、少搬运。",
+    "spoken_text": "总结一下：参数像模型的大脑，Key Value Cache 像当前工作记忆。P E 告诉模型你在哪；R O P E 让比较时看到相对位置；更大输入范围的优化，就是少存，少看，少搬运。",
+    "caption_text": "参数=模型大脑；KV Cache=当前工作记忆；PE/RoPE=位置关系；优化=少存少看少搬",
+    "claim_ids": ["ep06_claim_kv_cache_definition", "ep06_claim_rope_cache_boundary"]
+  },
+  {
+    "segment_id": "seg_021",
+    "start": 307,
+    "duration": 11,
+    "text": "下一集我们继续看：如果 Attention 不再总是全连接，而是窗口化、稀疏化、分组化，那 Transformer 为什么会走向稀疏化和专家化？",
+    "spoken_text": "下一集我们继续看：如果 Attention 不再总是全连接，而是窗口化、稀疏化、分组化，那 Transformer 为什么会走向稀疏化和专家化？",
+    "caption_text": "下一集：Attention 从全连接走向窗口化、稀疏化、分组化；再看 Transformer 为什么专家化",
+    "claim_ids": []
+  }
+]

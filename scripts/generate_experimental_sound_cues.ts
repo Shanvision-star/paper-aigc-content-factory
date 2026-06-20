@@ -210,7 +210,8 @@ export function generateExperimentalSoundCues(topicPath: string, rootDir = "."):
     cue.synth(sampleRate, cue.duration_sec),
     silence(0.8)
   ]);
-  const previewFile = path.join(outputDir, "ep02_experimental_sfx_preview_sequence.wav");
+  const episodeId = path.basename(episodeDir);
+  const previewFile = path.join(outputDir, `${episodeId}_experimental_sfx_preview_sequence.wav`);
   writeWav(previewFile, concat(previewParts));
   writeJson(path.join(outputDir, "experimental_sfx_manifest.json"), {
     status: "experimental_local_cues",

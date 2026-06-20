@@ -1,0 +1,66 @@
+{
+  "status": "draft_source_backed",
+  "episode_id": "ep06_kv_cache_long_context",
+  "claims": [
+    {
+      "claim_id": "ep06_claim_attention_formula",
+      "claim": "Scaled Dot-Product Attention computes weights from QK^T / sqrt(d_k), applies softmax, then aggregates V.",
+      "sources": ["vaswani_2017_attention", "harvard_annotated_transformer"]
+    },
+    {
+      "claim_id": "ep06_claim_autoregressive_generation",
+      "claim": "Autoregressive decoding generates one token at a time, so each new prediction depends on previous tokens.",
+      "sources": ["vaswani_2017_attention", "hf_transformers_kv_cache"]
+    },
+    {
+      "claim_id": "ep06_claim_kv_cache_definition",
+      "claim": "KV Cache stores previously computed Key and Value states for reuse during generation; it is not a cache of raw tokens or Query states.",
+      "sources": ["hf_transformers_kv_cache", "nvidia_tensorrtllm_kv_cache"]
+    },
+    {
+      "claim_id": "ep06_claim_kv_memory_growth",
+      "claim": "KV Cache memory grows with sequence length and model/layer/head dimensions, making long-context inference a GPU memory and bandwidth problem.",
+      "sources": ["kwon_2023_pagedattention", "nvidia_tensorrtllm_kv_cache", "shazeer_2019_mqa"]
+    },
+    {
+      "claim_id": "ep06_claim_rope_cache_boundary",
+      "claim": "RoPE does not invalidate KV Cache; it changes how position is applied to Q and K, so cached K states must remain aligned with the correct position convention.",
+      "sources": ["su_2021_roformer", "hf_transformers_kv_cache"]
+    },
+    {
+      "claim_id": "ep06_claim_long_context_difficulty",
+      "claim": "As context length increases, attention has to compare against more historical states, and RoPE-style relative phase makes position handling part of the attention computation rather than a simple input-only decoration.",
+      "sources": ["su_2021_roformer", "dao_2022_flashattention", "kwon_2023_pagedattention"]
+    },
+    {
+      "claim_id": "ep06_claim_sliding_window",
+      "claim": "Sliding-window or local attention limits each token to a recent window, reducing computation and bounding cache growth for those layers, at the cost of weakening direct long-range access.",
+      "sources": ["beltagy_2020_longformer", "hf_transformers_kv_cache"]
+    },
+    {
+      "claim_id": "ep06_claim_sparse_attention",
+      "claim": "Sparse and block-sparse attention compute only selected token or block connections, such as local, global, or random links, to reduce the quadratic burden of full attention.",
+      "sources": ["zaheer_2020_bigbird", "dao_2022_flashattention"]
+    },
+    {
+      "claim_id": "ep06_claim_mqa_gqa",
+      "claim": "MQA and GQA reduce the number of Key/Value heads relative to Query heads, cutting KV Cache memory and memory bandwidth during decoding.",
+      "sources": ["shazeer_2019_mqa", "ainslie_2023_gqa", "nvidia_tensorrtllm_kv_cache"]
+    },
+    {
+      "claim_id": "ep06_claim_paged_attention",
+      "claim": "PagedAttention treats KV Cache memory like paged blocks, reducing fragmentation and enabling more efficient reuse in serving systems.",
+      "sources": ["kwon_2023_pagedattention", "nvidia_tensorrtllm_kv_cache"]
+    },
+    {
+      "claim_id": "ep06_claim_flashattention_boundary",
+      "claim": "FlashAttention optimizes the attention computation and GPU memory IO; it is not the same layer of optimization as KV Cache, MQA, or GQA.",
+      "sources": ["dao_2022_flashattention"]
+    }
+  ],
+  "source_boundary_notes": [
+    "本集不声称 GPT、Claude 等闭源模型的具体位置编码或 KV Cache 实现。",
+    "RoPE 与 KV Cache 的关系必须表述为位置应用方式和位置偏移管理，而不是 RoPE 让 cache 失效。",
+    "Sliding Window、Sparse Attention、PagedAttention、MQA/GQA、FlashAttention 是不同工程层，不能合并成一个机制。"
+  ]
+}

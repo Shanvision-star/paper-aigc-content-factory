@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
+import { preProductionContractMissingInputs } from "./lib/preProductionContracts.js";
 import { episodeDirFromTopicPath, runtimeTimestamp, writeJson } from "./lib/runtimeAdapters.js";
 
 const require = createRequire(import.meta.url);
@@ -48,8 +49,11 @@ export function runBurnInSubtitles(
   const subtitleFile = options.subtitleFile ?? "captions/subtitles.ass";
   const outputVideo = options.outputVideo ?? "renders/douyin_zh_1080x1920_subtitled.mp4";
   const statusPath = path.join(episodeDir, "renders/subtitle_burn_status.json");
-  const missingInputs = [inputVideo, subtitleFile, options.audioFile].filter((relativePath): relativePath is string => Boolean(relativePath))
-    .filter((relativePath) => !fs.existsSync(path.join(episodeDir, relativePath)));
+  const missingInputs = [
+    ...preProductionContractMissingInputs(episodeDir),
+    ...[inputVideo, subtitleFile, options.audioFile].filter((relativePath): relativePath is string => Boolean(relativePath))
+      .filter((relativePath) => !fs.existsSync(path.join(episodeDir, relativePath)))
+  ];
 
   if (missingInputs.length > 0) {
     const result: BurnInSubtitlesResult = {

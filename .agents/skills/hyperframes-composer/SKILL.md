@@ -33,6 +33,9 @@ description: Use when composing storyboard, assets, audio, and captions into Hyp
 - Match scene components from the most specific `visual_type` or explicit registry entry before any generic fallback. For example, `kv_cache_cached_projection` must render the KV Cache component, not a generic QKV projection card.
 - Enforce Ogilvy readability rules while composing frames: dark load-bearing text on light/paper surfaces, no reverse type body copy, no long colored body panels, respect the 9pt minimum and 11pt preferred print baseline by scaling up for phone video, use readable serif/traditional faces for dense copy and large sans-serif only for hook/poster frames, stable type system, sufficient paragraph leading, no all-caps sentences, and no headlines over important figures or formulas.
 - For cover, hook, or poster-like frames, apply the five-second poster rule: keep the subject visible within five seconds with no more than three element types and a clean light-field layout.
+- Apply EP05-derived final-frame hygiene: stable episode title, no production-side labels, no blank proof areas, no formula/line/subtitle overlap, no static pseudo-animation, no text/formula jitter, and no full-page MATLAB asset shrunk into the scene.
+- Treat final MP4 keyframes as the approval surface. HTML preview, `.srt`, or individual asset screenshots are not sufficient when the task asks for a video review.
+- Preserve the fixed dynamic subtitle slot; do not animate subtitle blocks, formula glyphs, or body copy to create motion.
 
 ## Formula Asset Contract
 
@@ -57,3 +60,4 @@ Before composing a formula scene, verify that the episode `FRAME.md` or asset ma
 - Do not use white-on-black or white-on-color paragraphs for subtitles, formula explanations, image captions, or other load-bearing text.
 - Do not place titles, subtitles, or explanatory captions over important paper figures, formulas, code screenshots, axes, or matrix cells.
 - Do not publish rendered media to any platform.
+- Do not mark final composition complete without sampled final MP4 frames when audio, subtitles, formulas, MATLAB assets, or SFX changed.

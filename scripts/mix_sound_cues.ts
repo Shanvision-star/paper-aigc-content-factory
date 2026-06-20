@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { preProductionContractMissingInputs } from "./lib/preProductionContracts.js";
 import { episodeDirFromTopicPath, runtimeTimestamp, writeJson } from "./lib/runtimeAdapters.js";
 
 type CueTimeline = {
@@ -141,14 +142,19 @@ export function runSoundCueMixer(topicPath: string, rootDir = "."): MixResult {
   const timelinePath = path.join(episodeDir, "video_script/sound_cue_timeline.json");
   const manifestPath = path.join(episodeDir, "audio/sfx/experimental/experimental_sfx_manifest.json");
   const outputAudio = "audio/voiceover.with_sfx.wav";
-  const missingInputs = [voicePath, timelinePath, manifestPath].filter((filePath) => !fs.existsSync(filePath));
+  const missingInputs = [
+    ...preProductionContractMissingInputs(episodeDir),
+    ...[voicePath, timelinePath, manifestPath]
+      .filter((filePath) => !fs.existsSync(filePath))
+      .map((filePath) => path.relative(episodeDir, filePath).replace(/\\/g, "/"))
+  ];
 
   if (missingInputs.length > 0) {
     const result: MixResult = {
       status: "missing_inputs",
       output_audio: outputAudio,
       cues_mixed: 0,
-      missing_inputs: missingInputs.map((filePath) => path.relative(episodeDir, filePath).replace(/\\/g, "/"))
+      missing_inputs: missingInputs
     };
 
     writeJson(path.join(episodeDir, "audio/sfx/mix_status.json"), { ...result, generated_at: runtimeTimestamp });

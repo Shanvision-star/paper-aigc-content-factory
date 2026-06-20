@@ -1,0 +1,29 @@
+﻿{
+    "status":  "partial",
+    "reason":  "Local final review MP4 generated with authorized personal-reference voice; human review still required before publish.",
+    "output_mp4":  "renders/ep05_rope_position_encoding_indextts2_sfx_final_review.mp4",
+    "duration_s":  248.334,
+    "width":  1080,
+    "height":  1920,
+    "fps":  "15/1",
+    "caption_source":  "captions/subtitles.srt",
+    "voice_source":  "audio/voiceover.with_sfx.wav",
+    "voice_mode":  "authorized_personal_reference_voice",
+    "hyperframes_project":  "renders/hyperframes_ep05_final",
+    "verified":  [
+                     "MP4 file exists",
+                     "duration is generated from voiceover-aware composition timing",
+                     "portrait resolution requested through HyperFrames",
+                     "dynamic subtitles are split from reviewed voiceover text and burned as HTML caption groups",
+                     "MATLAB formula assets are inserted as local scene-level proof objects",
+                     "MATLAB RoPE rotation component is inserted as a local animated scene-level asset",
+                     "visible subtitle source excludes production-side readout cues",
+                     "full-page MATLAB MP4 clips are not nested inside the HyperFrames canvas"
+                 ],
+    "not_verified":  [
+                         "human visual review of the full generated duration",
+                         "personal voiceover quality approval",
+                         "platform upload packaging"
+                     ],
+    "publish_ready":  false
+}

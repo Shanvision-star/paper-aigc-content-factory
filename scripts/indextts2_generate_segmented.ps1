@@ -17,6 +17,22 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+$RequiredContracts = @(
+  "contracts\claim_contract.md",
+  "contracts\visual_contract.md",
+  "contracts\notation_contract.md",
+  "contracts\render_contract.md"
+)
+foreach ($RequiredContract in $RequiredContracts) {
+  $ContractPath = Join-Path $EpisodeDir $RequiredContract
+  if (-not (Test-Path $ContractPath)) {
+    throw "Missing pre-production contract before IndexTTS2 generation: $ContractPath"
+  }
+  if ([string]::IsNullOrWhiteSpace((Get-Content -Raw -Encoding UTF8 $ContractPath))) {
+    throw "Empty pre-production contract before IndexTTS2 generation: $ContractPath"
+  }
+}
+
 $ManifestPath = Join-Path $EpisodeDir $SegmentManifest
 $RefAudioPath = Join-Path $EpisodeDir $ReferenceAudio
 $CfgPath = Join-Path $IndexTtsDir "checkpoints\config.yaml"

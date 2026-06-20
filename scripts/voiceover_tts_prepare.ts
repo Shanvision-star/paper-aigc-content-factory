@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { assertPreProductionContracts } from "./lib/preProductionContracts.js";
 import {
   episodeDirFromTopicPath,
   hashText,
@@ -53,18 +54,28 @@ const engineConfigs: Record<TtsPrepareEngine, EngineConfig> = {
 };
 
 const termReplacements: Array<[RegExp, string]> = [
-  [/\bQK\^T\b/g, "Q 乘 K 转置"],
+  [/x\s*=\s*x\s*\+\s*pe/gi, "x 等于 x 加 P E"],
+  [/x\s*=\s*x\s*\+\s*PE/g, "x 等于 x 加 P E"],
+  [/mθ_i/g, "m 乘 theta 下标 i"],
+  [/nθ_i/g, "n 乘 theta 下标 i"],
+  [/θ_i/g, "theta 下标 i"],
+  [/δ_i/g, "delta 下标 i"],
+  [/n\s*-\s*m/g, "n 减 m"],
+  [/\bQK\^T\b/g, "Query 乘 Key 转置"],
   [/sqrt\(d_k\)/g, "根号下 d k"],
   [/\bd_k\b/g, "d k"],
+  [/\bd_model\b/g, "d model"],
   [/\bClaude\b/g, "Claude"],
   [/\bChatGPT\b/g, "ChatGPT"],
+  [/\bDeepSeek-V4\b/g, "DeepSeek 第四版"],
   [/\bAI Agent\b/g, "AI Agent"],
   [/\bAgent\b/g, "Agent"],
   [/\bAttention Is All You Need\b/g, "Attention Is All You Need"],
   [/\bSelf-Attention\b/g, "Self Attention"],
   [/\bMulti-Head Attention\b/g, "Multi Head Attention"],
   [/\bFlashAttention\b/g, "FlashAttention"],
-  [/\bKV Cache\b/g, "KV Cache"],
+  [/\bKV Cache\b/g, "Key Value cache"],
+  [/\bKV cache\b/g, "Key Value cache"],
   [/\bvLLM\b/g, "vLLM"],
   [/\bMCP\b/g, "MCP"],
   [/\bBERT\b/g, "BERT"],
@@ -75,14 +86,19 @@ const termReplacements: Array<[RegExp, string]> = [
   [/\bRoPE\b/g, "RoPE"],
   [/\bYaRN\b/g, "YaRN"],
   [/\bALiBi\b/g, "ALiBi"],
-  [/\bQK\b/g, "Q K"],
-  [/\bQ、K、V\b/g, "Q，K，V"],
+  [/\bQ\/K\b/g, "Query 向量和 Key 向量"],
+  [/\bQK\b/g, "Query 和 Key"],
+  [/\bQ、K、V\b/g, "Query，Key，Value"],
   [/\bsoftmax\b/g, "softmax"],
   [/\bSora\b/g, "Sora"]
 ];
 
 const chinesePronunciationReplacements: Array<[RegExp, string]> = [
   [/更准确地说/g, "准确一点说"],
+  [/在长上下文场景里/g, "在上下文长度变大时"],
+  [/变成了长上下文工程里的核心问题/g, "变成了处理更长输入范围时的核心工程问题"],
+  [/影响\s*KV\s*cache、长上下文/g, "影响 Key Value cache 在更大输入范围里的复用"],
+  [/上下文越长/g, "上下文长度越大"],
   [/“它”/g, "它"],
   [/根号\s*d\s*k/g, "根号下 d k"],
   [/动态地(?=建立关系|建模|计算|汇聚|更新|调整|变化|生成)/g, "以动态方式"],
@@ -102,9 +118,11 @@ const englishPronunciationStabilityReplacements: Array<[RegExp, string]> = [
 ];
 
 const formulaLetterPronunciationReplacements: Array<[RegExp, string]> = [
-  // F5-TTS sometimes reads the standalone formula letter K as "kai".
-  // Use "Kay" only in spoken_text; captions and visual formulas still display K.
-  [/(?<![A-Za-z])K(?![A-Za-z])/g, "Kay"]
+  // TTS engines can read standalone formula letters as Chinese pinyin-like sounds.
+  // Use semantic names only in spoken_text; captions and visual formulas still display Q/K/V.
+  [/(?<![A-Za-z])Q(?![A-Za-z])/g, "Query 向量"],
+  [/(?<![A-Za-z])K(?![A-Za-z])/g, "Key 向量"],
+  [/(?<![A-Za-z])V(?![A-Za-z])/g, "Value 向量"]
 ];
 
 const focusTermPatterns: Array<[RegExp, string]> = [
@@ -136,6 +154,10 @@ function detectFocusTerms(sourceText: string): string[] {
 export function normalizeForTts(sourceText: string, segmentId?: string): string {
   let text = normalizeNumbers(sourceText);
 
+  if (segmentId === "seg_006") {
+    text = "所以输入形状没有变。每个 token 的表示里，已经带上位置信息。";
+  }
+
   for (const [pattern, replacement] of chinesePronunciationReplacements) {
     text = text.replace(pattern, replacement);
   }
@@ -166,6 +188,8 @@ export function normalizeForTts(sourceText: string, segmentId?: string): string 
 
 export function prepareSegmentedTts(topicPath: string, rootDir = ".", engine: TtsPrepareEngine = "indextts2"): PreparedTtsManifest {
   const episodeDir = episodeDirFromTopicPath(topicPath, rootDir);
+  assertPreProductionContracts(episodeDir, "tts");
+
   const engineConfig = engineConfigs[engine];
   const segmentDir = path.join(episodeDir, engineConfig.segment_dir);
   const voiceSegments = readVoiceSegments(episodeDir);

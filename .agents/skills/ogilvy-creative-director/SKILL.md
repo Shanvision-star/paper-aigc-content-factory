@@ -70,6 +70,7 @@ Treat each paper episode as one clear promise supported by proof. Creative work 
 - `micro_headlines`: 5-8 second caption beats that carry new information, curiosity, and viewer benefit.
 - `brand_consistency_notes`: what must stay consistent with prior episodes.
 - `risk_notes`: possible overclaim, clickbait, evidence gap, or audience mismatch.
+- `stage_gate_notes`: which production stage must carry each promise, proof object, and micro-headline into the episode contract.
 
 ## Allowed Actions
 
@@ -80,6 +81,8 @@ Treat each paper episode as one clear promise supported by proof. Creative work 
 - Rewrite vague subtitles into caption as micro-headline beats that name the mechanism and payoff.
 - Convert long lists into numbered facts when that improves scanability.
 - Produce alternatives for different platforms while preserving the same Big Idea.
+- Reject frames that use local source names, code-page names, or model names as the episode title. The episode title stays stable; local sources are secondary labels.
+- Require every major frame to answer Big Idea, Proof Object, Visual Hero, and Caption as Micro-headline before `frame-spec-writer` locks the scene.
 
 ## Forbidden Actions
 
@@ -91,3 +94,4 @@ Treat each paper episode as one clear promise supported by proof. Creative work 
 - Do not replace `technical-script-reviewer`, `research-to-claims`, or source verification.
 - Do not change `spoken_text` pronunciation rules, TTS cueing, or hidden narration cues.
 - Do not make every frame look like an ad; use creative direction to clarify the episode's promise.
+- Do not approve large empty proof areas, decorative filler, or competing visual heroes as a substitute for a source-backed mechanism object.

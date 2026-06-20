@@ -17,6 +17,8 @@ Review the script before TTS or video render. The script must be technically cor
 - Transformer is the model architecture layer; Sora-style video systems, Agent orchestration, and MCP tool/context protocols are different layers.
 - Claims about ChatGPT, Claude, Llama, Qwen, DeepSeek, Agent, Sora, or MCP must be phrased as engineering connections, not direct one-line evolution unless sourced.
 - Cost claims must mention the relevant bottleneck, such as Attention sequence scaling, KV Cache, FlashAttention, vLLM, GQA, MLA, or long-context inference.
+- Positional-method claims must distinguish mechanism from effect. For RoPE-like content, block phrases such as "returns relative distance", "only leaves distance", or "guarantees higher accuracy" unless the script states the reviewed mechanism and evidence boundary.
+- Public model examples and proprietary product examples must not be merged. A public implementation document can support implementation evidence; a proprietary product can only be product context unless its internal detail is publicly specified.
 
 ## Feynman Checks
 
@@ -25,6 +27,7 @@ Review the script before TTS or video render. The script must be technically cor
 - Keep formulas as three-step actions: match, weight, aggregate.
 - Make the viewer understand why the idea matters in the modern LLM era.
 - Keep the next-episode CTA tied to the current mechanism.
+- Check that each analogy maps back to exact paper or engineering mechanism in the same scene, especially when the analogy explains position, distance, cache, or attention scores.
 
 ## Output Format
 
@@ -34,6 +37,7 @@ Return a concise review with:
 - `clarity_fixes`: wording changes that improve Feynman explanation.
 - `engineering_notes`: modern LLM context to add or qualify.
 - `tts_risks`: terms likely to be misread by TTS.
+- `stage_gate_risks`: EP05-derived risks that should be routed to research, script, frame, visual, voiceover, caption, sound, HyperFrames, or quality-gate stages.
 - `approval`: `approved`, `approved_with_minor_fixes`, or `blocked`.
 
 Do not rewrite the whole script unless asked. Keep good hook energy while removing misleading simplifications.

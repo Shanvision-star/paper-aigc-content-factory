@@ -25,6 +25,8 @@ description: Use when converting verified sources and paper notes into grounded 
 - Attach valid `source_ids` to each claim and timeline event.
 - Separate primary-source facts from interpretation or commentary.
 - Flag unsupported, ambiguous, duplicated, or out-of-scope claims.
+- Classify modern-model examples as `paper_fact`, `open_model_evidence`, `product_context`, `proprietary_unspecified`, `analogy`, or `inference` when the episode uses them to motivate an engineering point.
+- Preserve the boundary between public implementation evidence and product context. For example, a public model doc can support a RoPE/Partial RoPE claim; a proprietary product context cannot prove its internal positional encoding.
 
 ## Forbidden Actions
 
@@ -32,3 +34,4 @@ description: Use when converting verified sources and paper notes into grounded 
 - Do not invent source IDs or reuse IDs for unrelated evidence.
 - Do not write final voiceover, storyboard, captions, or video renders.
 - Do not upgrade uncertain interpretation into verified fact.
+- Do not let a closed-source model implementation claim pass as sourced evidence unless the source explicitly states that implementation detail.

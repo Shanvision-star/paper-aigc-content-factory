@@ -25,6 +25,9 @@ description: Use when converting QA, hook, and human-review feedback into audita
 - Explain each suggestion with source feedback, expected impact, risk, verification, and retention criteria.
 - Keep candidates reviewable and reversible.
 - Mark changes that require human approval before editing mainline files.
+- Route repeated issues to the earliest responsible stage using `docs/superpowers/specs/2026-06-20-ep05-stage-gate-map.md`.
+- When human screenshots or listening feedback expose a new failure mode, propose whether it belongs in research, script, technical review, Ogilvy, frame spec, visual asset, TTS, captions, sound, HyperFrames, platform packaging, or quality gate.
+- Include a retention note that says how future episodes will prove the same problem did not recur.
 
 ## Forbidden Actions
 

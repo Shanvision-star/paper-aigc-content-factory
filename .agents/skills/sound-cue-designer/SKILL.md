@@ -17,6 +17,8 @@ Use sound cues as auditory bookmarks for comprehension, not as decoration. A cue
 - Place cues between phrases or on visual action points; do not mask consonants, numbers, formulas, or subtitles.
 - Treat the final mix as part of the TTS gate: if effects hurt ASR transcript diff, English clarity, or human listening review, lower or remove them.
 - Do not add cue instructions into `spoken_text`; keep them in storyboard, FRAME, sound cue plan, or HyperFrames prompt.
+- Require a final mix status when the episode contract includes SFX. A video build must not silently fall back to a no-SFX voiceover after sound cues are approved.
+- Add special listening checks around professional terms, formulas, and next-episode CTA when a cue lands near those phrases.
 
 ## Paper Explainer Cue Map
 
@@ -40,6 +42,7 @@ When used for an episode, produce or update an episode-level sound cue plan with
 - sound type, duration, and relative loudness
 - risk to voice clarity, ASR transcript diff, captions, or platform tone
 - verification note for human listening review
+- final mix expectation: required/optional/off, target mixed file, and fallback policy
 
 ## Boundaries
 
@@ -47,3 +50,4 @@ When used for an episode, produce or update an episode-level sound cue plan with
 - Do not mix final audio or replace voiceover.
 - Do not change script claims, captions, formulas, or spoken text.
 - Do not use sound cues to compensate for unclear narration; fix the script first.
+- Do not approve a final MP4 as SFX-complete without evidence that the mixed audio file, not the dry voiceover file, was used.

@@ -19,7 +19,7 @@ This file defines the reusable visual identity for AI paper explainer content. I
 - `trace`: `#6EA8FE` for timelines, model family connections, and protocol/system layers.
 - `muted`: `#9CA3AF` for secondary labels.
 - `danger`: `#F87171` for risk and cost warnings.
-- `safe-black`: `#000000` for vertical cover padding and crop-safe edges.
+- `safe-paper`: `#F7F7F5` for vertical cover crop-safe background extension.
 
 ## Typography Roles
 
@@ -42,7 +42,9 @@ This file defines the reusable visual identity for AI paper explainer content. I
 - Canvas remains `1080x1920`.
 - Content scale is `90%`.
 - Safe padding is `54px` left/right and `96px` top/bottom.
-- Padding color is `black padding`.
+- Safe-area treatment is an invisible layout guard. Do not use black padding, black background, visible safety frames, or shrunken-poster exports.
+- Series cover style follows the EP04 light-paper cover grammar: warm white paper canvas, subtle grid, dark headline, source-backed proof cards, and warm-orange/blue emphasis.
+- Cover arrows and connectors are auxiliary: they must not be visually larger than the connected object, must not become the focal element, and must not point into empty decorative space. For RoPE/QK covers, use thin vectors, endpoint dots, short arcs, or small bridge lines before using large arrowheads.
 - Cover output names should encode episode, platform, canvas, and constraint, such as `{episode_slug}_{platform}_cover_1080x1920_safe90.png`.
 
 ## Figure and Formula Treatment

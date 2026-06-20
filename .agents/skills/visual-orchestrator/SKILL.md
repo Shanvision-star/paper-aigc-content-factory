@@ -30,6 +30,9 @@ description: Use when assigning visual engines and preparing an assets manifest 
 - For formula assets, write manifest metadata for canonical formula text or LaTeX, source type, render quality, annotation targets, and review status before HyperFrames composition.
 - Convert Hook Lab visual cues into concrete first-scene visual actions.
 - Preserve safe-zone and platform framing requirements in the manifest.
+- Mark MATLAB, Manim, SVG, or chart outputs as local proof objects, not full-page screenshots to be shrunk inside another page.
+- Require each visual asset to state its role: formula object, source figure, code proof, mechanism animation, analogy mapping, value table, or transition support.
+- Flag blank proof areas, static pseudo-animation, detached arrows, shifted formula highlights, and text/formula jitter as unresolved visual risks before render.
 
 ## Forbidden Actions
 
@@ -39,3 +42,4 @@ description: Use when assigning visual engines and preparing an assets manifest 
 - Do not install heavy rendering dependencies from inside the Skill.
 - Do not mark an asset complete before a renderer or adapter produces it.
 - Do not mark a formula asset complete if it is cropped, low-resolution, missing its canonical text, or lacks required annotation targets.
+- Do not accept an asset whose only motion is text/formula/card scaling, subtitle drifting, or whole-page zoom when the scene claims to be a mechanism animation.

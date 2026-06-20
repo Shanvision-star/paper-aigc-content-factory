@@ -1,0 +1,13 @@
+{
+  "episode_id": "ep05_rope_position_encoding",
+  "preferred_engine": "IndexTTS2",
+  "fallback_engine": "F5-TTS",
+  "voice_policy": "use_authorized_personal_reference_only",
+  "reference_audio": [
+    "voice/enrollment/reference_neutral_f5_8s.wav"
+  ],
+  "status": "audio_ready",
+  "generated_at": "1970-01-01T00:00:00.000Z",
+  "provider_calls": false,
+  "tts_calls": false
+}

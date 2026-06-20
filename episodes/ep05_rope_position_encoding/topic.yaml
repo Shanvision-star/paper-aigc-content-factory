@@ -1,0 +1,24 @@
+episode_id: ep05_rope_position_encoding
+title: "第5集 为什么现代大模型都绕不开 RoPE"
+paper:
+  title: "Attention Is All You Need"
+  arxiv_id: "1706.03762"
+  local_research_report: "D:/Shanvisorin_platform/Paper_everyday/paper_desgin/deep-research-report_5_V1.2.md"
+audience:
+  primary: "普通 AI 内容观众 + 工程初学者"
+targets:
+  - douyin.zh-CN
+  - xiaohongshu.zh-CN
+  - bilibili.zh-CN
+outputs:
+  blog: false
+  pdf: false
+  video: true
+  voiceover: true
+  publish_pack: false
+constraints:
+  auto_publish: false
+  require_primary_sources: true
+  require_citation_gate: true
+  require_human_review: true
+  voice_mode: personal_voice_or_builtin_fallback

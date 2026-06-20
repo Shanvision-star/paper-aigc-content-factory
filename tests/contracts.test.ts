@@ -1,7 +1,13 @@
 import { randomUUID } from "node:crypto";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { loadYamlFile, TopicSchema, PlatformProfileSchema, HookPatternsSchema, ProfileIdSchema, readPlatformProfile } from "../scripts/lib/contracts.js";
+import {
+  requiredPreProductionContracts,
+  validatePreProductionContracts
+} from "../scripts/lib/preProductionContracts.js";
 
 describe("content factory contracts", () => {
   it("loads the first episode topic", () => {
@@ -130,6 +136,30 @@ describe("content factory contracts", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error.issues[0]?.message).toContain("Duplicate hook pattern id(s): pain_point");
+    }
+  });
+
+  it("requires four pre-production contracts before TTS or render", () => {
+    const episodeDir = fs.mkdtempSync(path.join(os.tmpdir(), "preproduction-contracts-"));
+
+    try {
+      expect(validatePreProductionContracts(episodeDir)).toMatchObject({
+        status: "missing_inputs",
+        missing_inputs: [...requiredPreProductionContracts]
+      });
+
+      for (const relativePath of requiredPreProductionContracts) {
+        const filePath = path.join(episodeDir, relativePath);
+        fs.mkdirSync(path.dirname(filePath), { recursive: true });
+        fs.writeFileSync(filePath, `# ${relativePath}\n`, "utf8");
+      }
+
+      expect(validatePreProductionContracts(episodeDir)).toMatchObject({
+        status: "passed",
+        missing_inputs: []
+      });
+    } finally {
+      fs.rmSync(episodeDir, { recursive: true, force: true });
     }
   });
 });

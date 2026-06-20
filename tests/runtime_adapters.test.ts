@@ -5,12 +5,14 @@ import { describe, expect, it } from "vitest";
 import { runCaptionAligner } from "../scripts/caption_align.js";
 import { checkF5ReferenceSafety } from "../scripts/f5_reference_safety_check.js";
 import { runHyperframesDraft } from "../scripts/hyperframes_draft.js";
+import { runHyperframesFormalRender } from "../scripts/hyperframes_render_formal.js";
+import { requiredPreProductionContracts } from "../scripts/lib/preProductionContracts.js";
 import { buildRenderInputFingerprint } from "../scripts/lib/renderFreshness.js";
 import { runPublishPack } from "../scripts/publish_pack.js";
 import { runContractSmoke } from "../scripts/run_pipeline.js";
 import { runAsrTranscriptDiffGate } from "../scripts/asr_transcript_diff_gate.js";
 import { runTtsSampleReviewGate } from "../scripts/tts_sample_review_gate.js";
-import { normalizeForTts } from "../scripts/voiceover_tts_prepare.js";
+import { normalizeForTts, prepareSegmentedTts } from "../scripts/voiceover_tts_prepare.js";
 import { runVoiceoverDuplicateGuard } from "../scripts/voiceover_duplicate_guard.js";
 import { runVoiceoverAdapter } from "../scripts/voiceover_adapter.js";
 
@@ -84,6 +86,14 @@ function writeSegmentManifest(episodeDir: string, engine: "f5_tts" | "indextts2"
   );
 }
 
+function writePreProductionContracts(episodeDir: string): void {
+  for (const relativePath of requiredPreProductionContracts) {
+    const filePath = path.join(episodeDir, relativePath);
+    fs.mkdirSync(path.dirname(filePath), { recursive: true });
+    fs.writeFileSync(filePath, `# ${relativePath}\n`, "utf8");
+  }
+}
+
 describe("runtime adapters", () => {
   it("normalizes numbers while keeping English product and concept names continuous", () => {
     const spoken = normalizeForTts(
@@ -110,9 +120,10 @@ describe("runtime adapters", () => {
     expect(formula.startsWith("但 Transformer")).toBe(true);
     expect(formula).toContain("Transformer");
     expect(formula).toContain("FlashAttention");
-    expect(formula).toContain("KV Cache");
+    expect(formula).toContain("Key Value cache");
     expect(formula).toContain("vLLM");
-    expect(explicitCue.match(/重点来了/g)?.length).toBe(1);
+    expect(explicitCue).toContain("输入形状没有变");
+    expect(explicitCue).not.toContain("重点来了");
   });
 
   it("normalizes EP02 QKV formula and polyphone phrases before TTS", () => {
@@ -122,7 +133,7 @@ describe("runtime adapters", () => {
     );
 
     expect(spoken).toContain("准确一点说");
-    expect(spoken).toContain("Q 乘 Kay 转置");
+    expect(spoken).toContain("Query 乘 Key 转置");
     expect(spoken).toContain("根号下 d k");
     expect(spoken).toContain("softmax");
     expect(spoken).toContain("模型要判断， 它到底指谁");
@@ -151,7 +162,7 @@ describe("runtime adapters", () => {
     expect(spoken).toContain("它会逐个 token， 往后生成");
     expect(spoken).toContain("每生成一个新的 token，");
     expect(spoken.match(/\btoken\b/g)?.length).toBe(3);
-    expect(spoken).toContain("KV Cache");
+    expect(spoken).toContain("Key Value cache");
     expect(spoken).not.toContain("Chat G P T");
     expect(spoken).not.toContain("托肯");
     expect(spoken).not.toContain("tok en");
@@ -194,6 +205,24 @@ describe("runtime adapters", () => {
       expect(manifest.tts_calls).toBe(false);
       expect(recordingNeeded).toContain("voice/enrollment/consent.wav");
       expect(recordingNeeded).toContain("voice/enrollment/reference_*.wav");
+    });
+  });
+
+  it("blocks TTS prepare and formal render until pre-production contracts exist", () => {
+    withTempEpisode((tempRoot, episodeDir) => {
+      expect(() => prepareSegmentedTts(topicPath, tempRoot, "indextts2")).toThrow(
+        /Pre-production contract gate failed before tts/
+      );
+
+      const renderResult = runHyperframesFormalRender(topicPath, tempRoot);
+      expect(renderResult.status).toBe("missing_inputs");
+      expect(renderResult.missing_inputs).toContain("contracts/claim_contract.md");
+
+      writePreProductionContracts(episodeDir);
+
+      const ttsResult = prepareSegmentedTts(topicPath, tempRoot, "indextts2");
+      expect(ttsResult.status).toBe("prepared");
+      expect(fs.existsSync(path.join(episodeDir, "audio/indextts2/segments/segment_manifest.json"))).toBe(true);
     });
   });
 

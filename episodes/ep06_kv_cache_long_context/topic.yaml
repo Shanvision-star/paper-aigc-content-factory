@@ -1,0 +1,24 @@
+episode_id: ep06_kv_cache_long_context
+title: "第6集 为什么大模型需要 KV Cache 和大显存"
+paper:
+  title: "Attention Is All You Need"
+  arxiv_id: "1706.03762"
+  local_research_report: "draft_source_backed_from_ep05_and_public_sources"
+audience:
+  primary: "普通 AI 内容观众 + 工程初学者"
+targets:
+  - douyin.zh-CN
+  - xiaohongshu.zh-CN
+  - bilibili.zh-CN
+outputs:
+  blog: false
+  pdf: false
+  video: true
+  voiceover: true
+  publish_pack: false
+constraints:
+  auto_publish: false
+  require_primary_sources: true
+  require_citation_gate: true
+  require_human_review: true
+  voice_mode: personal_voice_or_builtin_fallback

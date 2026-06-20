@@ -27,8 +27,10 @@ Do not proceed to `full_tts`, audio merge, captions, or HyperFrames render until
 - If delivery tuning is needed, run `voiceover-emotion-coach` after `spoken_text` is locked and before sample generation. Its default is `preserve_original_ai_voice` with low-intensity prosody; it must not change `spoken_text` or replace the original AI voice character.
 - Apply the Pronunciation Normalization Contract before sample generation. High-risk phrases such as `更准确地说`, adverbial `地`, ambiguous `重`, `按行归一化`, `QK^T`, `sqrt(d_k)`, and `d_k` must be rewritten or annotated in `spoken_text` so TTS does not guess the reading.
 - Keep English technical and product terms as stable whole terms in `spoken_text`; for example `ChatGPT`, `Claude`, `token`, `Attention`, `softmax`, `KV Cache`, and `Multi-Head Attention` must not be split, translated, or phonetically rewritten unless the source script explicitly requires spelling an acronym.
+- EP05-derived high-risk terms must be checked before sample or full generation when present: naked `Q`, `K`, `V`, `Q/K`, `KV cache`, `mθ_i`, `nθ_i`, `δ_i`, `θ_i`, `n-m`, and polyphonic phrases such as `长上下文`.
 - Run duplicate and near-duplicate checks before TTS so repeated narration is blocked before audio exists.
 - Import only approved, postprocessed WAV files into the canonical `audio/voiceover.wav` slot.
+- For segmented TTS, require an audio freshness check before merge or final render whenever the manifest, `spoken_text`, or critical segment list changes.
 
 ## Stop Conditions
 
@@ -40,6 +42,7 @@ Stop and request human review when:
 - Audio contains electrical noise, clipping, long silence, or obvious segment discontinuity.
 - ASR transcript diff shows drift from `spoken_text` or detects leak-prone phrases.
 - `review/sample_audio_review.json.status` is not `approved` for the current segment text hash.
+- A critical segment wav is older than the current manifest, missing, invalid, or produced by a failed batch rerun.
 
 ## Verification
 
@@ -53,6 +56,8 @@ npm run audio:indextts2-generate-samples:ep02
 npm run audio:f5-generate-samples
 npm run audio:asr-transcript-diff
 npm run audio:sample-review-gate
+npm run audio:pronunciation-gate:ep05
+npm run audio:freshness-gate:ep05-critical
 ```
 
 Only after those gates pass should the workflow continue to `full_tts -> merge -> captions -> render`.

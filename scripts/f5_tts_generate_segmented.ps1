@@ -10,6 +10,22 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+$RequiredContracts = @(
+  "contracts\claim_contract.md",
+  "contracts\visual_contract.md",
+  "contracts\notation_contract.md",
+  "contracts\render_contract.md"
+)
+foreach ($RequiredContract in $RequiredContracts) {
+  $ContractPath = Join-Path $EpisodeDir $RequiredContract
+  if (-not (Test-Path $ContractPath)) {
+    throw "Missing pre-production contract before F5-TTS generation: $ContractPath"
+  }
+  if ([string]::IsNullOrWhiteSpace((Get-Content -Raw -Encoding UTF8 $ContractPath))) {
+    throw "Empty pre-production contract before F5-TTS generation: $ContractPath"
+  }
+}
+
 $SegmentDir = Join-Path $EpisodeDir "audio\f5_tts\$SegmentSubdir"
 $ManifestPath = Join-Path $SegmentDir "segment_manifest.json"
 $RefTextFile = Join-Path $EpisodeDir "audio\f5_tts\reference_text_f5_neutral.txt"

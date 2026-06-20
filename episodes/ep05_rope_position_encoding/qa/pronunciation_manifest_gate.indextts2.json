@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "engine": "indextts2",
+  "manifest": "audio/indextts2/segments/segment_manifest.json",
+  "checked_terms": [
+    "Q/K",
+    "Q Kay",
+    "Kay",
+    "KV cache",
+    "长上下文",
+    "standalone Q",
+    "standalone K",
+    "standalone V"
+  ],
+  "issues": []
+}

@@ -1,0 +1,113 @@
+[
+  {
+    "scene_id": "S01_rope_to_vram_hook",
+    "start": 0,
+    "duration": 8,
+    "voiceover": "上一集我们讲到，RoPE 把位置写进 Query 向量和 Key 向量的旋转关系里。问题来了：位置进了 Attention，为什么大模型就更吃显存了？",
+    "visual_type": "hook_rope_to_kv_cache",
+    "engine": "hyperframes",
+    "caption": "RoPE 之后，为什么更吃显存？",
+    "claim_ids": ["ep06_claim_rope_cache_boundary"],
+    "hook_id": "ep06_hook_rope_to_vram"
+  },
+  {
+    "scene_id": "S02_attention_formula_recall",
+    "start": 8,
+    "duration": 27,
+    "voiceover": "先回到 Harvard Annotated Transformer 里的核心公式：Attention 等于 softmax，括号里是 Query 乘 Key 转置，除以根号下 d k，再乘 Value。这句公式翻成人话就是三步：第一，当前 token 拿 Query 去匹配所有历史 Key；第二，softmax 分配权重；第三，从 Value 里加权读取信息。",
+    "visual_type": "formula_attention_qkv_three_steps",
+    "engine": "matlab",
+    "caption": "Attention = 匹配、分权、读取",
+    "claim_ids": ["ep06_claim_attention_formula"]
+  },
+  {
+    "scene_id": "S03_autoregressive_cache_need",
+    "start": 35,
+    "duration": 30,
+    "voiceover": "生成式大模型最麻烦的地方在这里：它不是一次把整段答案算完，而是逐个 token 往后生成。每生成一个新 token，都要重新面对全部历史。如果没有 KV Cache，模型每一步都要把历史 token 的 Key 和 Value 从头再算一遍。KV Cache 做的事很朴素：把已经算好的 Key 和 Value 存起来。",
+    "visual_type": "autoregressive_kv_cache_reuse",
+    "engine": "hyperframes",
+    "caption": "KV Cache：避免重复计算历史 K/V",
+    "claim_ids": ["ep06_claim_autoregressive_generation", "ep06_claim_kv_cache_definition"]
+  },
+  {
+    "scene_id": "S04_vram_growth_formula",
+    "start": 65,
+    "duration": 47,
+    "voiceover": "注意，KV Cache 存的不是原始 token，也不是 Query。它存的是每一层里、每个历史位置对应的 Key 状态和 Value 状态。为什么这会吃显存？因为每多一个 token，每一层就多一份 Key 和一份 Value。上下文长度越大，这个“记忆书架”就越长。一个简化公式可以这样看：KV 显存大约正比于 token 数、层数、Key Value 头数、每个头的维度和数据字节数。所以长输入不是免费午餐。",
+    "visual_type": "kv_cache_memory_growth",
+    "engine": "matlab",
+    "caption": "显存 ≈ token × layers × KV heads × head dim × bytes",
+    "claim_ids": ["ep06_claim_kv_cache_definition", "ep06_claim_kv_memory_growth"]
+  },
+  {
+    "scene_id": "S05_feynman_bookshelf",
+    "start": 112,
+    "duration": 16,
+    "voiceover": "用费曼方式说：不加缓存，就像你每写一个字都从头翻完整本书。加了 KV Cache，就像把查过的书签留在书架上，下次直接翻到那里。",
+    "visual_type": "feynman_bookshelf_bookmarks",
+    "engine": "hyperframes",
+    "caption": "KV Cache = 给历史信息留书签",
+    "claim_ids": ["ep06_claim_kv_cache_definition"]
+  },
+  {
+    "scene_id": "S06_rope_cache_boundary",
+    "start": 128,
+    "duration": 49,
+    "voiceover": "那 RoPE 到底改变了什么？它不是把 KV Cache 弄坏了。它改变的是 Query 和 Key 被拿来比较之前，位置如何进入它们的表示。公式上，位置 m 的 Query 会旋转成 R m 乘 Query；位置 n 的 Key 会旋转成 R n 乘 Key。两者做点积时，结果会隐式依赖 n 减 m。所以缓存仍然可以复用，但不能忘记位置坐标。每个缓存里的 Key，都必须和它原来的位置编号、RoPE 缩放规则、以及当前解码步保持一致。",
+    "visual_type": "rope_position_coordinate_cache_boundary",
+    "engine": "matlab",
+    "caption": "RoPE 改变 Q/K 的位置用法，不让 cache 失效",
+    "claim_ids": ["ep06_claim_rope_cache_boundary"]
+  },
+  {
+    "scene_id": "S07_long_context_bottleneck",
+    "start": 177,
+    "duration": 34,
+    "voiceover": "上下文长度变大时，难点有两层：第一，历史 Key 和 Value 越存越多；第二，当前 Query 要和越来越长的历史 Key 做匹配，读缓存也会变贵。这就是为什么很多人以为瓶颈只是算力，其实推理时常常还卡在显存和显存带宽上。GPU 不是只在算，也在不停搬运这些 Key 和 Value。",
+    "visual_type": "long_context_memory_bandwidth",
+    "engine": "hyperframes",
+    "caption": "长输入：存储和读取都变贵",
+    "claim_ids": ["ep06_claim_long_context_difficulty", "ep06_claim_kv_memory_growth"]
+  },
+  {
+    "scene_id": "S08_window_and_sparse_attention",
+    "start": 211,
+    "duration": 33,
+    "voiceover": "第一类解法是 Sliding Window Attention，滑动窗口注意力。它只让当前 token 看最近 W 个 token。好处是成本可控，代价是远处信息可能直接看不到。第二类是 Sparse Attention，稀疏注意力。它不让所有 token 两两相连，而是只保留局部块、全局 token，或者少量稀疏连接。",
+    "visual_type": "window_sparse_attention_masks",
+    "engine": "matlab",
+    "caption": "Window / Sparse：控制模型看哪里",
+    "claim_ids": ["ep06_claim_sliding_window", "ep06_claim_sparse_attention"]
+  },
+  {
+    "scene_id": "S09_kv_cache_engineering",
+    "start": 244,
+    "duration": 35,
+    "voiceover": "第三类是 MQA 和 GQA。Multi Query Attention 让多个 Query 头共享一组 Key 和 Value；Grouped Query Attention 则按组共享。目的都是减少 KV Cache。第四类是 PagedAttention 这样的缓存管理。它像操作系统分页一样，把 KV Cache 切成块，减少显存碎片，也方便不同请求复用相同前缀。",
+    "visual_type": "mqa_gqa_paged_kv_cache",
+    "engine": "matlab",
+    "caption": "MQA / GQA / PagedAttention：控制缓存怎么存",
+    "claim_ids": ["ep06_claim_mqa_gqa", "ep06_claim_paged_attention"]
+  },
+  {
+    "scene_id": "S10_flashattention_boundary",
+    "start": 279,
+    "duration": 16,
+    "voiceover": "还有 FlashAttention。它主要不是压缩 KV Cache，而是优化 Attention 本身的显存读写，让 Query、Key、Value 的计算路径更少搬数据。",
+    "visual_type": "flashattention_io_boundary",
+    "engine": "hyperframes",
+    "caption": "FlashAttention：优化显存读写，不是 cache 压缩",
+    "claim_ids": ["ep06_claim_flashattention_boundary"]
+  },
+  {
+    "scene_id": "S11_summary_next",
+    "start": 295,
+    "duration": 23,
+    "voiceover": "总结一下：参数像模型的大脑，KV Cache 像当前工作记忆。PE 告诉模型你在哪；RoPE 让比较时看到相对位置；长输入优化，就是少存、少看、少搬运。下一集我们继续看：如果 Attention 不再总是全连接，而是窗口化、稀疏化、分组化，那 Transformer 为什么会走向稀疏化和专家化？",
+    "visual_type": "summary_sparse_expert_teaser",
+    "engine": "hyperframes",
+    "caption": "少存、少看、少搬运",
+    "claim_ids": ["ep06_claim_kv_cache_definition", "ep06_claim_rope_cache_boundary"]
+  }
+]

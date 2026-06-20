@@ -1,0 +1,48 @@
+{
+  "status": "planned_for_review_mix",
+  "policy": "Sound cues are low-level auditory bookmarks only. They must not cover Attention, RoPE, Q/K, n - m, theta_i, KV cache, or other technical terms.",
+  "cues": [
+    {
+      "cue_id": "cue_001_opening",
+      "absolute_time_sec": 0.35,
+      "relative_loudness_db": -20,
+      "clarity_rule": "Opening identity only; remove if it masks the first spoken clause."
+    },
+    {
+      "cue_id": "cue_003_qkv_cards",
+      "absolute_time_sec": 24.2,
+      "relative_loudness_db": -20,
+      "clarity_rule": "Marks the PE input-addition visual; keep below voice and away from x = x + pe readout."
+    },
+    {
+      "cue_id": "cue_002_qk_reveal",
+      "absolute_time_sec": 86.4,
+      "relative_loudness_db": -20,
+      "clarity_rule": "Marks Q/K rotation entry after the RoPE term has been spoken."
+    },
+    {
+      "cue_id": "cue_005_softmax",
+      "absolute_time_sec": 121.6,
+      "relative_loudness_db": -21,
+      "clarity_rule": "Formula reveal cue; do not overlap n - m or theta_i pronunciation."
+    },
+    {
+      "cue_id": "cue_007_engineering_layers",
+      "absolute_time_sec": 151.4,
+      "relative_loudness_db": -22,
+      "clarity_rule": "Engineering-layer shift cue; must not cover the long-context explanation."
+    },
+    {
+      "cue_id": "cue_006_weighted_v",
+      "absolute_time_sec": 180.5,
+      "relative_loudness_db": -22,
+      "clarity_rule": "Feynman-summary cue; keep soft enough for subtitle readability and ASR."
+    },
+    {
+      "cue_id": "cue_008_cta",
+      "absolute_time_sec": 209.0,
+      "relative_loudness_db": -23,
+      "clarity_rule": "Next-episode tail; do not cover KV cache or inference-speed terms."
+    }
+  ]
+}

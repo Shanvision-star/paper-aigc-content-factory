@@ -8,6 +8,12 @@ This document governs MATLAB-generated visual assets for AI paper explainer epis
 - Revised: MATLAB rendering now has a standalone adapter contract that episode `FRAME.md` files, asset manifests, and HyperFrames handoff tasks must reference.
 - Reason / Impact: Formula and mechanism visuals can be reviewed before render, and a future agent cannot treat a MATLAB command success, HTML preview, or MP4 export as visual approval.
 
+## Edit Comparison - Audience-Visible Animation Hygiene
+
+- Original: The global MATLAB contract prohibited generic hidden-prompt leakage, but it did not name common production labels or require single-page animations to show visible motion beyond a static poster.
+- Revised: MATLAB assets now have explicit audience-visible hygiene, timed dynamic subtitle, single-page mechanism motion, formula-pronunciation, jitter-reduction, and PR-review requirements.
+- Reason / Impact: Future episodes can reuse MATLAB templates without accidentally burning internal prompts such as `Hook`, `视觉焦点`, `视觉爆点`, `教学边界`, or `给普通观众的一句话` into audience frames, and reviewers can reject static-looking MP4 previews before final composition.
+
 ## Authority And Scope
 
 Authority order for MATLAB visual assets:
@@ -77,12 +83,29 @@ Required fields:
 
 - Motion must explain mechanism, not decorate the scene.
 - Use staged reveal for formula-heavy content: source object first, operation step second, full formula last.
+- Single-page MATLAB animations must still contain visible motion evidence. Acceptable motion includes staged emphasis, active panel outlines, rotating vectors, moving arrows, fixed-position formula highlights that appear by timing, timed subtitle replacement, or filled bars that encode a mathematical quantity.
+- A one-page MP4 that only holds a static poster frame is not an animation deliverable unless the episode contract explicitly marks the asset as static.
+- Do not animate subtitles, formula glyphs, body copy, or title positions just to create motion. Text and formulas should stay locked after they appear unless the notation itself is the mathematical object being explained.
 - Use deterministic timing. Do not use unseeded randomness, wall-clock-dependent timing, live provider calls, or network-dependent source fetching.
 - Animation duration must map to voiceover beats. A visual step cannot finish before the spoken explanation that gives it meaning.
 - Fixed properties are required for MP4 previews: `fps`, `duration_s`, `expected_frame_count`, `VideoWriter` profile, `FrameRate`, `Quality`, and even pixel dimensions.
 - Review keyframes must be generated before full MP4 review. For example: start, first formula reveal, highlighted term, mechanism result, and final hold frame.
 - HTML Web Canvas output is inspection-only. It can help debug interactivity, but it does not replace PNG/SVG keyframes or final MP4 frame extraction.
 - Looping previews must return to a semantically valid state. Do not loop from a final formula into an earlier state in a way that changes the explanation.
+- Dynamic subtitles mean a fixed subtitle slot follows the approved voiceover subtitle timeline with `start_s` and `end_s` segments. The words may appear, replace, or highlight by timing, but the subtitle block itself should not drift, bounce, or resize between frames.
+- Do not use a progress bar as a substitute for dynamic subtitles, and do not allocate a large subtitle panel that competes with the formula or mechanism visual.
+- To reduce MP4 jitter, keep canvas size, axes limits, text positions, formula positions, line widths, and subtitle slot coordinates fixed across frames. Avoid pulsing borders around text, moving text badges, and frame-to-frame layout recalculation for static formulas.
+- If MATLAB text or LaTeX re-rasterization still causes visible shimmer, pre-render the static text/formula layer as a fixed image or move final subtitles to HyperFrames while keeping MATLAB responsible for the mechanism visual.
+
+## Audience-Visible Hygiene Contract
+
+- Audience frames must not show production-side labels, prompt fragments, reviewer notes, style-preview labels, internal asset names, file paths, TODO markers, or QA instructions.
+- Forbidden visible strings include `Hook`, `视觉焦点`, `视觉爆点`, `教学边界`, `给普通观众的一句话`, `style preview`, `placeholder`, `QA`, and script or file names.
+- If a boundary explanation is necessary, rewrite it as a viewer-facing statement without the production label. Example: use `二维旋转是 RoPE 维度块示意，不表示 token 在句子平面移动。` instead of `教学边界：...`.
+- If a recap sentence is necessary, use direct explanatory copy or `一句话总结`; do not display `给普通观众的一句话`.
+- Source labels are allowed only when they identify evidence, such as a paper, code page, equation number, or reviewed documentation. They must stay secondary and cannot read like production notes.
+- Formula highlights must be geometrically aligned to the exact symbol or term being discussed. A shifted or oversized highlight box is a review failure even if the formula itself is correct.
+- When formulas contain pronunciation-sensitive notation such as `mθ_i`, `nθ_i`, `δ_i`, `θ_i`, `d_model`, or `n - m`, the episode assets must define separate `visual_text` and `spoken_text` so TTS/audio cannot misread the formula.
 
 ## Formula Clarity Contract
 
@@ -117,14 +140,14 @@ Rules:
 
 ## Render Environment Contract
 
-R2026a uses the modern WebGL/ANGLE graphics path. MATLAB command success is not enough for visual approval; the render environment must be recorded because OS text scaling and renderer-device selection can change figure layout, font metrics, and exported frame geometry.
+The workstation default for paper-video MATLAB assets is R2021b first, with R2026a as the fallback when R2021b is missing, times out, crashes under `-batch`, or fails during graphics/startup. MATLAB command success is not enough for visual approval; the render environment must be recorded because OS text scaling and renderer-device selection can change figure layout, font metrics, and exported frame geometry.
 
 Rules:
 
 - Before final MATLAB exports, Windows accessibility `Text size` should be `100%`. Use Windows display scaling for screen comfort instead of accessibility text enlargement.
 - If `Text size` is greater than `100%`, the asset may only be marked `needs_human_review` until full-resolution keyframes and phone-size previews prove that labels, formulas, axes, legends, and source captions did not shift or become scrollable.
-- Run a tiny R2026a figure smoke after MATLAB install, update, preference reset, graphics-driver change, or ServiceHost/mwhome reset.
-- Record `rendererinfo` in the manifest. For this Windows workstation, expected final graphics output is `GraphicsRenderer: WebGL` and a `RendererDevice` that names `NVIDIA GeForce RTX 3050` through ANGLE/D3D11; any different device is allowed only with a PR note and visual evidence.
+- Run a tiny R2021b figure/export smoke after MATLAB install, update, preference reset, graphics-driver change, or ServiceHost/mwhome reset. If the runner falls back to R2026a, run and record the same smoke for R2026a.
+- Record `rendererinfo` in the manifest. For this Windows workstation, any renderer/device change between R2021b and R2026a is allowed only with a PR note and visual keyframe evidence.
 - Do not diagnose a MATLAB visual failure as a formula/script issue until compute smoke and minimum figure/export smoke have been separated.
 - If a minimum `figure` or `exportgraphics` smoke crashes while pure compute succeeds, first back up and reset user-level MATLAB Home/recent-artifacts state such as `%APPDATA%\MathWorks\mwhome`; do not remove hardware devices, uninstall MATLAB, or change project scripts as the first fix.
 - PR review must include the render environment summary when MATLAB assets are added or regenerated.
@@ -242,7 +265,7 @@ Handoff rules:
   "fps": 30,
   "duration_s": 6,
   "expected_frame_count": 180,
-  "matlab_executable": "D:/Program Files/MATLAB/R2026a/bin/matlab.exe",
+  "matlab_executable": "D:/Program Files/MATLAB/R2021b/bin/matlab.exe",
   "script_path": "scripts/matlab/render_ep05_rope_relative_distance.m",
   "output_formats": ["png_keyframes", "svg", "mp4_preview"],
   "outputs": {
@@ -256,28 +279,60 @@ Handoff rules:
 }
 ```
 
-## R2026a Invocation Contract
+## MATLAB Invocation Contract
 
 Default MATLAB executable for this project:
 
 ```powershell
-& 'D:\Program Files\MATLAB\R2026a\bin\matlab.exe' -batch "run('scripts/matlab/render_asset.m')"
+& 'D:\Program Files\MATLAB\R2021b\bin\matlab.exe' -batch "run('scripts/matlab/render_asset.m')"
 ```
 
 Rules:
 
-- Use the explicit R2026a executable path instead of relying on `PATH`.
+- Use the explicit R2021b executable path instead of relying on `PATH`.
 - Run a tiny version or script-entry smoke before a long render when the MATLAB runtime was recently installed or updated.
+- If a long render shows no valid output after 180 seconds, appears stuck, crashes under `-batch`, or fails during graphics/startup, stop that R2021b attempt, record the command and symptom, then retry the same asset with R2026a.
 - Run and record a tiny hidden-figure/export smoke before final MATLAB assets are approved:
 
 ```powershell
-& 'D:\Program Files\MATLAB\R2026a\bin\matlab.exe' -batch "f=figure('Visible','off'); ax=axes(f); plot(ax,1:10); drawnow; disp(rendererinfo(ax)); out=[tempname '.png']; exportgraphics(f,out); close(f)"
+& 'D:\Program Files\MATLAB\R2021b\bin\matlab.exe' -batch "f=figure('Visible','off'); ax=axes(f); plot(ax,1:10); drawnow; disp(rendererinfo(ax)); out=[tempname '.png']; exportgraphics(f,out); close(f)"
 ```
 
 - If MATLAB warns that Windows accessibility text size is greater than `100%`, reset it to `100%` before final export or record the exception in the manifest and PR review.
 - If `-batch` crashes, record the exact command, exit code, and crash symptom. Do not mark the render as failed or approved until a fallback attempt or human review decides the boundary.
-- R2021b can remain a fallback only when the episode contract records why R2026a was not used.
+- R2026a can remain a fallback only when the episode contract records why R2021b was not used, and the manifest should mark `fallback_from_r2021b` with the timeout, crash, or graphics symptom.
 - MATLAB invocation is never part of default `npm test`. It is an explicit render or smoke task.
+
+## Anti-Flicker Rule
+
+Original / Revised / Reason:
+
+- Original: A visually acceptable MATLAB preview could still flicker or shimmer after MP4 export when formulas, subtitles, or text boxes were animated or re-rendered frame by frame.
+- Revised: Formula, code, source labels, and explanatory text should be exported as stable PNG assets or rendered as fixed HyperFrames HTML layers. Motion belongs to geometry and emphasis layers: Q/K vectors, arrows, local highlights, relative-position bars, and calculation fills.
+- Reason / Impact: Future episodes can keep MATLAB's precise proof-object look while avoiding font re-rasterization, figure resizing, and caption drift in encoded vertical videos.
+
+Required practice:
+
+- Do not animate MATLAB text size, formula size, figure canvas size, axes limits, or whole-card position after the hero frame is laid out.
+- If MATLAB exports an MP4 mechanism clip, lock figure size, axes limits, text box positions, renderer, and output resolution; extract keyframes before HyperFrames import.
+- Prefer stable formula PNGs plus HyperFrames vector overlays when the same scene needs both mathematical typesetting and motion.
+- If a clip flickers, split it into a static formula/text layer and a separate geometry-only animation layer before rerendering.
+
+## EP05 RoPE Failure-Mode Reference
+
+- Original: EP05 MATLAB issues were discovered through repeated user screenshots: whole-page MATLAB images were too small, formula highlights shifted, circle arrows detached from their semantic target, text/formula layers jittered, and some MP4 previews looked static rather than animated.
+- Revised: Any MATLAB asset for formula-heavy paper explainers must be checked against `docs/visual_system/EP05_ROPE_POSTMORTEM.md` and routed through `docs/superpowers/specs/2026-06-20-ep05-stage-gate-map.md` before final HyperFrames import.
+- Reason / Impact: The EP05 postmortem converts screenshot feedback into reusable design rules, so future MATLAB assets are reviewed as local proof objects with stable formulas and semantic motion, not as accidental full-page posters.
+
+Required EP05-derived checks:
+
+- MATLAB assets are local proof objects, not full-page screenshots inserted into another page.
+- Static text, formulas, source labels, and subtitle slots stay locked after reveal.
+- Motion belongs to vectors, arrows, bars, highlights, or geometry objects that explain the mechanism.
+- Formula highlights align to exact symbols and do not drift between keyframes.
+- Arrows start and end on the intended semantic object; arrowheads are not oversized and do not float away from circles, axes, or vectors.
+- Keyframes show enough mechanism content; no blank waiting page or empty proof area is accepted.
+- If TTS will read notation shown in MATLAB, the episode contract must define separate visual and spoken forms before audio generation.
 
 ## Review Gates
 
@@ -296,6 +351,11 @@ After MATLAB rendering:
 - keyframes exist and match `expected_frame_count` plan;
 - formulas are sharp, complete, and readable;
 - terminology matches voiceover and captions;
+- sampled keyframes contain no forbidden audience-visible production labels;
+- single-page MP4 previews include visible mechanism motion, not only a static poster hold;
+- dynamic subtitle behavior is driven by reviewed `start_s/end_s` voiceover segments, and no progress bar is used as a subtitle substitute;
+- MP4 playback does not show whole-frame shimmer, drifting formula text, bouncing subtitles, or pulsing borders around load-bearing copy;
+- pronunciation-sensitive formula tokens have a reviewed visual/spoken notation mapping;
 - no overlap, crop, or unsafe-area violation;
 - MP4 preview has even pixel dimensions and expected duration;
 - manifest lists every output path and review status.

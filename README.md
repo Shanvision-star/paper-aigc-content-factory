@@ -222,6 +222,8 @@ http://localhost:8080
 当前已索引复盘：
 
 - `episodes/ep03_multi_head_attention/review/ep03_retrospective_indextts2_animation_candidates.md`：记录 EP03 的 IndexTTS2 切换候选、F5 fallback 边界、字幕/英文术语风险、HyperFrames 静态 PPT 化、公式对象、Figure 2 source-backed 资产、箭头/布局/文字溢出等可沉淀问题。
+- `docs/visual_system/EP05_ROPE_POSTMORTEM.md`：记录 EP05 RoPE 制作中暴露的技术语义、证据边界、广告学画面、MATLAB、字幕、TTS、SFX、布局和最终 MP4 QA 问题。
+- `docs/superpowers/specs/2026-06-20-ep05-stage-gate-map.md`：把 EP05 问题拆到研究、脚本、技术审核、广告学、分镜、视觉、TTS、字幕、音效、HyperFrames、发布包、质量门禁和 workflow 优化各环节。
 
 ## Voiceover Runtime
 
@@ -390,6 +392,7 @@ sample -> asr_diff -> human_approval -> full_tts -> merge -> captions -> render
 - Dagu 节点要能看到关键门禁进度，而不只是一个长命令成功：`sample`、`asr_diff`、`human_approval`、`full_tts`、`merge`、`captions`、`render`。
 - 每次音频或脚本变更后，重新跑小样门禁或说明没有重跑的原因。
 - 最终结论必须报告验证项和未验证项，不能用旧报告替代当前产物。
+- EP05-derived check: formula-heavy, MATLAB, dynamic-subtitle, personal-voice, SFX, or long-context episodes must apply `docs/superpowers/specs/2026-06-20-ep05-stage-gate-map.md` before final render. The final review package must include final MP4 keyframes, audio/video stream probe, pronunciation/freshness gates when TTS changed, subtitle banned-term/overlap checks, and SFX mix status when sound cues are required.
 
 ## Sound Cue Design Contract
 
@@ -419,7 +422,7 @@ sample -> asr_diff -> human_approval -> full_tts -> merge -> captions -> render
 
 - `docs/visual_system/DESIGN.md` 定义账号级视觉身份：颜色、字体、中英文模式、封面 `safe90`、论文图和公式处理原则。
 - `docs/visual_system/FRAME.md` 把视觉身份转成视频镜头规则：`1080x1920`、`1080x1440`、`1920x1080`、`1080x1080`、safe area、Caption Safe Area、Typography Floor、Frame Treatments、Paper Genre Treatment Registry、MATLAB adapter contract、Pre-Render Frame Audit。
-- `docs/visual_system/MATLAB.md` 约束 MATLAB 绘制、动画、字体映射、专业术语、公式清晰度、图像重叠检查、manifest、R2026a 调用、render environment 记录和导入 HyperFrames 的交接要求。
+- `docs/visual_system/MATLAB.md` 约束 MATLAB 绘制、动画、字体映射、专业术语、公式清晰度、图像重叠检查、manifest、R2021b 优先调用、render environment 记录和导入 HyperFrames 的交接要求。
 - `episodes/{paper_id}/video_script/FRAME.md` 定义单篇论文的执行规则：paper figure spotlight、formula explanation、platform variants、需要出现的原论文图片、公式图片、Manim 场景或 MATLAB 生成帧、字幕避让和渲染 QA。
 - 公式必须按 Formula Asset Contract 进入 HyperFrames：完整公式对象、canonical LaTeX/文本、清晰截图或 SVG/MathJax/KaTeX/Manim/MATLAB 来源、标注目标、safe-area bounding box 和关键帧审核。
 
@@ -448,8 +451,9 @@ MATLAB 只作为确定性视觉适配器进入项目，不替代 HyperFrames 最
 - 先写 episode FRAME 或 assets manifest，再运行 MATLAB；不能让脚本临时决定公式、画布、平台尺寸或证据来源。
 - 每个 MATLAB 视觉任务必须声明 `canvas_px`、`fps`、时长、预期帧数、输出格式、脚本路径、MATLAB release、source URL/source capture、canonical formula/LaTeX 和 annotation targets。
 - 默认采用 canvas-first：固定 `1080x1920`、`1080x1440`、`1920x1080` 或 `1080x1080` 后，再把公式、矩阵、箭头、字幕避让区和 source label 放入画布。
-- 生成 review frames 优先用 R2026a `exportgraphics` 的固定像素导出；最终帧不要依赖屏幕窗口状态或裸 `getframe`，除非 episode FRAME 记录原因和人工审核证据。
-- 使用 R2026a 生成或重生成 MATLAB 资产时，PR 必须记录 Windows 文本大小、显示缩放、`rendererinfo`、实际 renderer device、GPU 和最小 figure/export smoke；正式导出前 Windows 辅助功能 `Text size` 默认应为 `100%`。
+- 生成 review frames 优先用 R2021b `exportgraphics` 的固定像素导出；最终帧不要依赖屏幕窗口状态或裸 `getframe`，除非 episode FRAME 记录原因和人工审核证据。
+- 如果 R2021b 超过 180 秒没有有效输出、卡住、`-batch` 崩溃或图形启动异常，停止该次尝试并用 R2026a 生成同一资产；PR 里记录回退原因和两次命令。
+- 使用 R2021b 或 R2026a 生成、重生成 MATLAB 资产时，PR 必须记录 Windows 文本大小、显示缩放、`rendererinfo`、实际 renderer device、GPU 和最小 figure/export smoke；正式导出前 Windows 辅助功能 `Text size` 默认应为 `100%`。
 - MP4 预览用 `VideoWriter` 固定 `MPEG-4`、`FrameRate`、`Quality` 和偶数像素尺寸；HTML Web Canvas 只用于交互检查，不替代 PNG/SVG keyframes 或 final MP4 抽帧审核。
 - MATLAB 生成的公式、曲线、热力图和 RoPE/位置编码动画，必须和口播、字幕、source-backed 公式含义一致；不能把类比画成与论文机制不一致的结论。
 - 第三方 MATLAB 项目只能先吸收工程约束；不要直接复制 GPL 或许可证不清的代码。需要引入依赖时，先做 license review 和最小替代方案评估。
@@ -510,10 +514,11 @@ Canvas: 1080x1920
 Aspect ratio: 9:16
 Content scale: 90%
 Safe padding: 54px left/right, 96px top/bottom
-Padding treatment: black padding
+Safe-area treatment: invisible layout guard, not a black border, black background, or shrunken inner page
+Series reference: EP04 final cover, episodes/ep04_positional_encoding/video_script/cover_ep04_positional_encoding_final_1080x1920_safe90.png
 ```
 
-这个规则来自第一集封面实测：原始 1080x1920 全幅封面在抖音上传封面时容易边缘溢出，因此最终版保留 `1080x1920` 画布，把内容整体缩小到 `90%` 并补 `black padding`。不要为了填满画布再次放大内容，除非用户明确要求重新设计封面。
+这个规则来自第一集封面实测和第四集封面定稿经验：原始 1080x1920 全幅封面在抖音上传封面时容易边缘溢出，因此最终版保留 `1080x1920` 画布，让标题、公式、来源和主视觉留在安全区内。安全区只用于排版，不允许做成黑边、黑底、安全框线或缩小海报；背景、纹理和系列视觉必须延展到完整画布。后续封面风格优先参考第四集最终封面的浅色纸面、浅灰网格、强标题、论文证据卡和暖橙/蓝色机制强调；不要把非最终版第二集深色封面作为系列参考。
 
 后续封面设计参考来源固定记录如下，避免每次重新搜索：
 

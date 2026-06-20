@@ -27,13 +27,15 @@ describe("short-video cover constraints", () => {
 
     const skill = fs.readFileSync(coverSkillPath, "utf8");
     for (const doc of [readme, spec, skill]) {
-      expect(doc).toContain("cover_transformer_ai_v1_1080x1920_safe90.png");
+      expect(doc).toMatch(/cover_.*1080x1920_safe90\.png/);
       expect(doc).toContain("PNG");
       expect(doc).toContain("1080x1920");
       expect(doc).toContain("90%");
       expect(doc).toContain("54px");
       expect(doc).toContain("96px");
-      expect(doc).toContain("black padding");
+      expect(doc).toMatch(/invisible layout guard|安全区只作为排版约束/);
+      expect(doc).toMatch(/black background|黑底/);
+      expect(doc).toMatch(/EP04|第四集/);
       expect(doc).toContain("youtube-thumbnail");
       expect(doc).toContain("marketing-short-video-editing-coach");
       expect(doc).toContain("awesome-nanobanana-pro");

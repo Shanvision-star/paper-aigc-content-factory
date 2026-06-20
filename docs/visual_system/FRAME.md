@@ -114,6 +114,8 @@ Reveal operation order first, then notation. For Attention, show QK matching, so
 - For formula-heavy scenes, the frame contract must specify the source asset, full formula bounding box, annotation targets, operation order, caption exclusion zone, and keyframe review points.
 - The composition must fail review if original paper figures, formula crops, or required operation steps are missing from the rendered keyframes.
 - Reference infographics can inspire layout, but they do not count as implementation unless their structure is translated into explicit components, coordinates, assets, and review gates.
+- When a future episode uses RoPE-like formulas, MATLAB local assets, dynamic subtitles, or personal-voice TTS, review `docs/visual_system/EP05_ROPE_POSTMORTEM.md` before frame lock. That document is the canonical failure-mode reference for EP05-derived visual, audio, subtitle, and evidence-boundary regressions.
+- Also apply `docs/superpowers/specs/2026-06-20-ep05-stage-gate-map.md` so visual failures are routed to the earliest responsible production stage instead of being fixed only in the final composition.
 
 ## Formula Derivation Chain Hard Gate
 
@@ -124,14 +126,38 @@ Reveal operation order first, then notation. For Attention, show QK matching, so
 - Visual, caption, and spoken channels must preserve the same formula meaning. Example: the visual shows `√(d_k)` or a true radical form, while spoken text says the square root of d k.
 - Do not place formula fragments inside normal paragraph text when the scene requires mathematical inspection; use a protected formula object or source-backed image instead.
 
+## Audience-Visible Hygiene Hard Gate
+
+- Viewer-facing frames must not expose production prompts, style labels, reviewer notes, file names, internal asset ids, TODO text, QA notes, or script instructions.
+- Forbidden visible strings include `Hook`, `视觉焦点`, `视觉爆点`, `教学边界`, `给普通观众的一句话`, `style preview`, `placeholder`, `QA`, and local script or output paths.
+- If a teaching boundary is important, convert it into plain viewer-facing wording without the production label. Example: `二维旋转是 RoPE 维度块示意，不表示 token 在句子平面移动。`
+- If a plain-language recap is important, show the recap directly or use a neutral label such as `一句话总结`; do not display the production planning phrase `给普通观众的一句话`.
+- Dynamic subtitle means a fixed subtitle slot follows approved voiceover timing with `start_s` and `end_s` segments. Words may appear, replace, or highlight by time, but subtitle text blocks should not drift, bounce, or resize.
+- A progress bar is not a dynamic subtitle, and a large subtitle panel must not compete with the proof object.
+- Single-page animations must include visible mechanism motion such as active focus outlines, staged reveal, rotating vectors, moving arrows, fixed-position formula highlights that appear by timing, or quantity bars. A static poster exported as MP4 fails animation review unless explicitly scoped as static.
+- Titles, body copy, formula glyphs, and subtitle slots should stay position-locked after they appear. Do not move text or formulas simply to make a frame feel animated.
+- MP4 previews must be checked for jitter: no whole-frame shimmer, drifting formula text, bouncing subtitles, or pulsing borders around load-bearing copy.
+- Formula highlights must align to the exact term being discussed; shifted highlight boxes, loose arrows, or ambiguous callout targets fail review.
+- Pronunciation-sensitive notation must define visual and spoken forms before render. Examples: visual `mθ_i` / spoken `m 乘 theta 下标 i`, visual `δ_i` / spoken `delta 下标 i`, visual `n - m` / spoken `n 减 m，也就是相对位移`.
+
+## Advertising Idea Frame Gate
+
+- Every animation image, keyframe, MATLAB local asset, formula card, and HyperFrames scene must be reviewed with the `ogilvy-creative-director` skill before approval.
+- Each frame must declare: `Big Idea`, `Proof Object`, `Visual Hero`, and `Caption as Micro-headline`.
+- PR review for a video episode must include a per-frame advertising-gate checklist. If an animation image is added, replaced, or moved, update that checklist in the same change.
+- A frame fails review when it has no source-backed proof object, has two competing visual heroes, fills space with decoration instead of explanation, or uses a local source label as the episode title.
+- Recurring episode titles must stay consistent across frames. Scene-local paper names, code-page names, model names, or equation names are secondary labels and must not replace the episode title.
+- If a frame has empty space, add a proof object, operation step, numerical table, or Feynman-to-mechanism mapping; do not add decorative filler.
+
 ## MATLAB Figure And Animation Adapter Contract
 
 - MATLAB is an optional deterministic visual engine for source-backed formula conversion, matrix and heatmap views, positional-encoding curves, RoPE rotation geometry, attention score illustrations, and frame-to-video previews.
 - MATLAB does not replace HyperFrames as the final composition layer. A MATLAB scene should produce inspectable assets that HyperFrames or a later explicit render task can consume.
 - Full MATLAB layout, animation, typography, terminology, overlap-check, manifest, invocation, and HyperFrames handoff rules live in `docs/visual_system/MATLAB.md`; episode contracts must reference it when `visual_engine=matlab`.
 - Every MATLAB visual task must be canvas-first: declare `canvas_px`, `fps`, scene duration, expected frame count, safe-area policy, output formats, and target platform before drawing.
-- Prefer R2026a `exportgraphics` with explicit `Units="pixels"`, `Width`, `Height`, and `Padding=0` for review frames. Avoid relying on screen state or raw `getframe` for final frames unless the episode contract documents the reason and review evidence.
-- Before approving final MATLAB exports, record R2026a `rendererinfo`, actual renderer device, Windows accessibility text size, and display scaling. On the current Windows workstation, final R2026a graphics should resolve through ANGLE/D3D11 on `NVIDIA GeForce RTX 3050`; any deviation needs a PR note and reviewed keyframes.
+- Prefer R2021b `exportgraphics` with explicit `Units="pixels"`, `Width`, `Height`, and `Padding=0` for review frames. Avoid relying on screen state or raw `getframe` for final frames unless the episode contract documents the reason and review evidence.
+- If R2021b has no valid output after 180 seconds, appears stuck, crashes under `-batch`, or fails in graphics/startup, stop the attempt and rerun the same asset with R2026a; PR review must record the fallback reason and both attempted commands.
+- Before approving final MATLAB exports, record the active MATLAB release, `rendererinfo`, actual renderer device, Windows accessibility text size, and display scaling. Any R2021b-to-R2026a fallback needs a PR note and reviewed keyframes.
 - Windows accessibility `Text size` should be `100%` for final MATLAB exports. If it is greater than `100%`, the asset must stay `needs_human_review` until full-size and phone-size keyframes prove no font, formula, axis, or caption layout drift.
 - MATLAB MP4 previews use `VideoWriter` with a fixed profile such as `MPEG-4`, fixed `FrameRate`, fixed `Quality`, and even pixel dimensions. Do not let the first frame implicitly set an accidental odd or cropped video size.
 - Each MATLAB output must write or update a manifest with the MATLAB executable or release, script path, source URLs or local source captures, canonical formula text or LaTeX, annotation targets, frame count, output paths, and generation timestamp.
@@ -213,7 +239,15 @@ Summarize the paper's core mental model and preview the next technical decomposi
 - Formula legibility test: formulas are readable without shrinking below the typography floor.
 - Formula completeness test: each required formula is fully visible, has a canonical text/LaTeX record, and includes any required annotation targets.
 - MATLAB adapter test: MATLAB-generated assets declare their script, MATLAB release, canvas, fps or static format, source evidence, and review keyframes in the manifest before they are used in an episode render.
-- MATLAB render-environment test: PR review records Windows text size, display scaling, `rendererinfo`, renderer device, and a tiny R2026a figure/export smoke when MATLAB assets were generated or regenerated.
+- MATLAB render-environment test: PR review records Windows text size, display scaling, active MATLAB release, `rendererinfo`, renderer device, and a tiny R2021b figure/export smoke when MATLAB assets were generated or regenerated; if fallback occurs, record the R2026a attempt too.
+- Audience-visible hygiene test: sampled frames contain no production prompts, internal labels, QA notes, file paths, `Hook`, `视觉焦点`, `视觉爆点`, `教学边界`, or `给普通观众的一句话`.
+- Single-page animation test: MP4/GIF previews show real mechanism motion, not only a static poster; progress bars are not accepted as dynamic subtitles.
+- Timed subtitle test: dynamic subtitles are mapped to reviewed voiceover `start_s/end_s` segments and remain inside a fixed safe subtitle slot.
+- MP4 jitter test: sampled playback or extracted adjacent frames show that static text/formula layers remain locked while only intended mechanism objects move.
+- Formula callout alignment test: highlight boxes and arrows land on the exact formula term or visual object described by the narration.
+- Pronunciation contract test: notation with `θ`, `δ`, subscripts, superscripts, or model symbols has approved `visual_text` and `spoken_text` mappings before TTS or voiceover generation.
 - Platform crop test: vertical, note-video vertical, landscape, and square variants declare what is preserved or adapted.
 - Render boundary test: real HyperFrames render remains outside default `npm test`.
 - Render boundary test: real MATLAB rendering also remains outside default `npm test` unless a future deterministic unit test uses a tiny synthetic fixture with no external files or network calls.
+- EP05 regression test: if the scene contains formula animation, MATLAB assets, dynamic subtitles, personal-voice TTS, long-context examples, or closed-source model caveats, compare it against `docs/visual_system/EP05_ROPE_POSTMORTEM.md` and record which failure classes were checked.
+- Stage routing test: if an EP05-class failure is found, record the matching stage from `docs/superpowers/specs/2026-06-20-ep05-stage-gate-map.md` in the review notes, for example `script`, `frame`, `visual`, `voiceover`, `caption`, `sound`, `hyperframes`, or `quality-gate`.

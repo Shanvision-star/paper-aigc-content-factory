@@ -46,6 +46,9 @@ Create the visual bridge between research/script/storyboard assets and HyperFram
 - Ogilvy layout and typography hard rules: no reverse type, no colored body panels behind long text, readable type floor with `9pt` minimum and `11pt` preferred print baseline scaled up for phone video, readable serif/traditional faces for dense copy, large sans-serif only for poster/hook frames, stable font system, sufficient leading, no all-caps sentences, no headline-over-image layout, and five-second poster rule for cover/opening frames.
 - Pronunciation constraints, including Chinese `地` as `de` when TTS normalization is needed.
 - Render QA: no black frame, no subtitle overlap, figure attribution, formula legibility, key-frame review, and MATLAB render-environment evidence when MATLAB generated or regenerated assets.
+- EP05-derived stage gate routing when relevant: link `docs/superpowers/specs/2026-06-20-ep05-stage-gate-map.md`, then declare which scene-level risks are owned by script, visual, voiceover, captions, sound, HyperFrames, and final QA.
+- Four-channel notation contract for formula-heavy scenes: `source_text`, `spoken_text`, `caption_text`, and `visual_text`, including notation, professional terms, polyphones, and formula highlights.
+- Audience-visible hygiene contract: banned production labels, stable episode title, local source labels as secondary captions only, and no blank waiting scenes.
 
 ## Hard Boundaries
 
@@ -69,8 +72,9 @@ Create the visual bridge between research/script/storyboard assets and HyperFram
 4. Map each beat to one frame treatment.
 5. Assign visual engines: `hyperframes`, `manim`, `matlab`, `svg`, `paper_image`, or `python_chart`.
 6. Check caption safe area, formula completeness, formula legibility, annotation targets, and platform variants.
-7. Write or update episode `video_script/FRAME.md`.
-8. Report missing assets or unresolved review risks instead of fabricating content.
+7. Route EP05-derived risks to the correct downstream stage and record required evidence in the episode `FRAME.md`.
+8. Write or update episode `video_script/FRAME.md`.
+9. Report missing assets or unresolved review risks instead of fabricating content.
 
 ## Quality Bar
 

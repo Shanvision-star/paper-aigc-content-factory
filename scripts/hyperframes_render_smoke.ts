@@ -3,6 +3,7 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 import os from "node:os";
+import { validatePreProductionContracts } from "./lib/preProductionContracts.js";
 import { episodeDirFromTopicPath, runtimeTimestamp, writeJson, writeText } from "./lib/runtimeAdapters.js";
 
 const require = createRequire(import.meta.url);
@@ -14,10 +15,11 @@ type HyperframesSmokeProject = {
 };
 
 type HyperframesRenderSmokeResult = {
-  status: "rendered" | "render_failed";
-  project_dir: string;
+  status: "missing_inputs" | "rendered" | "render_failed";
+  project_dir: string | null;
   output_mp4: string;
   exit_code: number | null;
+  missing_inputs: string[];
 };
 
 function nodeBin(commandName: string): string {
@@ -195,8 +197,28 @@ export function buildHyperframesSmokeProject(topicPath: string, rootDir = "."): 
 }
 
 export function runHyperframesRenderSmoke(topicPath: string, rootDir = "."): HyperframesRenderSmokeResult {
-  const project = buildHyperframesSmokeProject(topicPath, rootDir);
   const episodeDir = episodeDirFromTopicPath(topicPath, rootDir);
+  const contractGate = validatePreProductionContracts(episodeDir);
+  const statusPath = path.join(episodeDir, "renders/hyperframes_smoke_status.json");
+
+  if (contractGate.status !== "passed") {
+    const blocked: HyperframesRenderSmokeResult = {
+      status: "missing_inputs",
+      project_dir: null,
+      output_mp4: "renders/hyperframes_smoke_1080x1920.mp4",
+      exit_code: null,
+      missing_inputs: contractGate.missing_inputs
+    };
+
+    writeJson(statusPath, {
+      ...blocked,
+      generated_at: runtimeTimestamp
+    });
+
+    return blocked;
+  }
+
+  const project = buildHyperframesSmokeProject(topicPath, rootDir);
   const outputPath = path.join(episodeDir, project.output_mp4);
   const hyperframes = nodeBin("hyperframes");
   const env = buildHyperframesRenderEnv();
@@ -220,10 +242,11 @@ export function runHyperframesRenderSmoke(topicPath: string, rootDir = "."): Hyp
     status,
     project_dir: project.project_dir,
     output_mp4: project.output_mp4,
-    exit_code: result.status
+    exit_code: result.status,
+    missing_inputs: []
   };
 
-  writeJson(path.join(episodeDir, "renders/hyperframes_smoke_status.json"), {
+  writeJson(statusPath, {
     ...summary,
     generated_at: runtimeTimestamp,
     stdout_tail: result.stdout?.slice(-2000) ?? "",

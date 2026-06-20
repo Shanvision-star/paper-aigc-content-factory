@@ -28,6 +28,9 @@ description: Use when evaluating episode artifacts and reporting pass, partial, 
 - Preserve deterministic default checks and keep real provider smoke separate.
 - Surface missing voice, video, captions, cover, blog, or publish artifacts.
 - Surface MATLAB visual risks when present: missing render environment, missing `rendererinfo`, Windows text size above `100%` without reviewed keyframes, missing overlap check, or missing HyperFrames import review.
+- Apply `docs/superpowers/specs/2026-06-20-ep05-stage-gate-map.md` when the episode has formulas, MATLAB/Manim/HyperFrames mechanism animation, dynamic subtitles, personal/cloned voice, SFX, long-context examples, or closed-source model caveats.
+- Require final MP4 evidence when the output is a video: audio/video stream probe, duration/resolution, final keyframes, burned-subtitle scan, no production-label leakage, and explicit verified/not-verified closeout.
+- Require pronunciation/freshness reports when TTS text or high-risk terms changed; require SFX mix status when sound cues are in scope.
 
 ## Forbidden Actions
 
@@ -35,3 +38,4 @@ description: Use when evaluating episode artifacts and reporting pass, partial, 
 - Do not hide missing voice, video, caption, source, or publish artifacts.
 - Do not claim full production readiness when status is `partial` or `failed`.
 - Do not auto-publish or lower gates to make an episode pass.
+- Do not treat command success, HTML preview, `.srt` generation, or individual asset screenshots as final video approval.

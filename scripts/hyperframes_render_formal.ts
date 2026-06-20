@@ -3,6 +3,7 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { buildHyperframesFormalProject, runHyperframesDraft } from "./hyperframes_draft.js";
 import { buildHyperframesRenderEnv } from "./hyperframes_render_smoke.js";
+import { validatePreProductionContracts } from "./lib/preProductionContracts.js";
 import { buildRenderInputFingerprint } from "./lib/renderFreshness.js";
 import { episodeDirFromTopicPath, runtimeTimestamp, writeJson } from "./lib/runtimeAdapters.js";
 
@@ -56,8 +57,27 @@ function muxAudio(outputPath: string, audioPath: string, env: NodeJS.ProcessEnv)
 
 export function runHyperframesFormalRender(topicPath: string, rootDir = "."): HyperframesFormalRenderResult {
   const episodeDir = episodeDirFromTopicPath(topicPath, rootDir);
-  const draft = runHyperframesDraft(topicPath, rootDir);
   const statusPath = path.join(episodeDir, "renders/hyperframes_formal_status.json");
+  const contractGate = validatePreProductionContracts(episodeDir);
+
+  if (contractGate.status !== "passed") {
+    const missingResult: HyperframesFormalRenderResult = {
+      status: "missing_inputs",
+      project_dir: null,
+      output_mp4: "renders/douyin_zh_1080x1920_draft.mp4",
+      exit_code: null,
+      missing_inputs: contractGate.missing_inputs
+    };
+
+    writeJson(statusPath, {
+      ...missingResult,
+      generated_at: runtimeTimestamp
+    });
+
+    return missingResult;
+  }
+
+  const draft = runHyperframesDraft(topicPath, rootDir);
 
   if (draft.status === "missing_inputs") {
     const missingResult: HyperframesFormalRenderResult = {
